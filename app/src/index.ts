@@ -45,6 +45,9 @@ app.whenReady().then(() => {
     win.show();
   });
 
-  win.loadURL("http://localhost:3000");
-  // win.loadURL("file://" + join(__dirname, "../ui/dist/index.html"));
+  if (app.isPackaged) {
+    win.loadURL("file://" + join(__dirname, "../ui/dist/index.html"));
+  } else {
+    win.loadURL("http://localhost:3000");
+  }
 });

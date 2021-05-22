@@ -1,14 +1,23 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "electron": "^12.0.7",
+    "electron-builder": "22.11.4",
     "typescript": "^4.2.4"
   },
   "scripts": {
     "build": "tsc",
+    "package": "electron-builder",
     "start": "electron dist/index.js"
+  },
+  "build": {
+    "appId": "me.calebdenio.lux",
+    "productName": "Lux",
+    "directories": {
+      "output": "build"
+    }
   }
 }
