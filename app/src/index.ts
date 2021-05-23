@@ -1,10 +1,12 @@
 import { BrowserWindow, app, ipcMain, Menu } from "electron";
 import { join } from "path";
 
-ipcMain.on("context-menu", () => {
+let mainWindow: BrowserWindow | undefined;
+
+ipcMain.on("fixture-context-menu", () => {
   Menu.buildFromTemplate([
     {
-      label: "hi",
+      label: "Delete fixture",
     },
   ]).popup();
 });
@@ -15,39 +17,40 @@ ipcMain.on("editor-context-menu", () => {
       label: "Select all",
       accelerator: "CommandOrControl+A",
       click: () => {
-        console.log("select all");
+        mainWindow?.webContents.send("editor-select-all");
       },
     },
     {
       label: "Invert selection",
       accelerator: "CommandOrControl+I",
       click: () => {
-        console.log("invert");
+        mainWindow?.webContents.send("editor-invert-selection");
       },
     },
   ]).popup();
 });
 
 app.whenReady().then(() => {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     titleBarStyle: "hidden",
     show: false,
     backgroundColor: "#1A202C",
+    title: "Lux",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
 
-  win.on("ready-to-show", () => {
-    win.show();
+  mainWindow.on("ready-to-show", () => {
+    mainWindow?.show();
   });
 
   if (app.isPackaged) {
-    win.loadURL("file://" + join(__dirname, "../ui/dist/index.html"));
+    mainWindow.loadURL("file://" + join(__dirname, "../ui/dist/index.html"));
   } else {
-    win.loadURL("http://localhost:3000");
+    mainWindow.loadURL("http://localhost:3000");
   }
 });

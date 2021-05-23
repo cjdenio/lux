@@ -89,15 +89,6 @@ export default function FooterNav() {
               icon={<RiEditFill />}
             />
           </Tooltip>
-          <Tooltip label="Console" placement="top">
-            <IconButton
-              disabled={location == "/"}
-              colorScheme={location === "/console" ? "blue" : undefined}
-              onClick={() => setLocation("/console")}
-              aria-label="Editor"
-              icon={<AiFillControl />}
-            />
-          </Tooltip>
         </ButtonGroup>
 
         <Tooltip label="Home" placement="top">

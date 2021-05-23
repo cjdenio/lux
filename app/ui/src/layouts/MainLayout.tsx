@@ -24,14 +24,14 @@ export default function MainLayout({
             <Box
               flexShrink={0}
               flexGrow={0}
-              flexBasis="300px"
+              flexBasis="250px"
               bg="gray.900"
               p={4}
               position="relative"
             >
               <Box
                 width="100%"
-                cursor="col-resize"
+                cursor="row-resize"
                 // bg="gray.700"
                 height="2px"
                 position="absolute"

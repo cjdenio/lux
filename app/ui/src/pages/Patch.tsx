@@ -24,39 +24,17 @@ import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
 export default function PatchPage() {
-  // const [fixtures, setFixtures] = useState([
-  //   { name: "Fixture 1", channels: [1, 3], id: 1 },
-  //   { name: "Fixture 2", channels: [4, 6], id: 2 },
-  //   { name: "Fixture 3", channels: [7, 9], id: 3 },
-  // ]);
   const [fixtures, setFixtures] = useState(
-    new Array(50).fill({}).map((v, i) => ({
-      id: i,
-      name: i.toString(),
+    new Array(10).fill({}).map((v, i) => ({
+      id: i + 1,
+      name: `Fixture ${i + 1}`,
       channels: [i, i + 1],
     }))
   );
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <MainLayout
-      rightSidebar={
-        <Box>
-          <FormControl>
-            <FormLabel>Fixture Name</FormLabel>
-            <Input type="text" />
-          </FormControl>
-        </Box>
-      }
-      bottomSidebar={
-        <Box>
-          <FormControl>
-            <FormLabel>Fixture Name</FormLabel>
-            <Input type="text" />
-          </FormControl>
-        </Box>
-      }
-    >
+    <MainLayout>
       <PatchModal isOpen={isOpen} onClose={onClose} />
       <Tooltip label="Patch fixture" placement="left">
         <IconButton
@@ -73,35 +51,37 @@ export default function PatchPage() {
         </IconButton>
       </Tooltip>
 
-      <Tabs variant="line">
-        <TabList>
-          <Tab>Universe 1</Tab>
-        </TabList>
+      <Box overflow="auto" height="100%">
+        <Tabs variant="line">
+          <TabList>
+            <Tab>Universe 1</Tab>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <Table variant="striped" size="sm">
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                  <Th>Channels</Th>
-                </Tr>
-              </Thead>
-
-              <Tbody>
-                {fixtures.map(({ name, id, channels }) => (
-                  <Tr key={id}>
-                    <Td>{id}</Td>
-                    <Td>{name}</Td>
-                    <Td>{channels.join("-")}</Td>
+          <TabPanels>
+            <TabPanel>
+              <Table variant="simple" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th>ID</Th>
+                    <Th>Name</Th>
+                    <Th>Channels</Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                </Thead>
+
+                <Tbody>
+                  {fixtures.map(({ name, id, channels }) => (
+                    <Tr key={id}>
+                      <Td>{id}</Td>
+                      <Td>{name}</Td>
+                      <Td>{channels.join("-")}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
     </MainLayout>
   );
 }

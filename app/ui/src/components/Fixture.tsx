@@ -28,7 +28,7 @@ export default function Fixture({
       }}
       onContextMenu={(e) => {
         e.preventDefault();
-        ipc.send("context-menu");
+        ipc.send("fixture-context-menu");
       }}
       cursor="pointer"
     >

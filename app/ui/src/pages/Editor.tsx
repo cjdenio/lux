@@ -11,12 +11,13 @@ import MainLayout from "../layouts/MainLayout";
 import { HexColorPicker } from "react-colorful";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
+import Fader from "../components/Fader";
 
 export default function EditorPage() {
   const [fixtures, setFixtures] = useState(
-    new Array(50).fill({}).map((v, i) => ({
-      id: i,
-      name: i.toString(),
+    new Array(10).fill({}).map((v, i) => ({
+      id: i + 1,
+      name: (i + 1).toString(),
       selected: false,
       edited: false,
       color: "#000000",
@@ -26,24 +27,35 @@ export default function EditorPage() {
   const selectedFixtures = fixtures.filter((f) => f.selected);
 
   useEffect(() => {
+    const selectAll = () => {
+      setFixtures((f) => f.map((fixture) => ({ ...fixture, selected: true })));
+    };
+
+    const invertSelection = () => {
+      setFixtures((f) =>
+        f.map((fixture) => ({ ...fixture, selected: !fixture.selected }))
+      );
+    };
+
     const onKeyPress = (e: KeyboardEvent) => {
       if (e.key == "a" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setFixtures((f) =>
-          f.map((fixture) => ({ ...fixture, selected: true }))
-        );
+        selectAll();
       } else if (e.key == "i" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setFixtures((f) =>
-          f.map((fixture) => ({ ...fixture, selected: !fixture.selected }))
-        );
+        invertSelection();
       }
     };
 
     document.addEventListener("keydown", onKeyPress);
 
+    ipc.on("editor-select-all", selectAll);
+    ipc.on("editor-invert-selection", invertSelection);
+
     return () => {
       document.removeEventListener("keydown", onKeyPress);
+      ipc.removeListener("editor-select-all", selectAll);
+      ipc.removeListener("editor-invert-selection", invertSelection);
     };
   }, []);
 
@@ -76,7 +88,7 @@ export default function EditorPage() {
                 </Text>
               )}
               <FormControl>
-                <FormLabel>Color</FormLabel>
+                <FormLabel mb={5}>Color</FormLabel>
                 <HexColorPicker
                   style={{ margin: "0 auto" }}
                   color={fixtures.find((i) => i.selected)?.color || "#000000"}
@@ -98,7 +110,8 @@ export default function EditorPage() {
       }
       bottomSidebar={
         <>
-          <Text>hi</Text>
+          <Fader value={75} onChange={(v) => {}} />
+          <Fader value={25} onChange={(v) => {}} />
         </>
       }
     >

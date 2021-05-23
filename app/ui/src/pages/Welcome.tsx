@@ -15,7 +15,7 @@ export default function WelcomePage() {
       <Heading fontSize="100px" fontWeight="lighter" mb={10}>
         Lux
       </Heading>
-      <Button size="sm" onClick={() => setLocation("/patch")}>
+      <Button size="sm" onClick={() => setLocation("/editor")}>
         Open test show
       </Button>
     </Flex>
