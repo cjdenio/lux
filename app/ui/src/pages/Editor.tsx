@@ -65,10 +65,12 @@ export default function EditorPage() {
       rightSidebar={
         <Box>
           {selectedFixtures.length == 0 ? (
-            <Alert status="info" variant="left-accent" mb={4}>
-              <AlertIcon />
-              No fixtures selected.
-            </Alert>
+            <>
+              <Alert status="info" variant="left-accent" mb={4}>
+                <AlertIcon />
+                No fixtures selected.
+              </Alert>
+            </>
           ) : (
             <>
               {selectedFixtures.length > 1 && (
@@ -104,14 +106,22 @@ export default function EditorPage() {
                   }}
                 />
               </FormControl>
+              <FormControl mt={2}>
+                <FormLabel>Intensity</FormLabel>
+                <Fader
+                  value={75}
+                  onChange={(v) => {}}
+                  orientation="horizontal"
+                />
+              </FormControl>
             </>
           )}
         </Box>
       }
       bottomSidebar={
         <>
-          <Fader value={75} onChange={(v) => {}} />
-          <Fader value={25} onChange={(v) => {}} />
+          <Fader value={75} onChange={(v) => {}} orientation="vertical" />
+          <Fader value={25} onChange={(v) => {}} orientation="vertical" />
         </>
       }
     >
