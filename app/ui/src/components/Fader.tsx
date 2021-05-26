@@ -25,6 +25,9 @@ export default function Fader({
       {...{ [isHorizontal ? "my" : "mx"]: 2 }}
     >
       <Box
+        onMouseDown={(e) => {
+          console.log(e.pageY);
+        }}
         flexGrow={1}
         width="100%"
         height="100%"
@@ -33,14 +36,6 @@ export default function Fader({
         }, gray.300 ${value}%, gray.700 ${value}%)`}
         borderRadius="md"
         position="relative"
-        onMouseDown={() =>
-          toast({
-            description: "Faders aren't quite functional yet.",
-            status: "warning",
-            position: "top-right",
-            isClosable: true,
-          })
-        }
       ></Box>
       <Text
         fontSize="sm"
