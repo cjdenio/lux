@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "author": {
+    "name": "Caleb Denio",
+    "email": "cjdenio44@gmail.com",
+    "url": "https://calebden.io"
+  },
   "devDependencies": {
     "electron": "^12.0.7",
     "electron-builder": "22.11.4",
@@ -11,7 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "package:mac": "electron-builder -m",
+    "package": "electron-builder",
     "start": "electron dist/index.js",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
@@ -30,6 +35,12 @@
           "arm64"
         ]
       }
+    },
+    "linux": {
+      "target": [
+        "zip",
+        "deb"
+      ]
     }
   }
 }
