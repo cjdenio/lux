@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "package": "electron-builder",
+    "package:mac": "electron-builder -m",
     "start": "electron dist/index.js",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
@@ -21,6 +21,15 @@
     "productName": "Lux",
     "directories": {
       "output": "build"
+    },
+    "mac": {
+      "target": {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
     }
   }
 }

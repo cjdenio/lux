@@ -1,0 +1,32 @@
+name: Package
+on:
+  push:
+    branches:
+      - master
+      - release-workflow
+jobs:
+  macos:
+    name: macOS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - run: yarn install
+        name: Install app dependencies
+
+      - run: yarn install
+        working-directory: ui/
+        name: Install UI dependencies
+
+      - run: yarn build
+        name: Compile app
+
+      - run: yarn build
+        working-directory: ui/
+        name: Build UI
+
+      - run: yarn package:mac
+        name: Package app for macOS
+
+      - run: ls build/
