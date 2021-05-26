@@ -8,22 +8,40 @@ export default function MainLayout({
   leftSidebar,
   rightSidebar,
   bottomSidebar,
+  leftSidebarId,
+  rightSidebarId,
+  bottomSidebarId,
 }: PropsWithChildren<{
   leftSidebar?: ReactNode;
   rightSidebar?: ReactNode;
   bottomSidebar?: ReactNode;
+  leftSidebarId?: string;
+  rightSidebarId?: string;
+  bottomSidebarId?: string;
 }>) {
   return (
     <Box height="100%">
       <Flex height="100%">
-        {leftSidebar && <Sidebar side="left">{leftSidebar}</Sidebar>}
+        {leftSidebar && (
+          <Sidebar id={leftSidebarId as string} side="left">
+            {leftSidebar}
+          </Sidebar>
+        )}
         <Flex direction="column" flexGrow={1} overflow="auto">
           <Box flexGrow={1} position="relative" overflow="auto">
             {children}
           </Box>
-          {bottomSidebar && <BottomSidebar>{bottomSidebar}</BottomSidebar>}
+          {bottomSidebar && (
+            <BottomSidebar id={bottomSidebarId as string}>
+              {bottomSidebar}
+            </BottomSidebar>
+          )}
         </Flex>
-        {rightSidebar && <Sidebar side="right">{rightSidebar}</Sidebar>}
+        {rightSidebar && (
+          <Sidebar id={rightSidebarId as string} side="right">
+            {rightSidebar}
+          </Sidebar>
+        )}
       </Flex>
     </Box>
   );

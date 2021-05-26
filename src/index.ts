@@ -34,8 +34,8 @@ ipcMain.on("editor-context-menu", () => {
 
 app.whenReady().then(() => {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
+    width: 1300,
+    height: 800,
     titleBarStyle: "hidden",
     show: false,
     backgroundColor: "#1A202C",

@@ -66,6 +66,9 @@ export default function EditorPage() {
   return (
     <MainLayout
       // leftSidebar={"hi"}
+      rightSidebarId="editor-right-sidebar"
+      leftSidebarId="editor-left-sidebar"
+      bottomSidebarId="editor-bottom-sidebar"
       rightSidebar={
         <Box>
           {selectedFixtures.length == 0 ? (
