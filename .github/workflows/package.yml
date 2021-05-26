@@ -7,7 +7,7 @@ on:
 jobs:
   macos:
     name: macOS
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -66,3 +66,33 @@ jobs:
           path: |
             build/*.zip
             build/*.deb
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - run: yarn install
+        name: Install app dependencies
+
+      - run: yarn install
+        working-directory: ui/
+        name: Install UI dependencies
+
+      - run: yarn build
+        name: Compile app
+
+      - run: yarn build
+        working-directory: ui/
+        name: Build UI
+
+      - run: yarn package --windows --publish never
+        name: Package app for Windows
+
+      - uses: actions/upload-artifact@v2
+        name: Upload packaged app
+        with:
+          name: lux-windows
+          path: |
+            build/*.exe
