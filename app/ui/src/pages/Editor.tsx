@@ -24,6 +24,10 @@ export default function EditorPage() {
     }))
   );
 
+  const [faderA, setFaderA] = useState(0);
+  const [faderB, setFaderB] = useState(0);
+  const [faderC, setFaderC] = useState(0);
+
   const selectedFixtures = fixtures.filter((f) => f.selected);
 
   useEffect(() => {
@@ -93,7 +97,7 @@ export default function EditorPage() {
                 <FormLabel mb={5}>Color</FormLabel>
                 <HexColorPicker
                   style={{ margin: "0 auto" }}
-                  color={fixtures.find((i) => i.selected)?.color || "#000000"}
+                  color={selectedFixtures[0].color || "#000000"}
                   onChange={(c) => {
                     setFixtures((f) =>
                       f.map((fixture) => {
@@ -109,8 +113,8 @@ export default function EditorPage() {
               <FormControl mt={2}>
                 <FormLabel>Intensity</FormLabel>
                 <Fader
-                  value={75}
-                  onChange={(v) => {}}
+                  value={faderC}
+                  onChange={setFaderC}
                   orientation="horizontal"
                 />
               </FormControl>
@@ -120,8 +124,46 @@ export default function EditorPage() {
       }
       bottomSidebar={
         <>
-          <Fader value={75} onChange={(v) => {}} orientation="vertical" />
-          <Fader value={25} onChange={(v) => {}} orientation="vertical" />
+          <Fader
+            value={faderA}
+            onChange={(v) => {
+              setFaderA(v);
+
+              const thing = Math.round((v / 100) * 255)
+                .toString(16)
+                .padStart(2, "0");
+
+              setFixtures((f) =>
+                f.map((fixture, index) => {
+                  if (index == 0) {
+                    fixture.color = `#${thing}${thing}${thing}`;
+                  }
+                  return fixture;
+                })
+              );
+            }}
+            orientation="vertical"
+          />
+          <Fader
+            value={faderB}
+            onChange={(v) => {
+              setFaderB(v);
+
+              const thing = Math.round((v / 100) * 255)
+                .toString(16)
+                .padStart(2, "0");
+
+              setFixtures((f) =>
+                f.map((fixture, index) => {
+                  if (index == 1) {
+                    fixture.color = `#${thing}${thing}${thing}`;
+                  }
+                  return fixture;
+                })
+              );
+            }}
+            orientation="vertical"
+          />
         </>
       }
     >
