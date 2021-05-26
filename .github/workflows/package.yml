@@ -26,7 +26,12 @@ jobs:
         working-directory: ui/
         name: Build UI
 
-      - run: yarn package:mac
+      - run: yarn package:mac --public never
         name: Package app for macOS
 
-      - run: ls build/
+      - uses: actions/upload-artifact@v2
+        name: Upload packaged app
+        with:
+          name: lux-mac
+          path: |
+            build/*-mac.zip
