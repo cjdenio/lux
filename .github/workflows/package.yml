@@ -26,7 +26,7 @@ jobs:
         working-directory: ui/
         name: Build UI
 
-      - run: yarn package:mac --public never
+      - run: yarn package:mac --publish never
         name: Package app for macOS
 
       - uses: actions/upload-artifact@v2
