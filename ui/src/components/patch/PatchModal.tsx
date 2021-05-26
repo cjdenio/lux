@@ -8,7 +8,7 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { ReactElement } from "react";
 
 export default function PatchModal({
   isOpen,
@@ -16,7 +16,7 @@ export default function PatchModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-}) {
+}): ReactElement {
   return (
     <Modal
       isOpen={isOpen}

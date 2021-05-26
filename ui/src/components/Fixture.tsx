@@ -1,6 +1,5 @@
-import React, { MouseEventHandler } from "react";
+import React, { ReactElement } from "react";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { useToast } from "@chakra-ui/toast";
 
 import ipc from "../lib/ipc";
 
@@ -8,7 +7,6 @@ export default function Fixture({
   name,
   selected,
   color,
-  edited,
   onClick,
 }: {
   name: string;
@@ -16,7 +14,7 @@ export default function Fixture({
   color: string;
   edited: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}) {
+}): ReactElement {
   return (
     <Flex
       direction="column"
@@ -42,7 +40,7 @@ export default function Fixture({
         borderColor={selected ? "blue.300" : "gray.600"}
         borderRadius="md"
         alignItems="center"
-        justifyContent="center "
+        justifyContent="center"
       >
         <Box
           borderRadius="full"

@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, {
   PropsWithChildren,
+  ReactElement,
   useContext,
   useEffect,
   useRef,
@@ -12,7 +13,7 @@ export default function Sidebar({
   children,
   side,
   id,
-}: PropsWithChildren<{ side: "left" | "right"; id: string }>) {
+}: PropsWithChildren<{ side: "left" | "right"; id: string }>): ReactElement {
   const [resizing, _setResizing] = useState(false);
   const resizingRef = useRef(resizing);
 

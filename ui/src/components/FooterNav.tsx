@@ -11,12 +11,11 @@ import {
   IconButton,
   Tooltip,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { RiLightbulbFill, RiEditFill, RiHome5Fill } from "react-icons/ri";
-import { AiFillControl } from "react-icons/ai";
 import { useLocation } from "wouter";
 
-export default function FooterNav() {
+export default function FooterNav(): ReactElement {
   const [location, setLocation] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const onAlertClose = (confirmed: boolean) => {

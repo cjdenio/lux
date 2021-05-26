@@ -1,5 +1,5 @@
-import { Box, Flex, Text, useToast } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 
 export default function Fader({
   value,
@@ -9,8 +9,7 @@ export default function Fader({
   value: number;
   onChange: (value: number) => void;
   orientation: "vertical" | "horizontal";
-}) {
-  const toast = useToast();
+}): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
 
   const [resizing, _setResizing] = useState(false);
@@ -75,7 +74,7 @@ export default function Fader({
       <Box
         onMouseDown={(e) => {
           setResizing(true);
-          resize(e as any);
+          resize(e as unknown as MouseEvent);
         }}
         onWheel={(e) => {
           let newValue = value + (isHorizontal ? -e.deltaX : e.deltaY) * 0.3;

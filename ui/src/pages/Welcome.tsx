@@ -1,9 +1,9 @@
 import { Flex, Heading, Button } from "@chakra-ui/react";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useLocation } from "wouter";
 
-export default function WelcomePage() {
-  const [location, setLocation] = useLocation();
+export default function WelcomePage(): ReactElement {
+  const [, setLocation] = useLocation();
 
   return (
     <Flex

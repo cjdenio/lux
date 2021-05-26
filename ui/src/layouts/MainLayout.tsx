@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren, ReactElement, ReactNode } from "react";
 import BottomSidebar from "../components/BottomSidebar";
 import Sidebar from "../components/Sidebar";
 
@@ -18,7 +18,7 @@ export default function MainLayout({
   leftSidebarId?: string;
   rightSidebarId?: string;
   bottomSidebarId?: string;
-}>) {
+}>): ReactElement {
   return (
     <Box height="100%">
       <Flex height="100%">

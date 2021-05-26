@@ -1,7 +1,10 @@
 import { IpcRenderer } from "electron";
 
-declare function require(m: string): any;
+declare global {
+  interface Window {
+    require<T>(m: string): T;
+  }
+}
 
-let ipc: IpcRenderer;
-
-export default ipc = require("electron").ipcRenderer as IpcRenderer;
+export default window.require<{ ipcRenderer: IpcRenderer }>("electron")
+  .ipcRenderer;

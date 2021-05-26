@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/layout";
 import React, {
   PropsWithChildren,
+  ReactElement,
   useContext,
   useEffect,
   useRef,
@@ -11,7 +12,7 @@ import SidebarContext from "../state/sidebar";
 export default function BottomSidebar({
   children,
   id,
-}: PropsWithChildren<{ id: string }>) {
+}: PropsWithChildren<{ id: string }>): ReactElement {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [resizing, _setResizing] = useState(false);

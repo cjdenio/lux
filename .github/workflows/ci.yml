@@ -29,3 +29,13 @@ jobs:
       - uses: actions/setup-node@v2
       - run: yarn install
       - run: yarn build
+  lint-ui:
+    name: Lint UI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: yarn install
+        working-directory: ui/
+      - run: yarn lint:check
+        working-directory: ui/

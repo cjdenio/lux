@@ -1,8 +1,5 @@
 import {
   Box,
-  FormControl,
-  FormLabel,
-  Input,
   Tabs,
   TabList,
   Tab,
@@ -18,13 +15,13 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
-export default function PatchPage() {
-  const [fixtures, setFixtures] = useState(
+export default function PatchPage(): ReactElement {
+  const [fixtures] = useState(
     new Array(10).fill({}).map((v, i) => ({
       id: i + 1,
       name: `Fixture ${i + 1}`,

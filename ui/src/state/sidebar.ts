@@ -5,6 +5,7 @@ const SidebarContext = createContext<{
   setSidebar: (id: string, size: number) => void;
 }>({
   sidebars: {},
+  // eslint-disable-next-line
   setSidebar: () => {},
 });
 

@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
-import React, { Component, PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren, ReactElement, ReactNode } from "react";
 
 export default function AppWindow({
   children,
   title,
-}: PropsWithChildren<{ title: ReactNode }>) {
+}: PropsWithChildren<{ title: ReactNode }>): ReactElement {
   return (
     <Flex direction="column" height="100%">
       <Flex

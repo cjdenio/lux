@@ -6,14 +6,14 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import { HexColorPicker } from "react-colorful";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
 import Fader from "../components/Fader";
 
-export default function EditorPage() {
+export default function EditorPage(): ReactElement {
   const [fixtures, setFixtures] = useState(
     new Array(10).fill({}).map((v, i) => ({
       id: i + 1,
@@ -177,7 +177,7 @@ export default function EditorPage() {
         wrap="wrap"
         onClick={(e) => {
           if (
-            (e.target as any).id == "editor" &&
+            (e.target as Element).id == "editor" &&
             !(e.shiftKey || e.metaKey || e.ctrlKey)
           ) {
             setFixtures((f) =>
@@ -186,7 +186,7 @@ export default function EditorPage() {
           }
         }}
         onContextMenu={(e) => {
-          if ((e.target as any).id == "editor") {
+          if ((e.target as Element).id == "editor") {
             ipc.send("editor-context-menu");
           }
         }}
