@@ -1,5 +1,7 @@
 import { BrowserWindow, app, ipcMain, Menu } from "electron";
 import { join } from "path";
+import Lux from "./core/lib";
+import ArtnetOutput from "./core/outputs/artnet";
 
 let mainWindow: BrowserWindow | undefined;
 

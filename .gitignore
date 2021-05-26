@@ -4,5 +4,5 @@ dist
 ui-dist
 dist-ssr
 *.local
-/app/build
+/build
 *.log

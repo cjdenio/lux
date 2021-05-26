@@ -2,15 +2,11 @@
   "folders": [
     {
       "name": "Electron app",
-      "path": "app"
+      "path": "."
     },
     {
       "name": "React UI",
-      "path": "app/ui"
-    },
-    {
-      "name": "Core library",
-      "path": "core"
+      "path": "ui"
     }
   ],
   "settings": {}
