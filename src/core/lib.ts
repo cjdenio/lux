@@ -16,14 +16,28 @@ export default class Lux {
       }
 
       Object.entries(fixture.properties).forEach(([property, value]) => {
+        let intensityFactor = 1;
+
+        if (
+          (property == "red" || property == "green" || property == "blue") &&
+          !definition.channels["intensity"] &&
+          fixture.properties["intensity"]
+        ) {
+          intensityFactor = fixture.properties["intensity"] / 255;
+        }
+
         const channel = definition.channels[property];
         if (channel === undefined) {
+          if (property == "intensity") {
+            return;
+          }
+
           throw new Error(
             `Property "${property}" not valid for fixture definition: ${definition.name}`
           );
         }
 
-        channels[channel + fixture.startChannel] = value;
+        channels[channel + fixture.startChannel] = value * intensityFactor;
       });
     });
 

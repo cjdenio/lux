@@ -1,11 +1,11 @@
-type Property = "r" | "g" | "b" | "a" | "i";
+type Property = "red" | "green" | "blue" | "amber" | "intensity";
 
 export interface PropertyMap {
-  r?: number;
-  g?: number;
-  b?: number;
-  a?: number;
-  i?: number;
+  red?: number;
+  green?: number;
+  blue?: number;
+  amber?: number;
+  intensity?: number;
 }
 
 export default Property;

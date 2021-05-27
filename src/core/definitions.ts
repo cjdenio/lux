@@ -1,23 +1,23 @@
-import Property, { PropertyMap } from "./types/Property";
+import { PropertyMap } from "./types/Property";
 
 export interface FixtureDefinition {
   name: string;
-  channels: { [key: string]: number };
+  channels: { [property: string]: number };
 }
 
 const definitions: { [key: string]: FixtureDefinition } = {
   generic_dimmer: {
     name: "Generic dimmer",
     channels: {
-      i: 0,
+      intensity: 0,
     },
   },
   generic_rgb: {
     name: "Generic RGB",
     channels: {
-      r: 0,
-      g: 1,
-      b: 2,
+      red: 0,
+      green: 1,
+      blue: 2,
     },
   },
 };

@@ -19,28 +19,29 @@ import Fixture from "./types/Fixture";
   lux.fixtures = test;
 
   for (let i = 2; i <= 4; i++) {
-    lux.fixtures[i].properties.i = 100;
+    lux.fixtures[i].properties.intensity = 100;
   }
 
-  lux.fixtures[1].properties.i = 50;
-  lux.fixtures[5].properties.i = 50;
+  lux.fixtures[1].properties.intensity = 50;
+  lux.fixtures[5].properties.intensity = 50;
 
   lux.fixtures[6].properties = {
-    r: 100,
-    b: 100,
+    red: 255,
+    blue: 255,
+    intensity: 100,
   };
   lux.fixtures[7].properties = {
-    b: 200,
+    blue: 200,
   };
   lux.fixtures[8].properties = {
-    b: 200,
+    blue: 200,
   };
   lux.fixtures[9].properties = {
-    b: 200,
+    blue: 200,
   };
   lux.fixtures[10].properties = {
-    r: 100,
-    b: 100,
+    red: 100,
+    blue: 100,
   };
 
   await lux.update();
