@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "author": {
+    "name": "Caleb Denio",
+    "email": "cjdenio44@gmail.com",
+    "url": "https://calebden.io"
+  },
   "devDependencies": {
     "electron": "^12.0.7",
     "electron-builder": "22.11.4",
@@ -21,6 +26,21 @@
     "productName": "Lux",
     "directories": {
       "output": "build"
+    },
+    "mac": {
+      "target": {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    },
+    "linux": {
+      "target": [
+        "zip",
+        "deb"
+      ]
     }
   }
 }

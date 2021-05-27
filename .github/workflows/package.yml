@@ -1,0 +1,98 @@
+name: Package
+on:
+  push:
+    branches:
+      - master
+      - release-workflow
+jobs:
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - run: yarn install
+        name: Install app dependencies
+
+      - run: yarn install
+        working-directory: ui/
+        name: Install UI dependencies
+
+      - run: yarn build
+        name: Compile app
+
+      - run: yarn build
+        working-directory: ui/
+        name: Build UI
+
+      - run: yarn package --mac --publish never
+        name: Package app for macOS
+
+      - uses: actions/upload-artifact@v2
+        name: Upload packaged app
+        with:
+          name: lux-mac
+          path: |
+            build/*-mac.zip
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - run: yarn install
+        name: Install app dependencies
+
+      - run: yarn install
+        working-directory: ui/
+        name: Install UI dependencies
+
+      - run: yarn build
+        name: Compile app
+
+      - run: yarn build
+        working-directory: ui/
+        name: Build UI
+
+      - run: yarn package --linux --publish never
+        name: Package app for Linux
+
+      - uses: actions/upload-artifact@v2
+        name: Upload packaged app
+        with:
+          name: lux-linux
+          path: |
+            build/*.zip
+            build/*.deb
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - run: yarn install
+        name: Install app dependencies
+
+      - run: yarn install
+        working-directory: ui/
+        name: Install UI dependencies
+
+      - run: yarn build
+        name: Compile app
+
+      - run: yarn build
+        working-directory: ui/
+        name: Build UI
+
+      - run: yarn package --windows --publish never
+        name: Package app for Windows
+
+      - uses: actions/upload-artifact@v2
+        name: Upload packaged app
+        with:
+          name: lux-windows
+          path: |
+            build/*.exe
