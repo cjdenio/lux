@@ -12,7 +12,8 @@ import SidebarContext from "../state/sidebar";
 export default function BottomSidebar({
   children,
   id,
-}: PropsWithChildren<{ id: string }>): ReactElement {
+  minSize,
+}: PropsWithChildren<{ id: string; minSize?: number }>): ReactElement {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [resizing, _setResizing] = useState(false);
@@ -36,9 +37,12 @@ export default function BottomSidebar({
     const resize = (e: MouseEvent) => {
       // console.log("mouse: " + e.y);
       if (resizingRef.current) {
-        setSize(
-          (sidebarRef.current?.getBoundingClientRect().bottom || 0) - e.y
-        );
+        let newSize =
+          (sidebarRef.current?.getBoundingClientRect().bottom || 0) - e.y;
+
+        if (minSize && newSize < minSize) newSize = minSize;
+
+        setSize(newSize);
       }
     };
 

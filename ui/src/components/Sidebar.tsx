@@ -13,7 +13,12 @@ export default function Sidebar({
   children,
   side,
   id,
-}: PropsWithChildren<{ side: "left" | "right"; id: string }>): ReactElement {
+  minSize,
+}: PropsWithChildren<{
+  side: "left" | "right";
+  id: string;
+  minSize?: number;
+}>): ReactElement {
   const [resizing, _setResizing] = useState(false);
   const resizingRef = useRef(resizing);
 
@@ -34,11 +39,17 @@ export default function Sidebar({
   useEffect(() => {
     const resize = (e: MouseEvent) => {
       if (resizingRef.current) {
+        let newSize: number;
+
         if (side == "left") {
-          setSize(e.x + 2);
+          newSize = e.x + 2;
         } else {
-          setSize(window.innerWidth - e.x + 1);
+          newSize = window.innerWidth - e.x + 1;
         }
+
+        if (minSize && newSize < minSize) newSize = minSize;
+
+        setSize(newSize);
       }
     };
 

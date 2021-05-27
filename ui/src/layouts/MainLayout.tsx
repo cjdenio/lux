@@ -23,7 +23,7 @@ export default function MainLayout({
     <Box height="100%">
       <Flex height="100%">
         {leftSidebar && (
-          <Sidebar id={leftSidebarId as string} side="left">
+          <Sidebar id={leftSidebarId as string} side="left" minSize={250}>
             {leftSidebar}
           </Sidebar>
         )}
@@ -32,13 +32,13 @@ export default function MainLayout({
             {children}
           </Box>
           {bottomSidebar && (
-            <BottomSidebar id={bottomSidebarId as string}>
+            <BottomSidebar id={bottomSidebarId as string} minSize={200}>
               {bottomSidebar}
             </BottomSidebar>
           )}
         </Flex>
         {rightSidebar && (
-          <Sidebar id={rightSidebarId as string} side="right">
+          <Sidebar id={rightSidebarId as string} side="right" minSize={250}>
             {rightSidebar}
           </Sidebar>
         )}
