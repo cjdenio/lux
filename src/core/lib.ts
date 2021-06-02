@@ -6,6 +6,8 @@ export default class Lux {
   fixtures: { [id: string]: Fixture } = {};
   output: LuxOutput;
 
+  grandMaster: number = 255;
+
   public async update() {
     if (!this.output) return;
 
@@ -39,6 +41,8 @@ export default class Lux {
           );
         }
 
+        intensityFactor = (intensityFactor * this.grandMaster) / 255;
+
         channels[channel + fixture.startChannel] = value * intensityFactor;
       });
     });
@@ -55,5 +59,9 @@ export default class Lux {
   public async attachOutput(output: LuxOutput) {
     this.output = output;
     await this.output.init();
+  }
+
+  public setGrandMaster(value: number) {
+    this.grandMaster = value;
   }
 }

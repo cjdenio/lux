@@ -19,14 +19,17 @@ export default function EditorPage(): ReactElement {
   const [fixtures, setFixtures] = useState<
     (FixtureWithDefinition & { selected?: boolean })[]
   >([]);
-
-  useEffect(() => {
-    console.log(fixtures.map((i) => i.selected));
-  }, [fixtures]);
+  const [grandMaster, setGrandMaster] = useState(0);
 
   useEffect(() => {
     ipc.invoke("fixtures").then((fixtures: FixtureWithDefinition[]) => {
       setFixtures(fixtures);
+    });
+  }, []);
+
+  useEffect(() => {
+    ipc.invoke("grand-master").then((grandMaster: number) => {
+      setGrandMaster(grandMaster);
     });
   }, []);
 
@@ -182,8 +185,14 @@ export default function EditorPage(): ReactElement {
       }
       bottomSidebar={
         <>
-          <Fader value={0} onChange={console.log} orientation="vertical" />
-          <Fader value={0} onChange={console.log} orientation="vertical" />
+          <Fader
+            value={(grandMaster / 255) * 100}
+            onChange={(v) => {
+              ipc.send("update-grand-master", (v / 100) * 255);
+              setGrandMaster((v / 100) * 255);
+            }}
+            orientation="vertical"
+          />
         </>
       }
     >
@@ -192,7 +201,7 @@ export default function EditorPage(): ReactElement {
         alignItems="center"
         justifyContent="center"
         wrap="wrap"
-        onClick={(e) => {
+        onMouseDown={(e) => {
           if (
             (e.target as Element).id == "editor" &&
             !(e.shiftKey || e.metaKey || e.ctrlKey)

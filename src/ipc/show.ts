@@ -15,6 +15,10 @@ export default function initShowIpc(
     }));
   });
 
+  ipc.handle("grand-master", () => {
+    return lux.grandMaster;
+  });
+
   ipc.on(
     "update-fixtures-properties",
     async (
@@ -31,4 +35,10 @@ export default function initShowIpc(
       await lux.update();
     }
   );
+
+  ipc.on("update-grand-master", async (e, value) => {
+    lux.setGrandMaster(value);
+
+    await lux.update();
+  });
 }
