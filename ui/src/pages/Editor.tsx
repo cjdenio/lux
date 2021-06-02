@@ -6,29 +6,54 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
-import { HexColorPicker } from "react-colorful";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
 import Fader from "../components/Fader";
+import ColorPicker from "../components/ColorPicker";
+import { Fixture as IFixture, FixtureWithDefinition } from "../../../src/core";
+import { IpcRendererEvent } from "electron";
 
 export default function EditorPage(): ReactElement {
-  const [fixtures, setFixtures] = useState(
-    new Array(10).fill({}).map((v, i) => ({
-      id: i + 1,
-      name: (i + 1).toString(),
-      selected: false,
-      edited: false,
-      color: "#000000",
-    }))
+  const [fixtures, setFixtures] = useState<
+    (FixtureWithDefinition & { selected?: boolean })[]
+  >([]);
+
+  useEffect(() => {
+    console.log(fixtures.map((i) => i.selected));
+  }, [fixtures]);
+
+  useEffect(() => {
+    ipc.invoke("fixtures").then((fixtures: FixtureWithDefinition[]) => {
+      setFixtures(fixtures);
+    });
+  }, []);
+
+  useEffect(() => {
+    const onUpdateFixture = (e: IpcRendererEvent, fixture: IFixture) => {
+      setFixtures((fs) =>
+        fs.map((f) => {
+          if (f.id == fixture.id) {
+            f.properties = { ...f.properties, ...fixture.properties };
+          }
+
+          return f;
+        })
+      );
+    };
+
+    ipc.on("update-fixture", onUpdateFixture);
+
+    return () => {
+      ipc.removeListener("update-fixture", onUpdateFixture);
+    };
+  }, []);
+
+  const selectedFixtures = useMemo(
+    () => fixtures.filter((f) => f.selected),
+    [fixtures]
   );
-
-  const [faderA, setFaderA] = useState(0);
-  const [faderB, setFaderB] = useState(0);
-  const [faderC, setFaderC] = useState(0);
-
-  const selectedFixtures = fixtures.filter((f) => f.selected);
 
   useEffect(() => {
     const selectAll = () => {
@@ -96,28 +121,58 @@ export default function EditorPage(): ReactElement {
                   {selectedFixtures.length} fixtures selected
                 </Text>
               )}
-              <FormControl>
-                <FormLabel mb={5}>Color</FormLabel>
-                <HexColorPicker
-                  style={{ margin: "0 auto" }}
-                  color={selectedFixtures[0].color || "#000000"}
-                  onChange={(c) => {
-                    setFixtures((f) =>
-                      f.map((fixture) => {
-                        if (fixture.selected) {
-                          fixture.color = c;
-                        }
-                        return fixture;
-                      })
-                    );
-                  }}
-                />
-              </FormControl>
-              <FormControl mt={2}>
+
+              {selectedFixtures.every((f) =>
+                Object.keys(f.definition.channels).includes("red")
+              ) && (
+                <FormControl mb={5}>
+                  <FormLabel>Color</FormLabel>
+                  <ColorPicker
+                    value={{
+                      r: selectedFixtures[0].properties.red || 255,
+                      g: selectedFixtures[0].properties.green || 255,
+                      b: selectedFixtures[0].properties.blue || 255,
+                    }}
+                    onChange={(c) => {
+                      // setFixtures((f) =>
+                      //   f.map((fixture) => {
+                      //     if (fixture.selected) {
+                      //       fixture.color = c;
+                      //     }
+                      //     return fixture;
+                      //   })
+                      // );
+                    }}
+                  />
+                  {/* <RgbColorPicker /> */}
+                </FormControl>
+              )}
+              <FormControl mb={5}>
                 <FormLabel>Intensity</FormLabel>
                 <Fader
-                  value={faderC}
-                  onChange={setFaderC}
+                  value={
+                    selectedFixtures[0].properties.intensity
+                      ? (selectedFixtures[0].properties.intensity / 255) * 100
+                      : 0
+                  }
+                  onChange={(e) => {
+                    setFixtures((fs) => {
+                      ipc.send("update-fixtures-properties", {
+                        ids: fs.filter((i) => i.selected).map((i) => i.id),
+                        properties: {
+                          intensity: Math.round((e / 100) * 255),
+                        },
+                      });
+
+                      return fs.map((f) => {
+                        if (f.selected) {
+                          f.properties.intensity = (e / 100) * 255;
+                        }
+
+                        return f;
+                      });
+                    });
+                  }}
                   orientation="horizontal"
                 />
               </FormControl>
@@ -127,46 +182,8 @@ export default function EditorPage(): ReactElement {
       }
       bottomSidebar={
         <>
-          <Fader
-            value={faderA}
-            onChange={(v) => {
-              setFaderA(v);
-
-              const thing = Math.round((v / 100) * 255)
-                .toString(16)
-                .padStart(2, "0");
-
-              setFixtures((f) =>
-                f.map((fixture, index) => {
-                  if (index == 0) {
-                    fixture.color = `#${thing}${thing}${thing}`;
-                  }
-                  return fixture;
-                })
-              );
-            }}
-            orientation="vertical"
-          />
-          <Fader
-            value={faderB}
-            onChange={(v) => {
-              setFaderB(v);
-
-              const thing = Math.round((v / 100) * 255)
-                .toString(16)
-                .padStart(2, "0");
-
-              setFixtures((f) =>
-                f.map((fixture, index) => {
-                  if (index == 1) {
-                    fixture.color = `#${thing}${thing}${thing}`;
-                  }
-                  return fixture;
-                })
-              );
-            }}
-            orientation="vertical"
-          />
+          <Fader value={0} onChange={console.log} orientation="vertical" />
+          <Fader value={0} onChange={console.log} orientation="vertical" />
         </>
       }
     >
@@ -192,13 +209,22 @@ export default function EditorPage(): ReactElement {
         }}
         id="editor"
       >
-        {fixtures.map((i) => (
+        {Object.values(fixtures).map((i) => (
           <Fixture
             name={i.name}
             key={i.id}
             selected={i.selected}
-            color={i.color}
-            edited={i.edited}
+            color={`rgb(${
+              (i.properties.red || 255) *
+              (i.properties.intensity ? i.properties.intensity / 255 : 0)
+            }, ${
+              (i.properties.green || 255) *
+              (i.properties.intensity ? i.properties.intensity / 255 : 0)
+            }, ${
+              (i.properties.blue || 255) *
+              (i.properties.intensity ? i.properties.intensity / 255 : 0)
+            })`}
+            edited={false}
             onClick={(e) => {
               setFixtures((f) => {
                 return f.map((fixture) => {

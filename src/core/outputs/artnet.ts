@@ -47,7 +47,13 @@ export default class ArtnetOutput implements LuxOutput {
 
       Buffer.from(data).copy(packet, 18);
 
-      this.socket.send(packet, 0x1936, this.addr, () => resolve());
+      this.socket.send(packet, 0x1936, this.addr, (err) => {
+        if (err) {
+          reject();
+        } else {
+          resolve();
+        }
+      });
     });
   }
 }

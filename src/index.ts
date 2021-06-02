@@ -1,35 +1,29 @@
 import { BrowserWindow, app, ipcMain, Menu } from "electron";
 import { join } from "path";
-import Lux from "./core/lib";
-import ArtnetOutput from "./core/outputs/artnet";
+import { Lux, ArtnetOutput, Fixture } from "./core";
 
-let mainWindow: BrowserWindow | undefined;
+import { readFile } from "fs/promises";
+import initShowIpc from "./ipc/show";
+import initEditorIpc from "./ipc/editor";
 
-ipcMain.on("fixture-context-menu", () => {
-  Menu.buildFromTemplate([
-    {
-      label: "Delete fixture",
-    },
-  ]).popup();
+let mainWindow: BrowserWindow;
+
+const lux = new Lux();
+lux.attachOutput(new ArtnetOutput("192.168.1.255")).then(() => {
+  console.log("Art-Net successfully connected");
 });
 
-ipcMain.on("editor-context-menu", () => {
-  Menu.buildFromTemplate([
-    {
-      label: "Select all",
-      accelerator: "CommandOrControl+A",
-      click: () => {
-        mainWindow?.webContents.send("editor-select-all");
-      },
+readFile("fixtures.json").then((fixtures) => {
+  const test = JSON.parse(fixtures.toString()).reduce(
+    (acc: { [id: string]: Fixture }, curr: Fixture) => {
+      return { ...acc, [curr.id]: curr };
     },
-    {
-      label: "Invert selection",
-      accelerator: "CommandOrControl+I",
-      click: () => {
-        mainWindow?.webContents.send("editor-invert-selection");
-      },
-    },
-  ]).popup();
+    {}
+  );
+
+  lux.fixtures = test;
+
+  console.log("fixtures attached");
 });
 
 app.whenReady().then(() => {
@@ -45,6 +39,9 @@ app.whenReady().then(() => {
       contextIsolation: false,
     },
   });
+
+  initShowIpc(mainWindow, lux, ipcMain);
+  initEditorIpc(mainWindow, ipcMain);
 
   mainWindow.on("ready-to-show", () => {
     mainWindow?.show();

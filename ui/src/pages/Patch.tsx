@@ -15,20 +15,23 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
+import { Fixture } from "../../../src/core";
+import ipc from "../lib/ipc";
+
 export default function PatchPage(): ReactElement {
-  const [fixtures] = useState(
-    new Array(10).fill({}).map((v, i) => ({
-      id: i + 1,
-      name: `Fixture ${i + 1}`,
-      channels: [i, i + 1],
-    }))
-  );
+  const [fixtures, setFixtures] = useState<{ [id: string]: Fixture }>({});
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  useEffect(() => {
+    ipc.invoke("fixtures").then((fixtures: { [id: string]: Fixture }) => {
+      setFixtures(fixtures);
+    });
+  }, []);
 
   return (
     <MainLayout>
@@ -66,11 +69,11 @@ export default function PatchPage(): ReactElement {
                 </Thead>
 
                 <Tbody>
-                  {fixtures.map(({ name, id, channels }) => (
+                  {Object.values(fixtures).map(({ name, id, startChannel }) => (
                     <Tr key={id}>
                       <Td>{id}</Td>
                       <Td>{name}</Td>
-                      <Td>{channels.join("-")}</Td>
+                      <Td>{startChannel}</Td>
                     </Tr>
                   ))}
                 </Tbody>

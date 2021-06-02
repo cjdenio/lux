@@ -7,6 +7,8 @@ export default class Lux {
   output: LuxOutput;
 
   public async update() {
+    if (!this.output) return;
+
     const channels: { [key: number]: number } = {};
 
     Object.values(this.fixtures).forEach((fixture) => {
