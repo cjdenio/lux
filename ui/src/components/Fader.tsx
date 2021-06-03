@@ -68,7 +68,6 @@ export default function Fader({
       width={isHorizontal ? "100%" : "50px"}
       alignItems="center"
       display="inline-flex"
-      cursor="pointer"
       {...{ [isHorizontal ? "my" : "mx"]: 2 }}
     >
       <Box
@@ -92,6 +91,7 @@ export default function Fader({
         }, gray.300 ${value}%, gray.700 ${value}%)`}
         borderRadius="md"
         position="relative"
+        cursor="pointer"
       ></Box>
       <Text
         fontSize="sm"
