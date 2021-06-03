@@ -24,10 +24,9 @@ export default class Lux {
 
         if (
           (property == "red" || property == "green" || property == "blue") &&
-          !definition.channels["intensity"] &&
-          fixture.properties["intensity"]
+          !definition.channels["intensity"]
         ) {
-          intensityFactor = fixture.properties["intensity"] / 255;
+          intensityFactor = (fixture.properties["intensity"] || 0) / 255;
         }
 
         const channel = definition.channels[property];

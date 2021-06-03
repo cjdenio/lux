@@ -39,7 +39,9 @@
     "name": "test",
     "startChannel": 6,
     "definitionId": "generic_rgb",
-    "properties": {}
+    "properties": {
+      "red": 255
+    }
   },
   {
     "id": 7,
