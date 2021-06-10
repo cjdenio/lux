@@ -1,29 +1,16 @@
 import { BrowserWindow, app, ipcMain, Menu } from "electron";
 import { join } from "path";
-import { Lux, ArtnetOutput, Fixture } from "./core";
+import { Lux, ArtnetOutput } from "./core";
 
-import { readFile } from "fs/promises";
 import initShowIpc from "./ipc/show";
 import initEditorIpc from "./ipc/editor";
+import initWelcomeIpc from "./ipc/welcome";
 
 let mainWindow: BrowserWindow;
 
 const lux = new Lux();
 lux.attachOutput(new ArtnetOutput("192.168.1.255")).then(() => {
   console.log("Art-Net successfully connected");
-});
-
-readFile("fixtures.json").then((fixtures) => {
-  const test = JSON.parse(fixtures.toString()).reduce(
-    (acc: { [id: string]: Fixture }, curr: Fixture) => {
-      return { ...acc, [curr.id]: curr };
-    },
-    {}
-  );
-
-  lux.fixtures = test;
-
-  console.log("fixtures attached");
 });
 
 app.whenReady().then(() => {
@@ -40,6 +27,7 @@ app.whenReady().then(() => {
     },
   });
 
+  initWelcomeIpc(lux, mainWindow, ipcMain);
   initShowIpc(mainWindow, lux, ipcMain);
   initEditorIpc(mainWindow, ipcMain);
 

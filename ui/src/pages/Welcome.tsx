@@ -1,23 +1,33 @@
-import { Flex, Heading, Button } from "@chakra-ui/react";
+import { Flex, Heading, Button, Box, ButtonGroup } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
-import { useLocation } from "wouter";
+import ipc from "../lib/ipc";
 
 export default function WelcomePage(): ReactElement {
-  const [, setLocation] = useLocation();
-
   return (
     <Flex
-      flexDir="column"
       alignItems="center"
       justifyContent="center"
       height="100%"
+      overflow="auto"
     >
-      <Heading fontSize="100px" fontWeight="lighter" mb={10}>
-        Lux
-      </Heading>
-      <Button size="sm" onClick={() => setLocation("/editor")}>
-        Open test show
-      </Button>
+      <Box flexShrink={0} flexBasis={0} flexGrow={1} textAlign="center">
+        <Heading fontSize="100px" fontWeight="lighter" mb={10}>
+          Lux
+        </Heading>
+      </Box>
+      <Flex
+        flexShrink={0}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        flexBasis={0}
+        flexGrow={1}
+      >
+        <ButtonGroup>
+          <Button onClick={() => ipc.send("open-project")}>Open Show</Button>
+          <Button colorScheme="blue">Create Show</Button>
+        </ButtonGroup>
+      </Flex>
     </Flex>
   );
 }

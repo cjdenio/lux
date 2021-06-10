@@ -184,16 +184,22 @@ export default function EditorPage(): ReactElement {
         </Box>
       }
       bottomSidebar={
-        <>
-          <Fader
-            value={(grandMaster / 255) * 100}
-            onChange={(v) => {
-              ipc.send("update-grand-master", (v / 100) * 255);
-              setGrandMaster((v / 100) * 255);
-            }}
-            orientation="vertical"
-          />
-        </>
+        <Flex width="100%" height="100%">
+          <Box flexGrow={1} overflowX="auto" whiteSpace="nowrap">
+            {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+            <Fader value={0} onChange={() => {}} orientation="vertical" />
+          </Box>
+          <Box flexShrink={0}>
+            <Fader
+              value={(grandMaster / 255) * 100}
+              onChange={(v) => {
+                ipc.send("update-grand-master", (v / 100) * 255);
+                setGrandMaster((v / 100) * 255);
+              }}
+              orientation="vertical"
+            />
+          </Box>
+        </Flex>
       }
     >
       <Flex
