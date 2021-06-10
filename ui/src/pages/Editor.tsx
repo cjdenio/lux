@@ -136,7 +136,8 @@ export default function EditorPage(): ReactElement {
                       g: selectedFixtures[0].properties.green || 255,
                       b: selectedFixtures[0].properties.blue || 255,
                     }}
-                    onChange={(c) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    onChange={(_c) => {
                       // setFixtures((f) =>
                       //   f.map((fixture) => {
                       //     if (fixture.selected) {
