@@ -15,7 +15,11 @@ import ColorPicker from "../components/ColorPicker";
 import { Fixture as IFixture, FixtureWithDefinition } from "../../../src/core";
 import { IpcRendererEvent } from "electron";
 
-export default function EditorPage(): ReactElement {
+export default function EditorPage({
+  isShow = false,
+}: {
+  isShow?: boolean;
+}): ReactElement {
   const [fixtures, setFixtures] = useState<
     (FixtureWithDefinition & { selected?: boolean })[]
   >([]);
@@ -98,91 +102,93 @@ export default function EditorPage(): ReactElement {
       leftSidebarId="editor-left-sidebar"
       bottomSidebarId="editor-bottom-sidebar"
       rightSidebar={
-        <Box>
-          {selectedFixtures.length == 0 ? (
-            <>
-              <Alert status="info" variant="left-accent" mb={4}>
-                <AlertIcon />
-                No fixtures selected.
-              </Alert>
-            </>
-          ) : (
-            <>
-              {selectedFixtures.length > 1 && (
-                <Text
-                  position="fixed"
-                  top={2}
-                  right={2}
-                  mb={2}
-                  color="gray.400"
-                  fontSize="xs"
-                  letterSpacing="wider"
-                  textTransform="uppercase"
-                  fontWeight="bold"
-                  fontFamily="heading"
-                >
-                  {selectedFixtures.length} fixtures selected
-                </Text>
-              )}
+        !isShow ? (
+          <Box>
+            {selectedFixtures.length == 0 ? (
+              <>
+                <Alert status="info" variant="left-accent" mb={4}>
+                  <AlertIcon />
+                  No fixtures selected.
+                </Alert>
+              </>
+            ) : (
+              <>
+                {selectedFixtures.length > 1 && (
+                  <Text
+                    position="fixed"
+                    top={2}
+                    right={2}
+                    mb={2}
+                    color="gray.400"
+                    fontSize="xs"
+                    letterSpacing="wider"
+                    textTransform="uppercase"
+                    fontWeight="bold"
+                    fontFamily="heading"
+                  >
+                    {selectedFixtures.length} fixtures selected
+                  </Text>
+                )}
 
-              {selectedFixtures.every((f) =>
-                Object.keys(f.definition.channels).includes("red")
-              ) && (
+                {selectedFixtures.every((f) =>
+                  Object.keys(f.definition.channels).includes("red")
+                ) && (
+                  <FormControl mb={5}>
+                    <FormLabel>Color</FormLabel>
+                    <ColorPicker
+                      value={{
+                        r: selectedFixtures[0].properties.red || 255,
+                        g: selectedFixtures[0].properties.green || 255,
+                        b: selectedFixtures[0].properties.blue || 255,
+                      }}
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      onChange={(_c) => {
+                        // setFixtures((f) =>
+                        //   f.map((fixture) => {
+                        //     if (fixture.selected) {
+                        //       fixture.color = c;
+                        //     }
+                        //     return fixture;
+                        //   })
+                        // );
+                      }}
+                    />
+                    {/* <RgbColorPicker /> */}
+                  </FormControl>
+                )}
                 <FormControl mb={5}>
-                  <FormLabel>Color</FormLabel>
-                  <ColorPicker
-                    value={{
-                      r: selectedFixtures[0].properties.red || 255,
-                      g: selectedFixtures[0].properties.green || 255,
-                      b: selectedFixtures[0].properties.blue || 255,
+                  <FormLabel>Intensity</FormLabel>
+                  <Fader
+                    value={
+                      selectedFixtures[0].properties.intensity
+                        ? (selectedFixtures[0].properties.intensity / 255) * 100
+                        : 0
+                    }
+                    onChange={(e) => {
+                      setFixtures((fs) => {
+                        ipc.send("update-fixtures-properties", {
+                          ids: fs.filter((i) => i.selected).map((i) => i.id),
+                          properties: {
+                            intensity: Math.round((e / 100) * 255),
+                          },
+                        });
+
+                        return fs.map((f) => {
+                          if (f.selected) {
+                            f.properties.intensity = (e / 100) * 255;
+                          }
+
+                          return f;
+                        });
+                      });
                     }}
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    onChange={(_c) => {
-                      // setFixtures((f) =>
-                      //   f.map((fixture) => {
-                      //     if (fixture.selected) {
-                      //       fixture.color = c;
-                      //     }
-                      //     return fixture;
-                      //   })
-                      // );
-                    }}
+                    orientation="horizontal"
                   />
-                  {/* <RgbColorPicker /> */}
                 </FormControl>
-              )}
-              <FormControl mb={5}>
-                <FormLabel>Intensity</FormLabel>
-                <Fader
-                  value={
-                    selectedFixtures[0].properties.intensity
-                      ? (selectedFixtures[0].properties.intensity / 255) * 100
-                      : 0
-                  }
-                  onChange={(e) => {
-                    setFixtures((fs) => {
-                      ipc.send("update-fixtures-properties", {
-                        ids: fs.filter((i) => i.selected).map((i) => i.id),
-                        properties: {
-                          intensity: Math.round((e / 100) * 255),
-                        },
-                      });
-
-                      return fs.map((f) => {
-                        if (f.selected) {
-                          f.properties.intensity = (e / 100) * 255;
-                        }
-
-                        return f;
-                      });
-                    });
-                  }}
-                  orientation="horizontal"
-                />
-              </FormControl>
-            </>
-          )}
-        </Box>
+              </>
+            )}
+          </Box>
+        ) : null
       }
       bottomSidebar={
         <Flex width="100%" height="100%">
@@ -225,9 +231,9 @@ export default function EditorPage(): ReactElement {
         }}
         id="editor"
       >
-        {Object.values(fixtures).map((i) => (
+        {fixtures.map((i) => (
           <Fixture
-            name={i.name}
+            name={i.id.toString()}
             key={i.id}
             selected={i.selected}
             color={`rgb(${

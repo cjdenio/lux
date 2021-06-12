@@ -32,7 +32,8 @@ app.whenReady().then(() => {
   initEditorIpc(mainWindow, ipcMain);
 
   mainWindow.on("ready-to-show", () => {
-    mainWindow?.show();
+    mainWindow.show();
+    mainWindow.maximize();
   });
 
   if (app.isPackaged) {

@@ -12,7 +12,13 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React, { ReactElement, useRef, useState } from "react";
-import { RiLightbulbFill, RiEditFill, RiHome5Fill } from "react-icons/ri";
+import {
+  RiLightbulbFill,
+  RiEditFill,
+  RiHome5Fill,
+  RiRecordCircleFill,
+} from "react-icons/ri";
+import { GoFileBinary } from "react-icons/go";
 import { useLocation } from "wouter";
 
 export default function FooterNav(): ReactElement {
@@ -21,7 +27,7 @@ export default function FooterNav(): ReactElement {
   const onAlertClose = (confirmed: boolean) => {
     setIsOpen(false);
 
-    confirmed && setLocation("/");
+    if (confirmed) setLocation("/");
   };
   const cancelRef = useRef(null);
 
@@ -79,13 +85,33 @@ export default function FooterNav(): ReactElement {
               icon={<RiLightbulbFill />}
             />
           </Tooltip>
-          <Tooltip label="Editor" placement="top">
+          <ButtonGroup isAttached>
+            <Tooltip label="Editor" placement="top">
+              <IconButton
+                disabled={location == "/"}
+                colorScheme={location === "/editor" ? "blue" : undefined}
+                onClick={() => setLocation("/editor")}
+                aria-label="Editor"
+                icon={<RiEditFill />}
+              />
+            </Tooltip>
+            <Tooltip label="Show" placement="top">
+              <IconButton
+                disabled={location == "/"}
+                colorScheme={location === "/show" ? "red" : undefined}
+                onClick={() => setLocation("/show")}
+                aria-label="Show"
+                icon={<RiRecordCircleFill />}
+              />
+            </Tooltip>
+          </ButtonGroup>
+          <Tooltip label="Output" placement="top">
             <IconButton
               disabled={location == "/"}
-              colorScheme={location === "/editor" ? "blue" : undefined}
-              onClick={() => setLocation("/editor")}
-              aria-label="Editor"
-              icon={<RiEditFill />}
+              colorScheme={location === "/output" ? "blue" : undefined}
+              onClick={() => setLocation("/output")}
+              aria-label="Output"
+              icon={<GoFileBinary />}
             />
           </Tooltip>
         </ButtonGroup>
@@ -94,7 +120,6 @@ export default function FooterNav(): ReactElement {
           <IconButton
             colorScheme={location === "/" ? "blue" : undefined}
             onClick={() => {
-              // setLocation("/");
               setIsOpen(true);
             }}
             aria-label="Home"

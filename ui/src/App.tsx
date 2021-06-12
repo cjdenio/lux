@@ -8,6 +8,7 @@ import WelcomePage from "./pages/Welcome";
 import FooterNav from "./components/FooterNav";
 import SidebarContext from "./state/sidebar";
 import ipc from "./lib/ipc";
+import OutputPage from "./pages/Output";
 
 function App(): ReactElement {
   const [sidebars, setSidebars] = useState({});
@@ -35,8 +36,14 @@ function App(): ReactElement {
         <Box flexGrow={1} height={0}>
           <Switch>
             <Route path="/" component={WelcomePage} />
-            <Route path="/editor" component={EditorPage} />
+            <Route path="/editor">
+              <EditorPage />
+            </Route>
+            <Route path="/show">
+              <EditorPage isShow />
+            </Route>
             <Route path="/patch" component={PatchPage} />
+            <Route path="/output" component={OutputPage} />
             <Route>
               <Redirect to="/" />
             </Route>
