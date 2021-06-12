@@ -18,6 +18,7 @@ export default function initWelcomeIpc(
         },
       ],
     });
+
     if (!file.canceled) {
       const showPath = file.filePaths[0];
 

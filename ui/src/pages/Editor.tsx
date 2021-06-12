@@ -14,6 +14,7 @@ import Fader from "../components/Fader";
 import ColorPicker from "../components/ColorPicker";
 import { Fixture as IFixture, FixtureWithDefinition } from "../../../src/core";
 import { IpcRendererEvent } from "electron";
+import useIpc from "../state/useIpc";
 
 export default function EditorPage({
   isShow = false,
@@ -23,17 +24,11 @@ export default function EditorPage({
   const [fixtures, setFixtures] = useState<
     (FixtureWithDefinition & { selected?: boolean })[]
   >([]);
-  const [grandMaster, setGrandMaster] = useState(0);
+  const [grandMaster, setGrandMaster] = useIpc("grand-master", 255);
 
   useEffect(() => {
     ipc.invoke("fixtures").then((fixtures: FixtureWithDefinition[]) => {
       setFixtures(fixtures);
-    });
-  }, []);
-
-  useEffect(() => {
-    ipc.invoke("grand-master").then((grandMaster: number) => {
-      setGrandMaster(grandMaster);
     });
   }, []);
 
@@ -200,7 +195,6 @@ export default function EditorPage({
             <Fader
               value={(grandMaster / 255) * 100}
               onChange={(v) => {
-                ipc.send("update-grand-master", (v / 100) * 255);
                 setGrandMaster((v / 100) * 255);
               }}
               orientation="vertical"
@@ -237,7 +231,7 @@ export default function EditorPage({
             key={i.id}
             selected={i.selected}
             color={`rgb(${
-              (i.properties.red || 255) *
+              (i.properties.red !== undefined ? i.properties.red : 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             }, ${
               (i.properties.green || 255) *

@@ -2,7 +2,9 @@ import definitions from "./definitions";
 import { LuxOutput } from "./outputs";
 import Fixture from "./types/Fixture";
 
-export default class Lux {
+import { EventEmitter } from "stream";
+
+export default class Lux extends EventEmitter {
   fixtures: { [id: string]: Fixture } = {};
   output: LuxOutput;
 
@@ -17,6 +19,25 @@ export default class Lux {
       const definition = definitions[fixture.definitionId];
       if (definition === undefined) {
         throw new Error(`Definition not found for fixture: ${fixture.name}`);
+      }
+
+      if (
+        definition.channels["red"] !== undefined &&
+        fixture.properties.red === undefined
+      ) {
+        fixture.properties.red = 255;
+      }
+      if (
+        definition.channels["green"] !== undefined &&
+        fixture.properties.green === undefined
+      ) {
+        fixture.properties.green = 255;
+      }
+      if (
+        definition.channels["blue"] !== undefined &&
+        fixture.properties.blue === undefined
+      ) {
+        fixture.properties.blue = 255;
       }
 
       Object.entries(fixture.properties).forEach(([property, value]) => {
@@ -62,5 +83,6 @@ export default class Lux {
 
   public setGrandMaster(value: number) {
     this.grandMaster = value;
+    this.emit("grand-master-update", this.grandMaster);
   }
 }

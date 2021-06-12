@@ -44,7 +44,9 @@ const show = msgpack.encode({
       startChannel: 6,
       definitionId: "generic_rgb",
       properties: {
-        red: 255,
+        red: 0,
+        green: 255,
+        blue: 255,
       },
     },
     {
@@ -59,7 +61,11 @@ const show = msgpack.encode({
       name: "test",
       startChannel: 14,
       definitionId: "generic_rgb",
-      properties: {},
+      properties: {
+        red: 0,
+        green: 255,
+        blue: 255,
+      },
     },
     {
       id: 9,
@@ -73,20 +79,24 @@ const show = msgpack.encode({
       name: "test",
       startChannel: 22,
       definitionId: "generic_rgb",
-      properties: {},
+      properties: {
+        red: 0,
+        green: 255,
+        blue: 255,
+      },
     },
     {
       id: 11,
       name: "test",
       startChannel: 26,
-      definitionId: "generic_rgb",
+      definitionId: "cf-805",
       properties: {},
     },
     {
       id: 12,
       name: "test",
       startChannel: 30,
-      definitionId: "generic_rgb",
+      definitionId: "cf-805",
       properties: {},
     },
   ].reduce((accumulator, fixture) => {
@@ -95,6 +105,6 @@ const show = msgpack.encode({
   }, {}),
 });
 
-// fs.writeFileSync("show.lux", show);
+fs.writeFileSync("show.lux", show);
 
-console.log(msgpack.decode(fs.readFileSync("show.lux")));
+// console.log(msgpack.decode(fs.readFileSync("show.lux")));

@@ -20,6 +20,15 @@ const definitions: { [key: string]: FixtureDefinition } = {
       blue: 2,
     },
   },
+  "cf-805": {
+    name: "CF-805",
+    channels: {
+      red: 0,
+      green: 1,
+      blue: 2,
+      intensity: 3,
+    },
+  },
 };
 
 export default definitions;
