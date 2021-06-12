@@ -1,4 +1,5 @@
 import { BrowserWindow, app, ipcMain, Menu } from "electron";
+import { Server } from "node-osc";
 import { join } from "path";
 import { Lux, ArtnetOutput } from "./core";
 
@@ -11,6 +12,22 @@ let mainWindow: BrowserWindow;
 const lux = new Lux();
 lux.attachOutput(new ArtnetOutput("192.168.1.255")).then(() => {
   console.log("Art-Net successfully connected");
+});
+
+const osc = new Server(3333, "0.0.0.0", () => {
+  console.log("OSC server started");
+});
+
+osc.on("message", async ([path, ...args]) => {
+  if (
+    path === "/lux/grand-master" &&
+    typeof args[0] === "number" &&
+    args[0] >= 0 &&
+    args[0] <= 255
+  ) {
+    lux.setGrandMaster(args[0]);
+    await lux.update();
+  }
 });
 
 app.whenReady().then(() => {

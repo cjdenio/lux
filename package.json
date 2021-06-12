@@ -9,6 +9,8 @@
     "url": "https://calebden.io"
   },
   "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/node-osc": "^6.0.0",
     "electron": "^12.0.7",
     "electron-builder": "22.11.4",
     "nodemon": "^2.0.7",
@@ -46,6 +48,8 @@
     }
   },
   "dependencies": {
-    "@msgpack/msgpack": "^2.7.0"
+    "@msgpack/msgpack": "^2.7.0",
+    "express": "^4.17.1",
+    "node-osc": "^6.0.2"
   }
 }

@@ -16,6 +16,8 @@ import { Fixture as IFixture, FixtureWithDefinition } from "../../../src/core";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
+import { _ } from "../util/util";
+
 export default function EditorPage({
   isShow = false,
 }: {
@@ -132,9 +134,9 @@ export default function EditorPage({
                     <FormLabel>Color</FormLabel>
                     <ColorPicker
                       value={{
-                        r: selectedFixtures[0].properties.red || 255,
-                        g: selectedFixtures[0].properties.green || 255,
-                        b: selectedFixtures[0].properties.blue || 255,
+                        r: _(selectedFixtures[0].properties.red, 255),
+                        g: _(selectedFixtures[0].properties.green, 255),
+                        b: _(selectedFixtures[0].properties.blue, 255),
                       }}
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       onChange={(_c) => {
@@ -231,13 +233,13 @@ export default function EditorPage({
             key={i.id}
             selected={i.selected}
             color={`rgb(${
-              (i.properties.red !== undefined ? i.properties.red : 255) *
+              _(i.properties.red, 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             }, ${
-              (i.properties.green || 255) *
+              _(i.properties.green, 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             }, ${
-              (i.properties.blue || 255) *
+              _(i.properties.blue, 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             })`}
             edited={false}
