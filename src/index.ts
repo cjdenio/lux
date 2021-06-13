@@ -45,8 +45,8 @@ app.whenReady().then(() => {
   });
 
   initWelcomeIpc(lux, mainWindow, ipcMain);
-  initShowIpc(mainWindow, lux, ipcMain);
-  initEditorIpc(mainWindow, ipcMain);
+  initShowIpc(lux, mainWindow, ipcMain);
+  initEditorIpc(lux, mainWindow, ipcMain);
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();

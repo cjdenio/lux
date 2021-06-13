@@ -8,6 +8,8 @@ export default class Lux extends EventEmitter {
   fixtures: { [id: string]: Fixture } = {};
   output: LuxOutput;
 
+  dmxOutput: number[] = new Array(512).fill(0);
+
   grandMaster: number = 255;
 
   public async update() {
@@ -65,6 +67,12 @@ export default class Lux extends EventEmitter {
 
         channels[channel + fixture.startChannel] = value * intensityFactor;
       });
+
+      if (definition.static) {
+        Object.entries(definition.static).forEach(([channel, value]) => {
+          channels[parseInt(channel) + fixture.startChannel] = value;
+        });
+      }
     });
 
     const output = new Array(512).fill(0);
@@ -72,6 +80,9 @@ export default class Lux extends EventEmitter {
     Object.entries(channels).forEach(([key, value]) => {
       output[parseInt(key) - 1] = value;
     });
+
+    this.dmxOutput = output;
+    this.emit("output-update", output);
 
     await this.output.set(output);
   }

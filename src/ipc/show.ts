@@ -4,8 +4,8 @@ import definitions, { FixtureDefinition } from "../core/definitions";
 import { PropertyMap } from "../core/types/Property";
 
 export default function initShowIpc(
-  mainWindow: BrowserWindow,
   lux: Lux,
+  mainWindow: BrowserWindow,
   ipc: IpcMain
 ) {
   ipc.handle("fixtures", (): FixtureWithDefinition[] => {
@@ -13,6 +13,10 @@ export default function initShowIpc(
       ...f,
       definition: definitions[f.definitionId],
     }));
+  });
+
+  ipc.handle("output", () => {
+    return lux.dmxOutput;
   });
 
   ipc.on(
@@ -45,4 +49,8 @@ export default function initShowIpc(
   lux.on("grand-master-update", (v) =>
     mainWindow.webContents.send("grand-master-update", v)
   );
+
+  lux.on("output-update", (output) => {
+    mainWindow.webContents.send("output-update", output);
+  });
 }

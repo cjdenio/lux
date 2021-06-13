@@ -17,6 +17,7 @@ export default class ArtnetOutput implements LuxOutput {
         this.socket.setBroadcast(true);
         resolve();
       });
+      this.socket.on("error", (err) => console.log(err));
     });
   }
 

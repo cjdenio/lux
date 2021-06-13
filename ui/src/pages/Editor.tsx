@@ -242,6 +242,7 @@ export default function EditorPage({
           <Fixture
             name={i.id.toString()}
             key={i.id}
+            id={i.id}
             selected={i.selected}
             color={`rgb(${
               _(i.properties.red, 255) *
@@ -253,7 +254,7 @@ export default function EditorPage({
               _(i.properties.blue, 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             })`}
-            edited={false}
+            edited={!!Object.keys(i.properties).length}
             onClick={(e) => {
               setFixtures((f) => {
                 return f.map((fixture) => {

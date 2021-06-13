@@ -2,17 +2,21 @@ import React, { ReactElement } from "react";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
 import ipc from "../lib/ipc";
+import { Tooltip } from "@chakra-ui/react";
 
 export default function Fixture({
   name,
-  selected,
+  id,
+  selected = false,
   color,
   onClick,
+  edited = false,
 }: {
   name: string;
+  id: number;
   selected?: boolean;
   color: string;
-  edited: boolean;
+  edited?: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }): ReactElement {
   return (
@@ -27,13 +31,29 @@ export default function Fixture({
       }}
       onContextMenu={(e) => {
         e.preventDefault();
-        ipc.send("fixture-context-menu");
+        ipc.send("fixture-context-menu", id);
       }}
       cursor="pointer"
     >
-      <Text fontSize="xs" width="100%" overflow="hidden">
-        {name}
-      </Text>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontSize="xs" width="100%" overflow="hidden">
+          {name}
+        </Text>
+
+        {edited && (
+          <Tooltip label="Edited">
+            <Box
+              width="8px"
+              height="8px"
+              borderRadius="full"
+              bg="red.500"
+              flexShrink={0}
+              flexGrow={0}
+              mr="1px"
+            ></Box>
+          </Tooltip>
+        )}
+      </Flex>
       <Flex
         height={50}
         width={50}

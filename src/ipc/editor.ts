@@ -1,10 +1,19 @@
 import { BrowserWindow, IpcMain, Menu } from "electron";
+import { Lux } from "../core";
 
-export default function initEditorIpc(mainWindow: BrowserWindow, ipc: IpcMain) {
-  ipc.on("fixture-context-menu", () => {
+export default function initEditorIpc(
+  lux: Lux,
+  mainWindow: BrowserWindow,
+  ipc: IpcMain
+) {
+  ipc.on("fixture-context-menu", (_e, id) => {
     Menu.buildFromTemplate([
       {
-        label: "Delete fixture",
+        label: "Clear fixture",
+        click: async () => {
+          lux.fixtures[id].properties = {};
+          await lux.update();
+        },
       },
     ]).popup();
   });

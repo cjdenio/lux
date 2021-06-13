@@ -3,6 +3,7 @@ import { PropertyMap } from "./types/Property";
 export interface FixtureDefinition {
   name: string;
   channels: { [property: string]: number };
+  static?: { [channel: number]: number };
 }
 
 const definitions: { [key: string]: FixtureDefinition } = {
@@ -26,7 +27,9 @@ const definitions: { [key: string]: FixtureDefinition } = {
       red: 0,
       green: 1,
       blue: 2,
-      intensity: 3,
+    },
+    static: {
+      3: 255,
     },
   },
 };
