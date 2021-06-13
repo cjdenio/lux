@@ -17,6 +17,7 @@ export default function Fixture({
 }): ReactElement {
   return (
     <Flex
+      display="inline-flex"
       direction="column"
       m={2}
       onMouseDown={(e) => {

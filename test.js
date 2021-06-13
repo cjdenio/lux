@@ -99,6 +99,13 @@ const show = msgpack.encode({
       definitionId: "cf-805",
       properties: {},
     },
+    {
+      id: 13,
+      name: "test",
+      startChannel: 34,
+      definitionId: "cf-805",
+      properties: {},
+    },
   ].reduce((accumulator, fixture) => {
     accumulator[fixture.id] = fixture;
     return accumulator;

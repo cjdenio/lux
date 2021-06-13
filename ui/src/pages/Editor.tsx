@@ -139,15 +139,26 @@ export default function EditorPage({
                         b: _(selectedFixtures[0].properties.blue, 255),
                       }}
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                      onChange={(_c) => {
-                        // setFixtures((f) =>
-                        //   f.map((fixture) => {
-                        //     if (fixture.selected) {
-                        //       fixture.color = c;
-                        //     }
-                        //     return fixture;
-                        //   })
-                        // );
+                      onChange={(c) => {
+                        setFixtures((fs) => {
+                          ipc.send("update-fixtures-properties", {
+                            ids: fs.filter((i) => i.selected).map((i) => i.id),
+                            properties: {
+                              red: c.r,
+                              green: c.g,
+                              blue: c.b,
+                            },
+                          });
+
+                          return fs.map((fixture) => {
+                            if (fixture.selected) {
+                              fixture.properties.red = c.r;
+                              fixture.properties.green = c.g;
+                              fixture.properties.blue = c.b;
+                            }
+                            return fixture;
+                          });
+                        });
                       }}
                     />
                     {/* <RgbColorPicker /> */}
@@ -205,11 +216,11 @@ export default function EditorPage({
         </Flex>
       }
     >
-      <Flex
+      <Box
         height="100%"
-        alignItems="center"
-        justifyContent="center"
-        wrap="wrap"
+        // alignItems="center"
+        // justifyContent="center"
+        // wrap="wrap"
         onMouseDown={(e) => {
           if (
             (e.target as Element).id == "editor" &&
@@ -265,7 +276,7 @@ export default function EditorPage({
             }}
           />
         ))}
-      </Flex>
+      </Box>
     </MainLayout>
   );
 }
