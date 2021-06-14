@@ -23,35 +23,26 @@ export default class Lux extends EventEmitter {
         throw new Error(`Definition not found for fixture: ${fixture.name}`);
       }
 
-      if (
-        definition.channels["red"] !== undefined &&
-        fixture.properties.red === undefined
-      ) {
-        fixture.properties.red = 255;
+      let intensityFactor = this.grandMaster / 255;
+
+      if (definition.channels["intensity"] === undefined) {
+        intensityFactor =
+          intensityFactor * ((fixture.properties["intensity"] || 0) / 255);
       }
-      if (
-        definition.channels["green"] !== undefined &&
-        fixture.properties.green === undefined
-      ) {
-        fixture.properties.green = 255;
-      }
-      if (
-        definition.channels["blue"] !== undefined &&
-        fixture.properties.blue === undefined
-      ) {
-        fixture.properties.blue = 255;
-      }
+
+      // Ensure that colors are 255 if not set
+      ["red", "green", "blue"].forEach((color) => {
+        if (
+          definition.channels[color] !== undefined &&
+          // @ts-ignore
+          fixture.properties[color] === undefined
+        ) {
+          channels[fixture.startChannel + definition.channels[color]] =
+            255 * intensityFactor;
+        }
+      });
 
       Object.entries(fixture.properties).forEach(([property, value]) => {
-        let intensityFactor = 1;
-
-        if (
-          (property == "red" || property == "green" || property == "blue") &&
-          !definition.channels["intensity"]
-        ) {
-          intensityFactor = (fixture.properties["intensity"] || 0) / 255;
-        }
-
         const channel = definition.channels[property];
         if (channel === undefined) {
           if (property == "intensity") {
@@ -62,8 +53,6 @@ export default class Lux extends EventEmitter {
             `Property "${property}" not valid for fixture definition: ${definition.name}`
           );
         }
-
-        intensityFactor = (intensityFactor * this.grandMaster) / 255;
 
         channels[channel + fixture.startChannel] = value * intensityFactor;
       });

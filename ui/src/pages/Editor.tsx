@@ -94,7 +94,6 @@ export default function EditorPage({
 
   return (
     <MainLayout
-      // leftSidebar={"hi"}
       rightSidebarId="editor-right-sidebar"
       leftSidebarId="editor-left-sidebar"
       bottomSidebarId="editor-bottom-sidebar"
@@ -138,7 +137,6 @@ export default function EditorPage({
                         g: _(selectedFixtures[0].properties.green, 255),
                         b: _(selectedFixtures[0].properties.blue, 255),
                       }}
-                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       onChange={(c) => {
                         setFixtures((fs) => {
                           ipc.send("update-fixtures-properties", {
@@ -161,7 +159,6 @@ export default function EditorPage({
                         });
                       }}
                     />
-                    {/* <RgbColorPicker /> */}
                   </FormControl>
                 )}
                 <FormControl mb={5}>

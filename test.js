@@ -43,11 +43,7 @@ const show = msgpack.encode({
       name: "test",
       startChannel: 6,
       definitionId: "generic_rgb",
-      properties: {
-        red: 0,
-        green: 255,
-        blue: 255,
-      },
+      properties: {},
     },
     {
       id: 7,
@@ -61,11 +57,7 @@ const show = msgpack.encode({
       name: "test",
       startChannel: 14,
       definitionId: "generic_rgb",
-      properties: {
-        red: 0,
-        green: 255,
-        blue: 255,
-      },
+      properties: {},
     },
     {
       id: 9,
@@ -79,11 +71,7 @@ const show = msgpack.encode({
       name: "test",
       startChannel: 22,
       definitionId: "generic_rgb",
-      properties: {
-        red: 0,
-        green: 255,
-        blue: 255,
-      },
+      properties: {},
     },
     {
       id: 11,
