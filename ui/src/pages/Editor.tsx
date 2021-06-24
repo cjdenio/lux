@@ -215,9 +215,6 @@ export default function EditorPage({
     >
       <Box
         height="100%"
-        // alignItems="center"
-        // justifyContent="center"
-        // wrap="wrap"
         onMouseDown={(e) => {
           if (
             (e.target as Element).id == "editor" &&
@@ -251,7 +248,7 @@ export default function EditorPage({
               _(i.properties.blue, 255) *
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             })`}
-            edited={!!Object.keys(i.properties).length}
+            edited={!isShow && !!Object.keys(i.properties).length}
             onClick={(e) => {
               setFixtures((f) => {
                 return f.map((fixture) => {

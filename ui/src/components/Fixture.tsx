@@ -24,7 +24,7 @@ export default function Fixture({
       display="inline-flex"
       direction="column"
       m={2}
-      onMouseDown={(e) => {
+      onClick={(e) => {
         if (onClick) {
           onClick(e);
         }
@@ -69,7 +69,6 @@ export default function Fixture({
           height="70%"
           width="70%"
           display="inline-block"
-          shadow={`0px 0px 30px ${color}`}
         />
       </Flex>
     </Flex>

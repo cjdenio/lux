@@ -12,7 +12,7 @@ export default class ArtnetOutput implements LuxOutput {
   init(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.socket = dgram.createSocket("udp4");
-      this.socket.bind(undefined, "192.168.1.6");
+      this.socket.bind(undefined, undefined);
       this.socket.on("listening", () => {
         this.socket.setBroadcast(true);
         resolve();
