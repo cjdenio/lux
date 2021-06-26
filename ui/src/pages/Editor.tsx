@@ -38,7 +38,7 @@ export default function EditorPage({
     const onUpdateFixture = (e: IpcRendererEvent, fixture: IFixture) => {
       setFixtures((fs) =>
         fs.map((f) => {
-          if (f.id == fixture.id) {
+          if (f.id === fixture.id) {
             f.properties = { ...f.properties, ...fixture.properties };
           }
 
@@ -71,10 +71,10 @@ export default function EditorPage({
     };
 
     const onKeyPress = (e: KeyboardEvent) => {
-      if (e.key == "a" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "a" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         selectAll();
-      } else if (e.key == "i" && (e.metaKey || e.ctrlKey)) {
+      } else if (e.key === "i" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         invertSelection();
       }
@@ -100,7 +100,7 @@ export default function EditorPage({
       rightSidebar={
         !isShow ? (
           <Box>
-            {selectedFixtures.length == 0 ? (
+            {selectedFixtures.length === 0 ? (
               <>
                 <Alert status="info" variant="left-accent" mb={4}>
                   <AlertIcon />
@@ -217,7 +217,7 @@ export default function EditorPage({
         height="100%"
         onClick={(e) => {
           if (
-            (e.target as Element).id == "editor" &&
+            (e.target as Element).id === "editor" &&
             !(e.shiftKey || e.metaKey || e.ctrlKey)
           ) {
             setFixtures((f) =>
@@ -226,7 +226,7 @@ export default function EditorPage({
           }
         }}
         onContextMenu={(e) => {
-          if ((e.target as Element).id == "editor") {
+          if ((e.target as Element).id === "editor") {
             ipc.send("editor-context-menu");
           }
         }}
@@ -253,11 +253,11 @@ export default function EditorPage({
               setFixtures((f) => {
                 return f.map((fixture) => {
                   if (e.shiftKey || e.metaKey || e.ctrlKey) {
-                    if (fixture.id == i.id) {
+                    if (fixture.id === i.id) {
                       return { ...fixture, selected: !fixture.selected };
                     }
                   } else {
-                    if (fixture.id == i.id) {
+                    if (fixture.id === i.id) {
                       return { ...fixture, selected: true };
                     } else {
                       return { ...fixture, selected: false };
@@ -269,7 +269,7 @@ export default function EditorPage({
                 });
               });
             }}
-            onRightClick={(e) => {
+            onRightClick={() => {
               if (!selectedFixtures.some((x) => x.id === i.id)) {
                 setFixtures((f) => {
                   return f.map((fixture) => {

@@ -1,12 +1,10 @@
 import React, { ReactElement } from "react";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
-import ipc from "../lib/ipc";
 import { Tooltip } from "@chakra-ui/react";
 
 export default function Fixture({
   name,
-  id,
   selected = false,
   color,
   onClick,

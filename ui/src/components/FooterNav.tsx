@@ -78,7 +78,7 @@ export default function FooterNav(): ReactElement {
         <ButtonGroup /* isAttached */>
           <Tooltip label="Patch" placement="top">
             <IconButton
-              disabled={location == "/"}
+              disabled={location === "/"}
               colorScheme={location === "/patch" ? "blue" : undefined}
               onClick={() => setLocation("/patch")}
               aria-label="Patch"
@@ -88,7 +88,7 @@ export default function FooterNav(): ReactElement {
           <ButtonGroup isAttached>
             <Tooltip label="Editor" placement="top">
               <IconButton
-                disabled={location == "/"}
+                disabled={location === "/"}
                 colorScheme={location === "/editor" ? "blue" : undefined}
                 onClick={() => setLocation("/editor")}
                 aria-label="Editor"
@@ -97,7 +97,7 @@ export default function FooterNav(): ReactElement {
             </Tooltip>
             <Tooltip label="Show" placement="top">
               <IconButton
-                disabled={location == "/"}
+                disabled={location === "/"}
                 colorScheme={location === "/show" ? "red" : undefined}
                 onClick={() => setLocation("/show")}
                 aria-label="Show"
@@ -107,7 +107,7 @@ export default function FooterNav(): ReactElement {
           </ButtonGroup>
           <Tooltip label="Output" placement="top">
             <IconButton
-              disabled={location == "/"}
+              disabled={location === "/"}
               colorScheme={location === "/output" ? "blue" : undefined}
               onClick={() => setLocation("/output")}
               aria-label="Output"

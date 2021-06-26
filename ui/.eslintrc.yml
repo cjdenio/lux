@@ -14,7 +14,8 @@ parserOptions:
 plugins:
   - react
   - "@typescript-eslint"
-rules: {}
+rules:
+  eqeqeq: warn
 settings:
   react:
     version: detect

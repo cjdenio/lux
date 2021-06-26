@@ -59,7 +59,7 @@ export default function Fader({
     };
   }, []);
 
-  const isHorizontal = orientation == "horizontal";
+  const isHorizontal = orientation === "horizontal";
 
   return (
     <Flex

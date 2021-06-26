@@ -41,7 +41,7 @@ export default function Sidebar({
       if (resizingRef.current) {
         let newSize: number;
 
-        if (side == "left") {
+        if (side === "left") {
           newSize = e.x + 2;
         } else {
           newSize = window.innerWidth - e.x + 1;
@@ -87,12 +87,12 @@ export default function Sidebar({
         position="absolute"
         top="0"
         bottom="0"
-        shadow={`inset ${side == "left" ? "-" : ""}1px 0px #2D3748`}
+        shadow={`inset ${side === "left" ? "-" : ""}1px 0px #2D3748`}
         _hover={{
           boxShadow: "none",
           bg: "blue.300",
         }}
-        {...(side == "left" ? { right: 0 } : { left: 0 })}
+        {...(side === "left" ? { right: 0 } : { left: 0 })}
       />
 
       <Box overflow="auto" height="100%" p={4}>
