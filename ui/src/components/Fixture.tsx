@@ -10,6 +10,7 @@ export default function Fixture({
   selected = false,
   color,
   onClick,
+  onRightClick,
   edited = false,
 }: {
   name: string;
@@ -18,6 +19,7 @@ export default function Fixture({
   color: string;
   edited?: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onRightClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }): ReactElement {
   return (
     <Flex
@@ -31,7 +33,9 @@ export default function Fixture({
       }}
       onContextMenu={(e) => {
         e.preventDefault();
-        ipc.send("fixture-context-menu", id);
+        if (onRightClick) {
+          onRightClick(e);
+        }
       }}
       cursor="pointer"
     >

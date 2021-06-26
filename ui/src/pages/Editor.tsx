@@ -215,7 +215,7 @@ export default function EditorPage({
     >
       <Box
         height="100%"
-        onMouseDown={(e) => {
+        onClick={(e) => {
           if (
             (e.target as Element).id == "editor" &&
             !(e.shiftKey || e.metaKey || e.ctrlKey)
@@ -268,6 +268,26 @@ export default function EditorPage({
                   return fixture;
                 });
               });
+            }}
+            onRightClick={(e) => {
+              if (!selectedFixtures.some((x) => x.id === i.id)) {
+                setFixtures((f) => {
+                  return f.map((fixture) => {
+                    if (fixture.id === i.id) {
+                      return { ...fixture, selected: true };
+                    }
+                    return { ...fixture, selected: false };
+                  });
+                });
+
+                ipc.send("fixture-context-menu", [i.id]);
+                return;
+              }
+
+              ipc.send(
+                "fixture-context-menu",
+                selectedFixtures.map((i) => i.id)
+              );
             }}
           />
         ))}

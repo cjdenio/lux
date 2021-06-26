@@ -73,7 +73,12 @@ export default class Lux extends EventEmitter {
     this.dmxOutput = output;
     this.emit("output-update", output);
 
-    await this.output.set(output);
+    try {
+      await this.output.set(output);
+    } catch (error) {
+      console.log("error updating output");
+      console.log(error);
+    }
   }
 
   public async attachOutput(output: LuxOutput) {

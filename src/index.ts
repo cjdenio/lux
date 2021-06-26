@@ -10,7 +10,7 @@ import initWelcomeIpc from "./ipc/welcome";
 let mainWindow: BrowserWindow;
 
 const lux = new Lux();
-lux.attachOutput(new ArtnetOutput("192.168.1.255")).then(() => {
+lux.attachOutput(new ArtnetOutput("127.0.0.1")).then(() => {
   console.log("Art-Net successfully connected");
 });
 

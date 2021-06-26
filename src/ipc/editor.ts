@@ -6,14 +6,20 @@ export default function initEditorIpc(
   mainWindow: BrowserWindow,
   ipc: IpcMain
 ) {
-  ipc.on("fixture-context-menu", (_e, id) => {
+  ipc.on("fixture-context-menu", (_e, ids: number[]) => {
     Menu.buildFromTemplate([
       {
-        label: "Clear fixture",
+        label:
+          ids.length === 1 ? "Clear fixture" : `Clear ${ids.length} fixtures`,
         click: async () => {
-          lux.fixtures[id].properties = {};
+          ids.forEach((id) => {
+            lux.fixtures[id].properties = {};
+          });
           await lux.update();
         },
+        enabled: ids.some(
+          (id) => Object.keys(lux.fixtures[id].properties).length !== 0
+        ),
       },
     ]).popup();
   });
