@@ -12,11 +12,12 @@ import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
 import Fader from "../components/Fader";
 import ColorPicker from "../components/ColorPicker";
-import { Fixture as IFixture, FixtureWithDefinition } from "../../../src/core";
+import { FixtureWithDefinition } from "../../../src/core";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
 import { _ } from "../util/util";
+import { PropertyMap } from "../../../src/core/types/Property";
 
 export default function EditorPage({
   isShow = false,
@@ -35,11 +36,14 @@ export default function EditorPage({
   }, []);
 
   useEffect(() => {
-    const onUpdateFixture = (e: IpcRendererEvent, fixture: IFixture) => {
+    const onUpdateFixtures = (
+      e: IpcRendererEvent,
+      { ids, properties }: { ids: number[]; properties: PropertyMap }
+    ) => {
       setFixtures((fs) =>
         fs.map((f) => {
-          if (f.id === fixture.id) {
-            f.properties = { ...f.properties, ...fixture.properties };
+          if (ids.includes(f.id)) {
+            f.properties = properties;
           }
 
           return f;
@@ -47,10 +51,10 @@ export default function EditorPage({
       );
     };
 
-    ipc.on("update-fixture", onUpdateFixture);
+    ipc.on("update-fixtures-properties", onUpdateFixtures);
 
     return () => {
-      ipc.removeListener("update-fixture", onUpdateFixture);
+      ipc.removeListener("update-fixtures-properties", onUpdateFixtures);
     };
   }, []);
 

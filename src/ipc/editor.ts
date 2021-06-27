@@ -15,6 +15,10 @@ export default function initEditorIpc(
           ids.forEach((id) => {
             lux.fixtures[id].properties = {};
           });
+          mainWindow.webContents.send("update-fixtures-properties", {
+            ids,
+            properties: {},
+          });
           await lux.update();
         },
         enabled: ids.some(
