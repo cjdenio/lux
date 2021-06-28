@@ -10,12 +10,14 @@ export default function Fixture({
   onClick,
   onRightClick,
   edited = false,
+  rgb = false,
 }: {
   name: string;
   id: number;
   selected?: boolean;
   color: string;
   edited?: boolean;
+  rgb?: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onRightClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }): ReactElement {

@@ -43,7 +43,7 @@ export default function EditorPage({
       setFixtures((fs) =>
         fs.map((f) => {
           if (ids.includes(f.id)) {
-            f.properties = properties;
+            return { ...f, properties };
           }
 
           return f;
@@ -154,9 +154,15 @@ export default function EditorPage({
 
                           return fs.map((fixture) => {
                             if (fixture.selected) {
-                              fixture.properties.red = c.r;
-                              fixture.properties.green = c.g;
-                              fixture.properties.blue = c.b;
+                              return {
+                                ...fixture,
+                                properties: {
+                                  ...fixture.properties,
+                                  red: c.r,
+                                  green: c.g,
+                                  blue: c.b,
+                                },
+                              };
                             }
                             return fixture;
                           });
@@ -184,7 +190,13 @@ export default function EditorPage({
 
                         return fs.map((f) => {
                           if (f.selected) {
-                            f.properties.intensity = (e / 100) * 255;
+                            return {
+                              ...f,
+                              properties: {
+                                ...f.properties,
+                                intensity: (e / 100) * 255,
+                              },
+                            };
                           }
 
                           return f;
@@ -253,6 +265,7 @@ export default function EditorPage({
               (i.properties.intensity ? i.properties.intensity / 255 : 0)
             })`}
             edited={!isShow && !!Object.keys(i.properties).length}
+            rgb={i.definition.channels["red"] !== undefined}
             onClick={(e) => {
               setFixtures((f) => {
                 return f.map((fixture) => {

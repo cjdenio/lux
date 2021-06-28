@@ -15,23 +15,18 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
 import { Fixture } from "../../../src/core";
-import ipc from "../lib/ipc";
+import useIpc from "../state/useIpc";
 
 export default function PatchPage(): ReactElement {
-  const [fixtures, setFixtures] = useState<{ [id: string]: Fixture }>({});
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  useEffect(() => {
-    ipc.invoke("fixtures").then((fixtures: { [id: string]: Fixture }) => {
-      setFixtures(fixtures);
-    });
-  }, []);
+  const [fixtures] = useIpc<{ [id: string]: Fixture }>("fixtures", {});
 
   return (
     <MainLayout>

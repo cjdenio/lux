@@ -6,6 +6,7 @@ import { Lux, ArtnetOutput } from "./core";
 import initShowIpc from "./ipc/show";
 import initEditorIpc from "./ipc/editor";
 import initWelcomeIpc from "./ipc/welcome";
+import initPatchIpc from "./ipc/patch";
 
 let mainWindow: BrowserWindow;
 
@@ -47,6 +48,7 @@ app.whenReady().then(() => {
   initWelcomeIpc(lux, mainWindow, ipcMain);
   initShowIpc(lux, mainWindow, ipcMain);
   initEditorIpc(lux, mainWindow, ipcMain);
+  initPatchIpc(lux, mainWindow, ipcMain);
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
