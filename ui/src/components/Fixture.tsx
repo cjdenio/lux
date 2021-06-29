@@ -10,7 +10,6 @@ export default function Fixture({
   onClick,
   onRightClick,
   edited = false,
-  rgb = false,
 }: {
   name: string;
   id: number;
