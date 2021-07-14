@@ -14,19 +14,21 @@ import {
   IconButton,
   Tooltip,
   useDisclosure,
+  Tag,
 } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
-import { Fixture } from "../../../src/core";
+import { FixtureWithDefinition } from "../../../src/core";
 import useIpc from "../state/useIpc";
+import { fixtureEndChannel } from "../../../src/util/util";
 
 export default function PatchPage(): ReactElement {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [fixtures] = useIpc<{ [id: string]: Fixture }>("fixtures", {});
+  const [fixtures] = useIpc<FixtureWithDefinition[]>("fixtures", []);
 
   return (
     <MainLayout>
@@ -59,18 +61,32 @@ export default function PatchPage(): ReactElement {
                   <Tr>
                     <Th>ID</Th>
                     <Th>Name</Th>
+                    <Th>Type</Th>
                     <Th>Channels</Th>
                   </Tr>
                 </Thead>
 
                 <Tbody>
-                  {Object.values(fixtures).map(({ name, id, startChannel }) => (
-                    <Tr key={id}>
-                      <Td>{id}</Td>
-                      <Td>{name}</Td>
-                      <Td>{startChannel}</Td>
-                    </Tr>
-                  ))}
+                  {Object.values(fixtures).map((fixture) => {
+                    const { id, name, definition, startChannel } = fixture;
+
+                    const endChannel = fixtureEndChannel(fixture);
+
+                    return (
+                      <Tr key={id}>
+                        <Td>{id}</Td>
+                        <Td>{name}</Td>
+                        <Td>
+                          <Tag>{definition.name}</Tag>
+                        </Td>
+                        <Td>
+                          {startChannel === endChannel
+                            ? startChannel
+                            : `${startChannel} / ${endChannel}`}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </TabPanel>

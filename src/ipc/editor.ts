@@ -7,13 +7,15 @@ export default function initEditorIpc(
   ipc: IpcMain
 ) {
   ipc.on("fixture-context-menu", (_e, ids: number[]) => {
+    if (lux.show === undefined) return;
+
     Menu.buildFromTemplate([
       {
         label:
           ids.length === 1 ? "Clear fixture" : `Clear ${ids.length} fixtures`,
         click: async () => {
           ids.forEach((id) => {
-            lux.fixtures[id].properties = {};
+            lux.show!.fixtures[id].properties = {};
           });
 
           mainWindow.webContents.send("update-fixtures-properties", {
@@ -23,7 +25,7 @@ export default function initEditorIpc(
           await lux.update();
         },
         enabled: ids.some(
-          (id) => Object.keys(lux.fixtures[id].properties).length !== 0
+          (id) => Object.keys(lux.show!.fixtures[id].properties).length !== 0
         ),
       },
     ]).popup();

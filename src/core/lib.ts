@@ -1,29 +1,53 @@
 import definitions from "./definitions";
 import { LuxOutput } from "./outputs";
 import Fixture from "./types/Fixture";
+import Show from "./types/Show";
 
 import { EventEmitter } from "stream";
+import { writeFile, readFile } from "fs/promises";
+import { encode, decode } from "@msgpack/msgpack";
 
 export default class Lux extends EventEmitter {
-  fixtures: { [id: string]: Fixture } = {};
+  show?: Show;
+
   output: LuxOutput;
 
   dmxOutput: number[] = new Array(512).fill(0);
 
-  grandMaster: number = 255;
+  public async open(path: string): Promise<Show> {
+    const rawShow = await readFile(path);
+
+    const show = <Show>{
+      ...(decode(rawShow) as Partial<Show>),
+      path: path,
+    };
+
+    this.show = show;
+
+    await this.update();
+
+    return show;
+  }
+
+  public async save() {
+    if (this.show !== undefined) {
+      await writeFile(this.show.path, encode(this.show));
+    }
+  }
 
   public async update() {
     if (!this.output) return;
+    if (!this.show) return;
 
     const channels: { [key: number]: number } = {};
 
-    Object.values(this.fixtures).forEach((fixture) => {
+    Object.values(this.show.fixtures).forEach((fixture) => {
       const definition = definitions[fixture.definitionId];
       if (definition === undefined) {
         throw new Error(`Definition not found for fixture: ${fixture.name}`);
       }
 
-      let intensityFactor = this.grandMaster / 255;
+      let intensityFactor = (this.show!.grandMaster || 255) / 255;
 
       if (definition.channels["intensity"] === undefined) {
         intensityFactor =
@@ -87,7 +111,9 @@ export default class Lux extends EventEmitter {
   }
 
   public setGrandMaster(value: number) {
-    this.grandMaster = value;
-    this.emit("grand-master-update", this.grandMaster);
+    if (this.show === undefined) return;
+
+    this.show.grandMaster = value;
+    this.emit("grand-master-update", this.show.grandMaster);
   }
 }

@@ -16,7 +16,7 @@ import { FixtureWithDefinition } from "../../../src/core";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
-import { _ } from "../util/util";
+import { _ } from "../../../src/util/util";
 import { PropertyMap } from "../../../src/core/types/Property";
 
 export default function EditorPage({
@@ -222,6 +222,9 @@ export default function EditorPage({
               value={(grandMaster / 255) * 100}
               onChange={(v) => {
                 setGrandMaster((v / 100) * 255);
+              }}
+              onChangeFinished={() => {
+                ipc.send("save");
               }}
               orientation="vertical"
             />

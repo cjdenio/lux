@@ -118,6 +118,7 @@ export default function FooterNav(): ReactElement {
 
         <Tooltip label="Home" placement="top">
           <IconButton
+            disabled={location === "/"}
             colorScheme={location === "/" ? "blue" : undefined}
             onClick={() => {
               setIsOpen(true);

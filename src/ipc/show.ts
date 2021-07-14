@@ -9,7 +9,9 @@ export default function initShowIpc(
   ipc: IpcMain
 ) {
   ipc.handle("fixtures", (): FixtureWithDefinition[] => {
-    return Object.values(lux.fixtures).map((f) => ({
+    if (lux.show === undefined) return [];
+
+    return Object.values(lux.show.fixtures).map((f) => ({
       ...f,
       definition: definitions[f.definitionId],
     }));
@@ -25,9 +27,11 @@ export default function initShowIpc(
       e,
       { ids, properties }: { ids: number[]; properties: PropertyMap }
     ) => {
+      if (lux.show === undefined) return;
+
       ids.forEach((id) => {
-        lux.fixtures[id].properties = {
-          ...lux.fixtures[id].properties,
+        lux.show!.fixtures[id].properties = {
+          ...lux.show!.fixtures[id].properties,
           ...properties,
         };
       });
@@ -37,13 +41,19 @@ export default function initShowIpc(
   );
 
   ipc.handle("grand-master", () => {
-    return lux.grandMaster;
+    if (lux.show === undefined) return;
+
+    return lux.show.grandMaster;
   });
 
   ipc.on("grand-master-update", async (e, value) => {
     lux.setGrandMaster(value);
 
     await lux.update();
+  });
+
+  ipc.on("save", async () => {
+    await lux.save();
   });
 
   lux.on("grand-master-update", (v) =>

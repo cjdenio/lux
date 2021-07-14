@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, Menu } from "electron";
+import { BrowserWindow, app, ipcMain, Menu, dialog } from "electron";
 import { Server } from "node-osc";
 import { join } from "path";
 import { Lux, ArtnetOutput } from "./core";
@@ -35,7 +35,7 @@ app.whenReady().then(() => {
   mainWindow = new BrowserWindow({
     width: 1300,
     height: 800,
-    titleBarStyle: "hidden",
+    titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
     show: false,
     backgroundColor: "#1A202C",
     title: "Lux",
@@ -50,9 +50,13 @@ app.whenReady().then(() => {
   initEditorIpc(lux, mainWindow, ipcMain);
   initPatchIpc(lux, mainWindow, ipcMain);
 
+  ipcMain.handle("platform", (): NodeJS.Platform => {
+    return process.platform;
+  });
+
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
-    mainWindow.maximize();
+    // mainWindow.maximize();
   });
 
   if (app.isPackaged) {

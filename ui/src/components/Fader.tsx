@@ -1,28 +1,24 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 
 export default function Fader({
   value,
   onChange,
+  onChangeFinished,
   orientation = "vertical",
 }: {
   value: number;
-  onChange: (value: number) => void;
+  onChange: (value: number) => unknown;
+  onChangeFinished?: () => unknown;
   orientation: "vertical" | "horizontal";
 }): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [resizing, _setResizing] = useState(false);
-  const resizingRef = useRef(resizing);
-
-  const setResizing = (data: boolean) => {
-    _setResizing(data);
-    resizingRef.current = data;
-  };
+  const resizing = useRef(false);
 
   const resize = (e: MouseEvent) => {
     // console.log("mouse: " + e.y);
-    if (resizingRef.current) {
+    if (resizing.current) {
       const rect = ref.current?.getBoundingClientRect();
 
       let newValue: number;
@@ -47,7 +43,8 @@ export default function Fader({
 
   useEffect(() => {
     const cancelResize = () => {
-      setResizing(false);
+      resizing.current = false;
+      onChangeFinished && onChangeFinished();
     };
 
     document.addEventListener("mousemove", resize);
@@ -72,7 +69,7 @@ export default function Fader({
     >
       <Box
         onMouseDown={(e) => {
-          setResizing(true);
+          resizing.current = true;
           resize(e as unknown as MouseEvent);
         }}
         onWheel={(e) => {

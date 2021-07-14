@@ -2,6 +2,8 @@ const msgpack = require("@msgpack/msgpack");
 const fs = require("fs");
 
 const show = msgpack.encode({
+  // name: "Test Show",
+  grandMaster: 100,
   fixtures: [
     {
       id: 1,
