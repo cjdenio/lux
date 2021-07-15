@@ -1,8 +1,7 @@
 node_modules
 .DS_Store
 dist
-ui-dist
+build
 dist-ssr
 *.local
-/build
 *.log

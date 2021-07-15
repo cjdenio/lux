@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, Menu, dialog } from "electron";
+import { BrowserWindow, app, ipcMain } from "electron";
 import { Server } from "node-osc";
 import { join, basename } from "path";
 import { Lux, ArtnetOutput } from "./core";

@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "packages/app/",
+      "name": "Electron app"
+    },
+    {
+      "path": "packages/ui/",
+      "name": "React UI"
+    },
+    {
+      "path": "packages/common/",
+      "name": "Common"
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "Vtrois.gitmoji-vscode"
+    ]
+  }
+}

@@ -1,7 +1,6 @@
 import { BrowserWindow, IpcMain } from "electron";
-import { FixtureWithDefinition, Lux } from "../core";
-import definitions, { FixtureDefinition } from "../core/definitions";
-import { PropertyMap } from "../core/types/Property";
+import { Lux } from "../core";
+import { FixtureWithDefinition, PropertyMap, definitions } from "@lux/common";
 
 export default function initShowIpc(
   lux: Lux,

@@ -12,12 +12,11 @@ import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
 import Fader from "../components/Fader";
 import ColorPicker from "../components/ColorPicker";
-import { FixtureWithDefinition } from "../../../src/core";
+import { FixtureWithDefinition, PropertyMap } from "@lux/common";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
-import { _ } from "../../../src/util/util";
-import { PropertyMap } from "../../../src/core/types/Property";
+import { _ } from "@lux/common/src";
 
 export default function EditorPage({
   isShow = false,

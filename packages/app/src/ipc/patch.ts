@@ -1,10 +1,11 @@
 import { BrowserWindow, IpcMain } from "electron";
 import { Lux } from "../core";
-import definitions, {
+import {
   FixtureDefinition,
   FixtureDefinitionWithId,
   categories,
-} from "../core/definitions";
+  definitions,
+} from "@lux/common";
 
 export default function initPatchIpc(
   lux: Lux,

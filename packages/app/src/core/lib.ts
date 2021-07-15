@@ -1,6 +1,5 @@
-import definitions from "./definitions";
 import { LuxOutput } from "./outputs";
-import Show from "./types/Show";
+import { Show, definitions } from "@lux/common";
 
 import { EventEmitter } from "stream";
 import { writeFile, readFile } from "fs/promises";

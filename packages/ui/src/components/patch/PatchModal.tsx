@@ -17,7 +17,7 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
-import { FixtureDefinitionWithId } from "../../../../src/core/definitions";
+import { FixtureDefinitionWithId } from "@lux/common";
 import useIpc from "../../state/useIpc";
 
 export default function PatchModal({

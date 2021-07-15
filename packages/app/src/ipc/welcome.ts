@@ -2,7 +2,7 @@ import { BrowserWindow, dialog, IpcMain, Menu } from "electron";
 import { readFile } from "fs/promises";
 import { decode } from "@msgpack/msgpack";
 import { Lux } from "../core";
-import Show from "../core/types/Show";
+import { Show } from "@lux/common";
 
 import { basename } from "path";
 

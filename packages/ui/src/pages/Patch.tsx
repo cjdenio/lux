@@ -21,9 +21,8 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
-import { FixtureWithDefinition } from "../../../src/core";
+import { FixtureWithDefinition, fixtureEndChannel } from "@lux/common/src";
 import useIpc from "../state/useIpc";
-import { fixtureEndChannel } from "../../../src/util/util";
 
 export default function PatchPage(): ReactElement {
   const { isOpen, onClose, onOpen } = useDisclosure();
