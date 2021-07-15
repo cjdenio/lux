@@ -1,6 +1,6 @@
 import { BrowserWindow, app, ipcMain, Menu, dialog } from "electron";
 import { Server } from "node-osc";
-import { join } from "path";
+import { join, basename } from "path";
 import { Lux, ArtnetOutput } from "./core";
 
 import initShowIpc from "./ipc/show";
@@ -9,6 +9,8 @@ import initWelcomeIpc from "./ipc/welcome";
 import initPatchIpc from "./ipc/patch";
 
 let mainWindow: BrowserWindow;
+
+const files: string[] = [];
 
 const lux = new Lux();
 lux.attachOutput(new ArtnetOutput("127.0.0.1")).then(() => {
@@ -31,7 +33,7 @@ osc.on("message", async ([path, ...args]) => {
   }
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   mainWindow = new BrowserWindow({
     width: 1300,
     height: 800,
@@ -57,6 +59,18 @@ app.whenReady().then(() => {
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
     // mainWindow.maximize();
+
+    if (files.length > 0) {
+      (async () => {
+        const show = await lux.open(files[0]);
+
+        mainWindow.webContents.send("open-project");
+        mainWindow.webContents.send(
+          "window-title-update",
+          show.name || basename(files[0])
+        );
+      })();
+    }
   });
 
   if (app.isPackaged) {
@@ -64,4 +78,8 @@ app.whenReady().then(() => {
   } else {
     mainWindow.loadURL("http://localhost:3000");
   }
+});
+
+app.on("open-file", async (_e, path) => {
+  files.push(path);
 });

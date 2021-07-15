@@ -32,6 +32,11 @@
       "output": "build"
     },
     "mac": {
+      "fileAssociations": {
+        "ext": "lux",
+        "name": "Lux show",
+        "role": "Viewer"
+      },
       "target": {
         "target": "zip",
         "arch": [
