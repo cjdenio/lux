@@ -1,6 +1,5 @@
 import definitions from "./definitions";
 import { LuxOutput } from "./outputs";
-import Fixture from "./types/Fixture";
 import Show from "./types/Show";
 
 import { EventEmitter } from "stream";
