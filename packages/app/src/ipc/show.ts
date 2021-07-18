@@ -1,6 +1,12 @@
 import { BrowserWindow, IpcMain } from "electron";
 import { Lux } from "../core";
-import { FixtureWithDefinition, PropertyMap, definitions } from "@lux/common";
+import {
+  FixtureWithDefinition,
+  PropertyMap,
+  definitions,
+  Fixture,
+  _,
+} from "@lux/common";
 
 export default function initShowIpc(
   lux: Lux,
@@ -10,10 +16,22 @@ export default function initShowIpc(
   ipc.handle("fixtures", (): FixtureWithDefinition[] => {
     if (lux.show === undefined) return [];
 
-    return Object.values(lux.show.fixtures).map((f) => ({
-      ...f,
-      definition: definitions[f.definitionId],
-    }));
+    const fixtures: FixtureWithDefinition[] = [];
+
+    for (const universeIndex in lux.show.universes) {
+      const universe = lux.show.universes[universeIndex];
+
+      for (const fixtureIndex in universe.fixtures) {
+        const fixture = universe.fixtures[fixtureIndex];
+
+        fixtures.push({
+          ...fixture,
+          definition: definitions[fixture.definitionId],
+        });
+      }
+    }
+
+    return fixtures;
   });
 
   ipc.handle("output", () => {
@@ -24,25 +42,26 @@ export default function initShowIpc(
     "update-fixtures-properties",
     async (
       e,
-      { ids, properties }: { ids: number[]; properties: PropertyMap }
+      { fixtures, properties }: { fixtures: Fixture[]; properties: PropertyMap }
     ) => {
       if (lux.show === undefined) return;
 
-      ids.forEach((id) => {
-        lux.show!.fixtures[id].properties = {
-          ...lux.show!.fixtures[id].properties,
+      for (const fixture of fixtures) {
+        lux.show.universes[fixture.universe].fixtures[fixture.id].properties = {
+          ...lux.show.universes[fixture.universe].fixtures[fixture.id]
+            .properties,
           ...properties,
         };
-      });
+      }
 
       await lux.update();
     }
   );
 
-  ipc.handle("grand-master", () => {
-    if (lux.show === undefined) return;
+  ipc.handle("grand-master", (): number => {
+    if (lux.show === undefined) return 0;
 
-    return lux.show.grandMaster;
+    return _(lux.show.grandMaster, 255);
   });
 
   ipc.on("grand-master-update", async (e, value) => {

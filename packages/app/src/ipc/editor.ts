@@ -1,4 +1,5 @@
 import { BrowserWindow, IpcMain, Menu } from "electron";
+import { Fixture } from "@lux/common";
 import { Lux } from "../core";
 
 export default function initEditorIpc(
@@ -6,26 +7,32 @@ export default function initEditorIpc(
   mainWindow: BrowserWindow,
   ipc: IpcMain
 ) {
-  ipc.on("fixture-context-menu", (_e, ids: number[]) => {
+  ipc.on("fixture-context-menu", (_e, fixtures: Fixture[]) => {
     if (lux.show === undefined) return;
 
     Menu.buildFromTemplate([
       {
         label:
-          ids.length === 1 ? "Clear fixture" : `Clear ${ids.length} fixtures`,
+          fixtures.length === 1
+            ? "Clear fixture"
+            : `Clear ${fixtures.length} fixtures`,
         click: async () => {
-          ids.forEach((id) => {
-            lux.show!.fixtures[id].properties = {};
-          });
+          for (const fixture of fixtures) {
+            lux.show!.universes[fixture.universe].fixtures[
+              fixture.id
+            ].properties = {};
+          }
 
           mainWindow.webContents.send("update-fixtures-properties", {
-            ids,
+            ids: fixtures,
             properties: {},
           });
           await lux.update();
         },
-        enabled: ids.some(
-          (id) => Object.keys(lux.show!.fixtures[id].properties).length !== 0
+        enabled: fixtures.some(
+          (fixture) =>
+            lux.show!.universes[fixture.universe].fixtures[fixture.id]
+              .properties !== {}
         ),
       },
     ]).popup();

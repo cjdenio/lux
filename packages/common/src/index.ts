@@ -3,7 +3,9 @@ export type {
   FixtureWithDefinition,
 } from "./types/Fixture";
 export type { default as Property, PropertyMap } from "./types/Property";
-export type { default as Show } from "./types/Show";
+export type { default as Show, Output, Universe } from "./types/Show";
+
+export { defaultShow } from "./types/Show";
 
 export { default as definitions, categories } from "./definitions";
 

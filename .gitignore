@@ -5,3 +5,6 @@ build
 dist-ssr
 *.local
 *.log
+*.lux
+
+packages/app/ui/

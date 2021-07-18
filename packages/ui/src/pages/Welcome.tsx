@@ -25,7 +25,9 @@ export default function WelcomePage(): ReactElement {
       >
         <ButtonGroup>
           <Button onClick={() => ipc.send("open-project")}>Open Show</Button>
-          <Button colorScheme="blue">Create Show</Button>
+          <Button onClick={() => ipc.send("create-project")} colorScheme="blue">
+            Create Show
+          </Button>
         </ButtonGroup>
       </Flex>
     </Flex>

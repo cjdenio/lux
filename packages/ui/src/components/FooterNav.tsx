@@ -20,6 +20,7 @@ import {
 } from "react-icons/ri";
 import { GoFileBinary } from "react-icons/go";
 import { useLocation } from "wouter";
+import ipc from "../lib/ipc";
 
 export default function FooterNav(): ReactElement {
   const [location, setLocation] = useLocation();
@@ -27,7 +28,10 @@ export default function FooterNav(): ReactElement {
   const onAlertClose = (confirmed: boolean) => {
     setIsOpen(false);
 
-    if (confirmed) setLocation("/");
+    if (confirmed) {
+      ipc.send("close-project");
+      setLocation("/");
+    }
   };
   const cancelRef = useRef(null);
 

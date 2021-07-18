@@ -13,7 +13,7 @@ let mainWindow: BrowserWindow;
 const files: string[] = [];
 
 const lux = new Lux();
-lux.attachOutput(new ArtnetOutput("127.0.0.1")).then(() => {
+lux.attachOutput("artnet", new ArtnetOutput("127.0.0.1")).then(() => {
   console.log("Art-Net successfully connected");
 });
 
@@ -74,7 +74,7 @@ app.whenReady().then(async () => {
   });
 
   if (app.isPackaged) {
-    mainWindow.loadURL("file://" + join(__dirname, "../ui/dist/index.html"));
+    mainWindow.loadURL("file://" + join(__dirname, "..", "ui", "index.html"));
   } else {
     mainWindow.loadURL("http://localhost:3000");
   }

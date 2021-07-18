@@ -1,5 +1,6 @@
 import { Flex, Text, Box } from "@chakra-ui/react";
 import React, { PropsWithChildren, ReactElement } from "react";
+import { useEffect } from "react";
 import useIpc from "../state/useIpc";
 
 export default function AppWindow({
@@ -7,6 +8,10 @@ export default function AppWindow({
 }: PropsWithChildren<unknown>): ReactElement {
   const [title] = useIpc<string | undefined>("window-title", undefined);
   const [platform] = useIpc<NodeJS.Platform>("platform", "win32");
+
+  useEffect(() => {
+    document.title = title ? `${title} | Lux` : "Lux";
+  }, [title]);
 
   return (
     <Flex direction="column" height="100%">

@@ -11,7 +11,7 @@ import MainLayout from "../layouts/MainLayout";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
 import Fader from "../components/Fader";
-import ColorPicker from "../components/ColorPicker";
+import HslColorPicker from "../components/HslColorPicker";
 import { FixtureWithDefinition, PropertyMap } from "@lux/common";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
@@ -134,7 +134,7 @@ export default function EditorPage({
                 ) && (
                   <FormControl mb={5}>
                     <FormLabel>Color</FormLabel>
-                    <ColorPicker
+                    <HslColorPicker
                       value={{
                         r: _(selectedFixtures[0].properties.red, 255),
                         g: _(selectedFixtures[0].properties.green, 255),
@@ -143,7 +143,7 @@ export default function EditorPage({
                       onChange={(c) => {
                         setFixtures((fs) => {
                           ipc.send("update-fixtures-properties", {
-                            ids: fs.filter((i) => i.selected).map((i) => i.id),
+                            fixtures: fs.filter((i) => i.selected),
                             properties: {
                               red: c.r,
                               green: c.g,
@@ -181,7 +181,7 @@ export default function EditorPage({
                     onChange={(e) => {
                       setFixtures((fs) => {
                         ipc.send("update-fixtures-properties", {
-                          ids: fs.filter((i) => i.selected).map((i) => i.id),
+                          fixtures: fs.filter((i) => i.selected),
                           properties: {
                             intensity: Math.round((e / 100) * 255),
                           },
@@ -299,14 +299,11 @@ export default function EditorPage({
                   });
                 });
 
-                ipc.send("fixture-context-menu", [i.id]);
+                ipc.send("fixture-context-menu", [i]);
                 return;
               }
 
-              ipc.send(
-                "fixture-context-menu",
-                selectedFixtures.map((i) => i.id)
-              );
+              ipc.send("fixture-context-menu", selectedFixtures);
             }}
           />
         ))}

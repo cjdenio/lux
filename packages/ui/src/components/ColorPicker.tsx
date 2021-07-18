@@ -1,6 +1,15 @@
-import React, { ReactElement, useEffect, useRef, useState } from "react";
-import { Box } from "@chakra-ui/layout";
-import { RgbColor, rgbToHsv, hsvToHsl, hsvToRgb } from "../util/color";
+import {
+  Button,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
+import React, { ReactElement, useState } from "react";
+import { RgbColor } from "../util/color";
+import Fader from "./Fader";
+import HslColorPicker from "./HslColorPicker";
 
 export default function ColorPicker({
   value,
@@ -9,108 +18,91 @@ export default function ColorPicker({
   value: RgbColor;
   onChange: (color: RgbColor) => void;
 }): ReactElement {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const colorHsv = { ...rgbToHsv(value), v: 100 };
-  const colorHsl = hsvToHsl(colorHsv);
-
-  const [position, _setPosition] = useState({
-    x: (colorHsv.h / 360) * 100,
-    y: -colorHsv.s + 100,
-  });
-  const positionRef = useRef(position);
-  const setPosition = (position: { x: number; y: number }) => {
-    _setPosition(position);
-    positionRef.current = position;
-  };
-
-  const [moving, _setMoving] = useState(false);
-  const movingRef = useRef(moving);
-  const setMoving = (moving: boolean) => {
-    _setMoving(moving);
-    movingRef.current = moving;
-  };
-
-  const move = (e: MouseEvent) => {
-    if (movingRef.current) {
-      const rect = ref.current?.getBoundingClientRect() as DOMRect;
-
-      let x = ((e.clientX - rect.left) / rect.width) * 100;
-      let y = ((e.clientY - rect.top) / rect.height) * 100;
-
-      if (x > 100) {
-        x = 100;
-      } else if (x < 0) {
-        x = 0;
-      }
-
-      if (y > 100) {
-        y = 100;
-      } else if (y < 0) {
-        y = 0;
-      }
-
-      const h = (x / 100) * 360;
-      const s = -y + 100;
-
-      onChange(
-        hsvToRgb({
-          h,
-          s,
-          v: 100,
-        })
-      );
-
-      setPosition({
-        x,
-        y,
-      });
-    }
-  };
-
-  useEffect(() => {
-    const onMouseUp = () => {
-      setMoving(false);
-    };
-
-    document.addEventListener("mouseup", onMouseUp);
-    document.addEventListener("mousemove", move);
-
-    return () => {
-      document.removeEventListener("mouseup", onMouseUp);
-      document.removeEventListener("mousemove", move);
-    };
-  });
-
-  useEffect(() => {
-    setPosition({ x: (colorHsv.h / 360) * 100, y: -colorHsv.s + 100 });
-  }, [value]);
+  const [color, setColor] = useState(value);
 
   return (
-    <Box
-      ref={ref}
-      height="200px"
-      width="100%"
-      bgImage="linear-gradient(to bottom, transparent, white), linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%)"
-      borderRadius="md"
-      position="relative"
-      onMouseDown={(e) => {
-        setMoving(true);
-        move(e as unknown as MouseEvent);
-      }}
-    >
-      <Box
-        position="absolute"
-        top={`${position.y}%`}
-        left={`${position.x}%`}
-        width="20px"
-        height="20px"
-        bg={`hsl(${colorHsl.h}, ${colorHsl.s}%, ${colorHsl.l}%)`}
-        shadow="md"
-        borderRadius="full"
-        border="2px solid white"
-        transform="translate(-50%, -50%)"
-      />
-    </Box>
+    <Tabs variant="enclosed">
+      <TabList>
+        <Tab>Picker</Tab>
+        <Tab>RGB</Tab>
+        <Tab>Presets</Tab>
+      </TabList>
+
+      <TabPanels>
+        <TabPanel>
+          <HslColorPicker
+            value={color}
+            onChange={(e) => {
+              setColor(e);
+              onChange(e);
+            }}
+          />
+        </TabPanel>
+        <TabPanel>
+          <Fader
+            orientation="horizontal"
+            value={(color.r / 255) * 100}
+            onChange={(e) =>
+              setColor((c) => {
+                const newColor = { ...c, r: (e / 100) * 255 };
+
+                onChange(newColor);
+                return newColor;
+              })
+            }
+          />
+          <Fader
+            orientation="horizontal"
+            value={(color.g / 255) * 100}
+            onChange={(e) =>
+              setColor((c) => {
+                const newColor = { ...c, g: (e / 100) * 255 };
+
+                onChange(newColor);
+                return newColor;
+              })
+            }
+          />
+          <Fader
+            orientation="horizontal"
+            value={(color.b / 255) * 100}
+            onChange={(e) =>
+              setColor((c) => {
+                const newColor = { ...c, b: (e / 100) * 255 };
+
+                onChange(newColor);
+                return newColor;
+              })
+            }
+          />
+        </TabPanel>
+        <TabPanel>
+          <Button
+            onClick={() => {
+              setColor({ r: 255, g: 0, b: 0 });
+              onChange({ r: 255, g: 0, b: 0 });
+            }}
+          >
+            Red
+          </Button>
+          <Button
+            onClick={() => {
+              setColor({ r: 0, g: 255, b: 0 });
+              onChange({ r: 0, g: 255, b: 0 });
+            }}
+          >
+            Green
+          </Button>
+          <Button
+            onClick={() => {
+              setColor({ r: 0, g: 0, b: 255 });
+              onChange({ r: 0, g: 0, b: 255 });
+            }}
+          >
+            Blue
+          </Button>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 }
