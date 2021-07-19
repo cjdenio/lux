@@ -1,8 +1,8 @@
-import { BrowserWindow, dialog, IpcMain, Menu } from "electron";
-import { readFile, writeFile } from "fs/promises";
-import { decode, encode } from "@msgpack/msgpack";
+import { BrowserWindow, dialog, IpcMain } from "electron";
+import { writeFile } from "fs/promises";
+import { encode } from "@msgpack/msgpack";
 import { Lux } from "../core";
-import { Show, defaultShow } from "@lux/common";
+import { defaultShow } from "@lux/common";
 
 import { basename } from "path";
 
@@ -10,7 +10,7 @@ export default function initWelcomeIpc(
   lux: Lux,
   mainWindow: BrowserWindow,
   ipc: IpcMain
-) {
+): void {
   ipc.on("open-project", async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       title: "Open Show",

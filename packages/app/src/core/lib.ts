@@ -35,7 +35,7 @@ export default class Lux extends EventEmitter {
     return show;
   }
 
-  public close() {
+  public close(): void {
     if (this.timeout !== undefined) {
       clearInterval(this.timeout);
       this.timeout = undefined;
@@ -53,7 +53,7 @@ export default class Lux extends EventEmitter {
   /**
    * Saves the loaded project
    */
-  public async save() {
+  public async save(): Promise<void> {
     if (this.show !== undefined) {
       await writeFile(this.show.path, encode(this.show));
     }
@@ -123,6 +123,7 @@ export default class Lux extends EventEmitter {
     for (const property in definition.channels) {
       const channel = definition.channels[property];
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       let value = fixture.properties[property];
 
@@ -162,12 +163,12 @@ export default class Lux extends EventEmitter {
     return output;
   }
 
-  public async attachOutput(name: string, output: LuxOutput) {
+  public async attachOutput(name: string, output: LuxOutput): Promise<void> {
     this.outputs[name] = output;
     await output.init();
   }
 
-  public setGrandMaster(value: number) {
+  public setGrandMaster(value: number): void {
     if (this.show === undefined) return;
 
     this.show.grandMaster = value;

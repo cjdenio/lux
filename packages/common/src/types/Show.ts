@@ -24,5 +24,5 @@ export interface Universe {
 
 export interface Output {
   name: string;
-  args: any;
+  args: unknown;
 }

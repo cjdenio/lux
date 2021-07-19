@@ -10,7 +10,7 @@ export default class ArtnetOutput implements LuxOutput {
   }
 
   init(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.socket = dgram.createSocket("udp4");
       this.socket.bind(undefined, undefined);
       this.socket.on("listening", () => {
@@ -22,7 +22,7 @@ export default class ArtnetOutput implements LuxOutput {
   }
 
   close(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.socket.close(() => resolve());
     });
   }

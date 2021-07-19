@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import PatchModal from "../components/patch/PatchModal";
 import MainLayout from "../layouts/MainLayout";
 
 import { FixtureWithDefinition, fixtureEndChannel } from "@lux/common/src";
@@ -26,7 +25,7 @@ import useIpc from "../state/useIpc";
 import PatchSidebar from "../components/patch/PatchSidebar";
 
 export default function PatchPage(): ReactElement {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { isOpen, onOpen } = useDisclosure();
 
   const [fixtures] = useIpc<FixtureWithDefinition[]>("fixtures", []);
 

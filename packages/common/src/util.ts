@@ -1,4 +1,4 @@
-import { Fixture, FixtureWithDefinition } from ".";
+import { FixtureWithDefinition } from ".";
 
 /**
  * Returns the provided value, or the provided default if the value is undefined

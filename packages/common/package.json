@@ -6,10 +6,15 @@
   "author": "Caleb Denio",
   "license": "MIT",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
     "eslint": "^7.31.0",
+    "prettier": "^2.3.2",
     "typescript": "^4.3.5"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint --max-warnings 0 src",
+    "format:check": "prettier --check src"
   }
 }

@@ -1,17 +1,12 @@
 import { BrowserWindow, IpcMain } from "electron";
 import { Lux } from "../core";
-import {
-  FixtureDefinition,
-  FixtureDefinitionWithId,
-  categories,
-  definitions,
-} from "@lux/common";
+import { FixtureDefinitionWithId, categories, definitions } from "@lux/common";
 
 export default function initPatchIpc(
   lux: Lux,
   mainWindow: BrowserWindow,
   ipc: IpcMain
-) {
+): void {
   // Map used here to preserve insertion order
   ipc.handle("definitions", (): Map<string, FixtureDefinitionWithId[]> => {
     const definitionsWithCategories = new Map<
@@ -25,6 +20,7 @@ export default function initPatchIpc(
     });
 
     Object.entries(definitions).forEach(([id, definition]) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       definitionsWithCategories
         .get(definition.category || "Uncategorized")!
         .push({ ...definition, id });

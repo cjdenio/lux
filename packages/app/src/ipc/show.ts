@@ -12,7 +12,7 @@ export default function initShowIpc(
   lux: Lux,
   mainWindow: BrowserWindow,
   ipc: IpcMain
-) {
+): void {
   ipc.handle("fixtures", (): FixtureWithDefinition[] => {
     if (lux.show === undefined) return [];
 

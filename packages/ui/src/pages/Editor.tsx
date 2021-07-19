@@ -6,13 +6,7 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
-import React, {
-  PureComponent,
-  ReactElement,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";

@@ -6,7 +6,7 @@ export default function initEditorIpc(
   lux: Lux,
   mainWindow: BrowserWindow,
   ipc: IpcMain
-) {
+): void {
   ipc.on("fixture-context-menu", (_e, fixtures: Fixture[]) => {
     if (lux.show === undefined) return;
 
@@ -17,8 +17,10 @@ export default function initEditorIpc(
             ? "Clear fixture"
             : `Clear ${fixtures.length} fixtures`,
         click: async () => {
+          if (lux.show === undefined) return;
+
           for (const fixture of fixtures) {
-            lux.show!.universes[fixture.universe].fixtures[
+            lux.show.universes[fixture.universe].fixtures[
               fixture.id
             ].properties = {};
           }
