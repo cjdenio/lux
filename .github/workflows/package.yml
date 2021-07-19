@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - package-refactor
 jobs:
   macos:
     name: macOS
@@ -11,29 +12,28 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
 
-      - run: yarn install
-        name: Install app dependencies
+      - run: yarn global add lerna
+        name: Install Lerna
 
-      - run: yarn install
-        working-directory: ui/
-        name: Install UI dependencies
+      - run: lerna bootstrap
+        name: Install dependencies
 
-      - run: yarn build
+      - run: lerna run build
         name: Compile app
 
-      - run: yarn build
-        working-directory: ui/
-        name: Build UI
+      - run: cp -r packages/ui/dist packages/app/ui
+        name: Copy UI into app directory
 
       - run: yarn package --mac --publish never
         name: Package app for macOS
+        working-directory: packages/app
 
       - uses: actions/upload-artifact@v2
         name: Upload packaged app
         with:
           name: lux-mac
           path: |
-            build/*-mac.zip
+            packages/app/build/*-mac.zip
   linux:
     name: Linux
     runs-on: ubuntu-latest
@@ -41,22 +41,21 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
 
-      - run: yarn install
-        name: Install app dependencies
+      - run: yarn global add lerna
+        name: Install Lerna
 
-      - run: yarn install
-        working-directory: ui/
-        name: Install UI dependencies
+      - run: lerna bootstrap
+        name: Install dependencies
 
-      - run: yarn build
+      - run: lerna run build
         name: Compile app
 
-      - run: yarn build
-        working-directory: ui/
-        name: Build UI
+      - run: cp -r packages/ui/dist packages/app/ui
+        name: Copy UI into app directory
 
       - run: yarn package --linux --publish never
         name: Package app for Linux
+        working-directory: packages/app
 
       - uses: actions/upload-artifact@v2
         name: Upload packaged app
@@ -72,22 +71,21 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
 
-      - run: yarn install
-        name: Install app dependencies
+      - run: yarn global add lerna
+        name: Install Lerna
 
-      - run: yarn install
-        working-directory: ui/
-        name: Install UI dependencies
+      - run: lerna bootstrap
+        name: Install dependencies
 
-      - run: yarn build
+      - run: lerna run build
         name: Compile app
 
-      - run: yarn build
-        working-directory: ui/
-        name: Build UI
+      - run: cp -r packages/ui/dist packages/app/ui
+        name: Copy UI into app directory
 
       - run: yarn package --windows --publish never
         name: Package app for Windows
+        working-directory: packages/app
 
       - uses: actions/upload-artifact@v2
         name: Upload packaged app
