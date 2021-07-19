@@ -1,0 +1,65 @@
+{
+  "name": "@lux/app",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "homepage": "https://github.com/cjdenio/lux",
+  "license": "MIT",
+  "author": {
+    "name": "Caleb Denio",
+    "email": "cjdenio44@gmail.com",
+    "url": "https://calebden.io"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/node-osc": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "electron": "^12.0.7",
+    "electron-builder": "22.11.4",
+    "eslint": "^7.31.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "package": "electron-builder",
+    "start": "electron dist/index.js",
+    "format:check": "prettier --check src",
+    "lint": "eslint --max-warnings 0 src"
+  },
+  "build": {
+    "appId": "me.calebdenio.lux",
+    "productName": "Lux",
+    "directories": {
+      "output": "build"
+    },
+    "mac": {
+      "fileAssociations": {
+        "ext": "lux",
+        "name": "Lux show",
+        "role": "Viewer"
+      },
+      "target": {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    },
+    "linux": {
+      "target": [
+        "zip",
+        "deb"
+      ]
+    }
+  },
+  "dependencies": {
+    "@lux/common": "0.0.0",
+    "@msgpack/msgpack": "^2.7.0",
+    "express": "^4.17.1",
+    "node-osc": "^6.0.2"
+  }
+}

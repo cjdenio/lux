@@ -1,60 +1,7 @@
 {
-  "name": "lux",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "license": "MIT",
-  "author": {
-    "name": "Caleb Denio",
-    "email": "cjdenio44@gmail.com",
-    "url": "https://calebden.io"
-  },
+  "name": "root",
+  "private": true,
   "devDependencies": {
-    "@types/express": "^4.17.12",
-    "@types/node-osc": "^6.0.0",
-    "electron": "^12.0.7",
-    "electron-builder": "22.11.4",
-    "nodemon": "^2.0.7",
-    "prettier": "^2.3.0",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.2.4"
-  },
-  "scripts": {
-    "build": "tsc",
-    "package": "electron-builder",
-    "start": "electron dist/index.js",
-    "format:check": "prettier --check .",
-    "format:fix": "prettier --write ."
-  },
-  "build": {
-    "appId": "me.calebdenio.lux",
-    "productName": "Lux",
-    "directories": {
-      "output": "build"
-    },
-    "mac": {
-      "fileAssociations": {
-        "ext": "lux",
-        "name": "Lux show",
-        "role": "Viewer"
-      },
-      "target": {
-        "target": "zip",
-        "arch": [
-          "x64",
-          "arm64"
-        ]
-      }
-    },
-    "linux": {
-      "target": [
-        "zip",
-        "deb"
-      ]
-    }
-  },
-  "dependencies": {
-    "@msgpack/msgpack": "^2.7.0",
-    "express": "^4.17.1",
-    "node-osc": "^6.0.2"
+    "lerna": "^4.0.0"
   }
 }
