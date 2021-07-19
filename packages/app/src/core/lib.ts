@@ -1,5 +1,5 @@
 import { LuxOutput } from "./outputs";
-import { Show, definitions, _ } from "@lux/common";
+import { Show, definitions, _, Fixture } from "@lux/common";
 
 import { EventEmitter } from "stream";
 import { writeFile, readFile } from "fs/promises";
@@ -12,6 +12,9 @@ export default class Lux extends EventEmitter {
 
   // Cache of DMX output
   dmxOutput: { [universe: number]: number[] } = {};
+  universeUpdateQueue: { [universe: string]: boolean } = {};
+
+  timeout: NodeJS.Timeout | undefined;
 
   public async open(path: string): Promise<Show> {
     if (this.show !== undefined) this.close();
@@ -27,104 +30,136 @@ export default class Lux extends EventEmitter {
 
     await this.update();
 
+    this.timeout = setInterval(() => this.update(), 20);
+
     return show;
   }
 
   public close() {
+    if (this.timeout !== undefined) {
+      clearInterval(this.timeout);
+      this.timeout = undefined;
+    }
+
     if (this.show === undefined) return;
 
     this.show = undefined;
     this.dmxOutput = {};
+    this.universeUpdateQueue = {};
 
     console.log("Closed project");
   }
 
+  /**
+   * Saves the loaded project
+   */
   public async save() {
     if (this.show !== undefined) {
       await writeFile(this.show.path, encode(this.show));
     }
   }
 
-  public async update() {
+  /**
+   * Called every ~20ms
+   */
+  private async update() {
     if (this.show === undefined) return;
 
     // Iterate over universes
-    Object.entries(this.show.universes).forEach(
-      async ([universeIndex, universe]) => {
-        const channels: { [key: number]: number } = {};
+    for (const universeIndex in this.show.universes) {
+      const universe = this.show.universes[universeIndex];
+
+      // Store the universe's DMX output
+      let channels: number[] = [];
+
+      const inUpdateQueue = !!this.universeUpdateQueue[universeIndex];
+
+      // Check if universe needs to be updated
+      if (!this.dmxOutput[universeIndex] || inUpdateQueue) {
+        console.log(`Updating universe: ${universeIndex}`);
+
+        if (inUpdateQueue) {
+          delete this.universeUpdateQueue[universeIndex];
+        }
+
+        channels = new Array(512).fill(0);
 
         // Iterate over fixtures in universe
-        Object.values(universe.fixtures).forEach((fixture) => {
-          const definition = definitions[fixture.definitionId];
-          if (definition === undefined) {
-            throw new Error(
-              `Definition not found for fixture: ${fixture.name}`
-            );
-          }
+        for (const fixtureIndex in universe.fixtures) {
+          const fixture = universe.fixtures[fixtureIndex];
 
-          let intensityFactor = _(this.show!.grandMaster, 255) / 255;
+          const output = this.computeFixtureOutput(fixture);
 
-          if (definition.channels["intensity"] === undefined) {
-            intensityFactor =
-              intensityFactor * ((fixture.properties["intensity"] || 0) / 255);
-          }
-
-          // Ensure that colors are 255 if not set
-          ["red", "green", "blue"].forEach((color) => {
-            if (
-              definition.channels[color] !== undefined &&
-              // @ts-ignore
-              fixture.properties[color] === undefined
-            ) {
-              channels[fixture.startChannel + definition.channels[color]] =
-                255 * intensityFactor;
-            }
+          output.forEach((value, index) => {
+            channels[index + (fixture.startChannel - 1)] = value;
           });
+        }
+      } else {
+        channels = this.dmxOutput[universeIndex];
+      }
 
-          Object.entries(fixture.properties).forEach(([property, value]) => {
-            const channel = definition.channels[property];
-            if (channel === undefined) {
-              if (property == "intensity") {
-                return;
-              }
-
-              throw new Error(
-                `Property "${property}" not valid for fixture definition: ${definition.name}`
-              );
-            }
-
-            channels[channel + fixture.startChannel] = value * intensityFactor;
+      // Write the universe to all of the configured outputs
+      if (universe.outputs !== undefined) {
+        for (const { name, args } of universe.outputs) {
+          this.outputs[name].set(channels, args).catch((err) => {
+            console.error(err);
           });
-
-          if (definition.static) {
-            Object.entries(definition.static).forEach(([channel, value]) => {
-              channels[parseInt(channel) + fixture.startChannel] = value;
-            });
-          }
-        });
-
-        const dmxOutput = new Array(512).fill(0);
-
-        Object.entries(channels).forEach(([key, value]) => {
-          dmxOutput[parseInt(key) - 1] = value;
-        });
-
-        this.dmxOutput[parseInt(universeIndex)] = dmxOutput;
-        this.emit("output-update", parseInt(universeIndex), dmxOutput);
-
-        try {
-          if (universe.outputs) {
-            for (const output of universe.outputs) {
-              this.outputs[output.name] &&
-                this.outputs[output.name].set(dmxOutput, output.args);
-            }
-          }
-        } catch (error) {
-          console.log("error updating output");
-          console.log(error);
         }
       }
-    );
+
+      this.dmxOutput[universeIndex] = channels;
+      this.emit("output-update", this.dmxOutput);
+    }
+  }
+
+  /**
+   * Compute a fixture's DMX output
+   */
+  private computeFixtureOutput(fixture: Fixture): number[] {
+    const definition = definitions[fixture.definitionId];
+
+    const output: number[] = [];
+
+    for (const property in definition.channels) {
+      const channel = definition.channels[property];
+
+      // @ts-ignore
+      let value = fixture.properties[property];
+
+      if (value === undefined) {
+        switch (property) {
+          case "red":
+          case "green":
+          case "blue":
+            value = 255;
+            break;
+
+          default:
+            value = 0;
+            break;
+        }
+      }
+
+      if (definition.channels["intensity"] === undefined) {
+        value = value * (_(fixture.properties.intensity, 0) / 255);
+      }
+
+      if (this.show?.grandMaster !== undefined) {
+        value = value * (this.show.grandMaster / 255);
+      }
+
+      output[channel] = value;
+    }
+
+    if (definition.static) {
+      for (const channel in definition.static) {
+        const value = definition.static[channel];
+
+        output[channel] = value;
+      }
+    }
+
+    return output;
   }
 
   public async attachOutput(name: string, output: LuxOutput) {

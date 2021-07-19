@@ -14,6 +14,15 @@ const theme = extendTheme({
         },
       },
     },
+    Accordion: {
+      baseStyle: {
+        button: {
+          _focus: {
+            boxShadow: "none",
+          },
+        },
+      },
+    },
   },
 });
 

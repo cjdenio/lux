@@ -24,15 +24,16 @@ export default function initEditorIpc(
           }
 
           mainWindow.webContents.send("update-fixtures-properties", {
-            ids: fixtures,
+            ids: fixtures.map((f) => f.id),
             properties: {},
           });
-          await lux.update();
+
+          for (const fixture of fixtures) {
+            lux.universeUpdateQueue[fixture.universe] = true;
+          }
         },
         enabled: fixtures.some(
-          (fixture) =>
-            lux.show!.universes[fixture.universe].fixtures[fixture.id]
-              .properties !== {}
+          (fixture) => Object.keys(fixture.properties).length !== 0
         ),
       },
     ]).popup();

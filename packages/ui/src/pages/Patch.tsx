@@ -23,6 +23,7 @@ import MainLayout from "../layouts/MainLayout";
 
 import { FixtureWithDefinition, fixtureEndChannel } from "@lux/common/src";
 import useIpc from "../state/useIpc";
+import PatchSidebar from "../components/patch/PatchSidebar";
 
 export default function PatchPage(): ReactElement {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -30,8 +31,10 @@ export default function PatchPage(): ReactElement {
   const [fixtures] = useIpc<FixtureWithDefinition[]>("fixtures", []);
 
   return (
-    <MainLayout>
-      <PatchModal isOpen={isOpen} onClose={onClose} />
+    <MainLayout
+      rightSidebar={isOpen ? <PatchSidebar /> : null}
+      rightSidebarId="patch-right-sidebar"
+    >
       <Tooltip label="Patch fixture" placement="left">
         <IconButton
           size="lg"

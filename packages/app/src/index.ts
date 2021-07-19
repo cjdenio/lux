@@ -29,7 +29,6 @@ osc.on("message", async ([path, ...args]) => {
     args[0] <= 255
   ) {
     lux.setGrandMaster(args[0]);
-    await lux.update();
   }
 });
 

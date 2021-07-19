@@ -6,7 +6,13 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useMemo, useState } from "react";
+import React, {
+  PureComponent,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import MainLayout from "../layouts/MainLayout";
 import Fixture from "../components/Fixture";
 import ipc from "../lib/ipc";
@@ -42,6 +48,9 @@ export default function EditorPage({
       setFixtures((fs) =>
         fs.map((f) => {
           if (ids.includes(f.id)) {
+            console.log("yo");
+            console.log(properties);
+
             return { ...f, properties };
           }
 

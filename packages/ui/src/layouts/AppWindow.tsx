@@ -7,7 +7,7 @@ export default function AppWindow({
   children,
 }: PropsWithChildren<unknown>): ReactElement {
   const [title] = useIpc<string | undefined>("window-title", undefined);
-  const [platform] = useIpc<NodeJS.Platform>("platform", "win32");
+  const [platform] = useIpc<NodeJS.Platform>("platform", "linux");
 
   useEffect(() => {
     document.title = title ? `${title} | Lux` : "Lux";

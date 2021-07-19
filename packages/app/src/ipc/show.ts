@@ -54,7 +54,9 @@ export default function initShowIpc(
         };
       }
 
-      await lux.update();
+      for (const fixture of fixtures) {
+        lux.universeUpdateQueue[fixture.universe] = true;
+      }
     }
   );
 
@@ -66,8 +68,6 @@ export default function initShowIpc(
 
   ipc.on("grand-master-update", async (e, value) => {
     lux.setGrandMaster(value);
-
-    await lux.update();
   });
 
   ipc.on("save", async () => {

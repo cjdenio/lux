@@ -9,13 +9,15 @@ import FooterNav from "./components/FooterNav";
 import SidebarContext from "./state/sidebar";
 import ipc from "./lib/ipc";
 import OutputPage from "./pages/Output";
+import { IpcRendererEvent } from "electron";
 
 function App(): ReactElement {
   const [sidebars, setSidebars] = useState({});
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    const onOpenProject = () => setLocation("/editor");
+    const onOpenProject = (_e: IpcRendererEvent, location?: string) =>
+      setLocation(location || "/patch");
 
     ipc.on("open-project", onOpenProject);
 

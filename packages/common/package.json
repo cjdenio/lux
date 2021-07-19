@@ -6,6 +6,7 @@
   "author": "Caleb Denio",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^7.31.0",
     "typescript": "^4.3.5"
   },
   "scripts": {
