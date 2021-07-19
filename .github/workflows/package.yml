@@ -62,8 +62,8 @@ jobs:
         with:
           name: lux-linux
           path: |
-            build/*.zip
-            build/*.deb
+            packages/app/build/*.zip
+            packages/app/build/*.deb
   windows:
     name: Windows
     runs-on: windows-latest
@@ -92,4 +92,4 @@ jobs:
         with:
           name: lux-windows
           path: |
-            build/*.exe
+            packages/app/build/*.exe
