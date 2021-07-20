@@ -1,5 +1,11 @@
 import { LuxOutput } from "./outputs";
-import { Show, definitions, _, Fixture } from "@lux/common";
+import {
+  Show,
+  definitions,
+  _,
+  Fixture,
+  FixtureWithDefinition,
+} from "@lux/common";
 
 import { EventEmitter } from "stream";
 import { writeFile, readFile } from "fs/promises";
@@ -55,6 +61,8 @@ export default class Lux extends EventEmitter {
    */
   public async save(): Promise<void> {
     if (this.show !== undefined) {
+      console.log("saving show");
+
       await writeFile(this.show.path, encode(this.show));
     }
   }
@@ -173,5 +181,26 @@ export default class Lux extends EventEmitter {
 
     this.show.grandMaster = value;
     this.emit("grand-master-update", this.show.grandMaster);
+  }
+
+  public fixtures(): FixtureWithDefinition[] {
+    if (this.show === undefined) return [];
+
+    const fixtures: FixtureWithDefinition[] = [];
+
+    for (const universeIndex in this.show.universes) {
+      const universe = this.show.universes[universeIndex];
+
+      for (const fixtureIndex in universe.fixtures) {
+        const fixture = universe.fixtures[fixtureIndex];
+
+        fixtures.push({
+          ...fixture,
+          definition: definitions[fixture.definitionId],
+        });
+      }
+    }
+
+    return fixtures;
   }
 }

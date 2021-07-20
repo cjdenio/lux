@@ -1,12 +1,6 @@
 import { BrowserWindow, IpcMain } from "electron";
 import { Lux } from "../core";
-import {
-  FixtureWithDefinition,
-  PropertyMap,
-  definitions,
-  Fixture,
-  _,
-} from "@lux/common";
+import { FixtureWithDefinition, PropertyMap, Fixture, _ } from "@lux/common";
 
 export default function initShowIpc(
   lux: Lux,
@@ -14,24 +8,7 @@ export default function initShowIpc(
   ipc: IpcMain
 ): void {
   ipc.handle("fixtures", (): FixtureWithDefinition[] => {
-    if (lux.show === undefined) return [];
-
-    const fixtures: FixtureWithDefinition[] = [];
-
-    for (const universeIndex in lux.show.universes) {
-      const universe = lux.show.universes[universeIndex];
-
-      for (const fixtureIndex in universe.fixtures) {
-        const fixture = universe.fixtures[fixtureIndex];
-
-        fixtures.push({
-          ...fixture,
-          definition: definitions[fixture.definitionId],
-        });
-      }
-    }
-
-    return fixtures;
+    return lux.fixtures();
   });
 
   ipc.handle("output", () => {

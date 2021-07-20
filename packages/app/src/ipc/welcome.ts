@@ -53,8 +53,6 @@ export default function initWelcomeIpc(
     });
 
     if (!canceled && filePath) {
-      console.log(filePath);
-
       await writeFile(filePath, encode(defaultShow()));
       const show = await lux.open(filePath);
 

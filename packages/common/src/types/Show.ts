@@ -4,6 +4,8 @@ export default interface Show {
   name?: string;
   path: string;
 
+  nextId: number;
+
   universes: { [num: number]: Universe };
 
   grandMaster?: number;
@@ -14,6 +16,7 @@ export function defaultShow(name?: string): Partial<Show> {
     name,
     universes: {},
     grandMaster: 255,
+    nextId: 1,
   };
 }
 

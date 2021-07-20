@@ -18,7 +18,7 @@ const theme = extendTheme({
       baseStyle: {
         button: {
           _focus: {
-            boxShadow: "none",
+            // boxShadow: "none",
           },
         },
       },

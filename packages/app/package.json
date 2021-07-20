@@ -1,5 +1,5 @@
 {
-  "name": "@lux/app",
+  "name": "lux",
   "version": "0.0.0",
   "main": "dist/index.js",
   "homepage": "https://github.com/cjdenio/lux",

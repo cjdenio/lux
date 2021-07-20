@@ -13,9 +13,15 @@ import {
   NumberInputStepper,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
+import ipc from "../../lib/ipc";
+import { Fixture } from "@lux/common";
 import DefinitionSelector from "./DefinitionSelector";
 
-export default function PatchSidebar(): ReactElement {
+export default function PatchSidebar({
+  onClose,
+}: {
+  onClose: () => void;
+}): ReactElement {
   const [definition, setDefinition] = useState("");
   const [universe, setUniverse] = useState(1);
   const [name, setName] = useState("");
@@ -70,8 +76,24 @@ export default function PatchSidebar(): ReactElement {
         </FormControl>
 
         <ButtonGroup mt={5}>
-          <Button>Cancel</Button>
-          <Button colorScheme="blue" disabled={!definition}>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            colorScheme="blue"
+            disabled={!definition || !name}
+            onClick={() => {
+              ipc.send("patch-fixture", {
+                name,
+                universe,
+                definitionId: definition,
+                startChannel,
+              } as Partial<Fixture>);
+
+              setDefinition("");
+              setName("");
+              setStartChannel(1);
+              setUniverse(1);
+            }}
+          >
             Patch
           </Button>
         </ButtonGroup>
