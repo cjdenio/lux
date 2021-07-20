@@ -35,12 +35,13 @@ export default function initPatchIpc(
     return definitionsWithCategories;
   });
 
-  ipc.on("patch-fixture", (_e, f: Fixture, num: number) => {
+  ipc.on("patch-fixture", (_e, f: Fixture, num: number, gap: number) => {
     if (lux.show === undefined) return;
 
     f.properties = {};
 
-    const channelCount = definitionChannelCount(definitions[f.definitionId]);
+    const channelCount =
+      definitionChannelCount(definitions[f.definitionId]) + gap;
 
     for (let i = 0; i < num; i++) {
       const id = lux.show.nextId + i;

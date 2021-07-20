@@ -26,10 +26,11 @@ export default function PatchSidebar({
   onClose: () => void;
 }): ReactElement {
   const [definition, setDefinition] = useState("");
-  const [universe, setUniverse] = useState(1);
+  const [universe, setUniverse] = useState<number | undefined>(1);
+  const [startChannel, setStartChannel] = useState<number | undefined>(1);
   const [name, setName] = useState("");
-  const [startChannel, setStartChannel] = useState(1);
-  const [numFixtures, setNumFixtures] = useState(1);
+  const [numFixtures, setNumFixtures] = useState<number | undefined>(1);
+  const [addressGap, setAddressGap] = useState<number | undefined>(0);
 
   return (
     <Box>
@@ -41,7 +42,7 @@ export default function PatchSidebar({
           <NumberInput
             value={universe}
             min={1}
-            onChange={(e) => setUniverse(parseInt(e) || 1)}
+            onChange={(e) => setUniverse(parseInt(e) || undefined)}
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -57,7 +58,7 @@ export default function PatchSidebar({
             value={startChannel}
             min={1}
             max={512}
-            onChange={(e) => setStartChannel(parseInt(e) || 1)}
+            onChange={(e) => setStartChannel(parseInt(e) || undefined)}
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -90,7 +91,22 @@ export default function PatchSidebar({
           <NumberInput
             value={numFixtures}
             min={1}
-            onChange={(e) => setNumFixtures(parseInt(e) || 1)}
+            onChange={(e) => setNumFixtures(parseInt(e) || undefined)}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </FormControl>
+
+        <FormControl mb={3}>
+          <FormLabel>Address Gap</FormLabel>
+          <NumberInput
+            value={addressGap}
+            min={0}
+            onChange={(e) => setAddressGap(parseInt(e) || undefined)}
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -104,7 +120,16 @@ export default function PatchSidebar({
           <Button onClick={onClose}>Cancel</Button>
           <Button
             colorScheme="blue"
-            disabled={!definition || !name}
+            disabled={
+              !(
+                definition &&
+                name &&
+                universe !== undefined &&
+                startChannel !== undefined &&
+                numFixtures !== undefined &&
+                addressGap !== undefined
+              )
+            }
             onClick={() => {
               ipc.send(
                 "patch-fixture",
@@ -114,7 +139,8 @@ export default function PatchSidebar({
                   definitionId: definition,
                   startChannel,
                 } as Partial<Fixture>,
-                numFixtures
+                numFixtures,
+                addressGap
               );
 
               // setDefinition("");
