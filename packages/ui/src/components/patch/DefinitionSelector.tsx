@@ -24,7 +24,10 @@ export default function DefinitionSelector({
 }): ReactElement {
   const [definitions] = useIpc<Map<string, FixtureDefinitionWithId[]>>(
     "definitions",
-    new Map([["Generic", []]])
+    new Map([
+      ["Generic", []],
+      ["Uncategorized", []],
+    ])
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [accordion, setAccordion] = useState<number[]>([]);

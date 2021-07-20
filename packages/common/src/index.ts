@@ -11,4 +11,4 @@ export { default as definitions, categories } from "./definitions";
 
 export type { FixtureDefinition, FixtureDefinitionWithId } from "./definitions";
 
-export { _, fixtureEndChannel } from "./util";
+export { _, fixtureEndChannel, definitionChannelCount } from "./util";

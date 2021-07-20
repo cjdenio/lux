@@ -6,6 +6,7 @@ import {
   definitions,
   Fixture,
 } from "@lux/common";
+import { definitionChannelCount } from "@lux/common";
 
 export default function initPatchIpc(
   lux: Lux,
@@ -34,26 +35,42 @@ export default function initPatchIpc(
     return definitionsWithCategories;
   });
 
-  ipc.on("patch-fixture", (_e, f: Fixture) => {
+  ipc.on("patch-fixture", (_e, f: Fixture, num: number) => {
     if (lux.show === undefined) return;
 
-    const id = lux.show.nextId;
-
-    f.id = id;
     f.properties = {};
 
-    if (!lux.show?.universes[f.universe]) {
-      lux.show.universes[f.universe] = { fixtures: { [id]: f } };
-    } else {
-      lux.show.universes[f.universe].fixtures[id] = f;
+    const channelCount = definitionChannelCount(definitions[f.definitionId]);
+
+    for (let i = 0; i < num; i++) {
+      const id = lux.show.nextId + i;
+
+      const newFixture = {
+        ...f,
+        id,
+        name: f.name.replace("{}", (i + 1).toString()),
+        startChannel: f.startChannel + channelCount * i,
+      };
+
+      if (!lux.show?.universes[f.universe]) {
+        lux.show.universes[f.universe] = {
+          fixtures: {
+            [id]: newFixture,
+          },
+        };
+      } else {
+        lux.show.universes[f.universe].fixtures[id] = newFixture;
+      }
     }
 
-    lux.show.nextId++;
+    lux.show.nextId += num;
 
     mainWindow.webContents.send("fixtures-update", lux.fixtures());
     mainWindow.webContents.send(
       "fixtures-by-universe-update",
       lux.fixturesByUniverse()
     );
+
+    lux.save();
   });
 }

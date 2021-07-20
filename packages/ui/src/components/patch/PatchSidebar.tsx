@@ -2,8 +2,11 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Code,
+  Divider,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   NumberDecrementStepper,
@@ -26,6 +29,7 @@ export default function PatchSidebar({
   const [universe, setUniverse] = useState(1);
   const [name, setName] = useState("");
   const [startChannel, setStartChannel] = useState(1);
+  const [numFixtures, setNumFixtures] = useState(1);
 
   return (
     <Box>
@@ -73,6 +77,27 @@ export default function PatchSidebar({
               setName((target as HTMLInputElement).value)
             }
           />
+          <FormHelperText>
+            ✨ Hint: use <Code>{"{}"}</Code> to represent the fixture number if
+            patching multiple fixtures!
+          </FormHelperText>
+        </FormControl>
+
+        <Divider mb={5} mt={7} />
+
+        <FormControl mb={3}>
+          <FormLabel>Fixture Count</FormLabel>
+          <NumberInput
+            value={numFixtures}
+            min={1}
+            onChange={(e) => setNumFixtures(parseInt(e) || 1)}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
         </FormControl>
 
         <ButtonGroup mt={5}>
@@ -81,17 +106,21 @@ export default function PatchSidebar({
             colorScheme="blue"
             disabled={!definition || !name}
             onClick={() => {
-              ipc.send("patch-fixture", {
-                name,
-                universe,
-                definitionId: definition,
-                startChannel,
-              } as Partial<Fixture>);
+              ipc.send(
+                "patch-fixture",
+                {
+                  name,
+                  universe,
+                  definitionId: definition,
+                  startChannel,
+                } as Partial<Fixture>,
+                numFixtures
+              );
 
-              setDefinition("");
-              setName("");
-              setStartChannel(1);
-              setUniverse(1);
+              // setDefinition("");
+              // setName("");
+              // setStartChannel(1);
+              // setUniverse(1);
             }}
           >
             Patch
