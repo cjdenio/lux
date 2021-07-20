@@ -203,4 +203,26 @@ export default class Lux extends EventEmitter {
 
     return fixtures;
   }
+
+  /**
+   * Returns
+   */
+  public fixturesByUniverse(): {
+    [universe: string]: FixtureWithDefinition[];
+  } {
+    if (this.show === undefined) return {};
+
+    const universes: { [universe: string]: FixtureWithDefinition[] } = {};
+
+    for (const universeIndex in this.show.universes) {
+      const universe = this.show.universes[universeIndex];
+
+      universes[universeIndex] = Object.values(universe.fixtures).map((f) => ({
+        ...f,
+        definition: definitions[f.definitionId],
+      }));
+    }
+
+    return universes;
+  }
 }

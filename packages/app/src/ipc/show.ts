@@ -11,6 +11,12 @@ export default function initShowIpc(
     return lux.fixtures();
   });
 
+  ipc.handle("fixtures-by-universe", (): {
+    [universe: string]: FixtureWithDefinition[];
+  } => {
+    return lux.fixturesByUniverse();
+  });
+
   ipc.handle("output", () => {
     return lux.dmxOutput;
   });

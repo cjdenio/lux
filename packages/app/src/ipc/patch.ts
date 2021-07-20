@@ -51,5 +51,9 @@ export default function initPatchIpc(
     lux.show.nextId++;
 
     mainWindow.webContents.send("fixtures-update", lux.fixtures());
+    mainWindow.webContents.send(
+      "fixtures-by-universe-update",
+      lux.fixturesByUniverse()
+    );
   });
 }

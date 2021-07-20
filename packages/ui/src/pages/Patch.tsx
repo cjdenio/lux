@@ -30,7 +30,12 @@ import { RiAddLine, RiCloseLine } from "react-icons/ri";
 export default function PatchPage(): ReactElement {
   const { isOpen, onToggle, onOpen, onClose } = useDisclosure();
 
-  const [fixtures] = useIpc<FixtureWithDefinition[]>("fixtures", []);
+  const [universes] = useIpc<
+    | {
+        [universe: string]: FixtureWithDefinition[];
+      }
+    | undefined
+  >("fixtures-by-universe", undefined);
 
   return (
     <MainLayout
@@ -53,61 +58,79 @@ export default function PatchPage(): ReactElement {
       </Tooltip>
 
       <Box overflow="auto" height="100%">
-        <Tabs variant="line">
-          <TabList>
-            <Tab>Universe 1</Tab>
-          </TabList>
+        {universes !== undefined &&
+          (Object.keys(universes).length > 0 ? (
+            <Tabs variant="line">
+              <TabList>
+                {Object.keys(universes).map((universe) => (
+                  <Tab key={universe}>Universe {universe}</Tab>
+                ))}
+              </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              {fixtures.length > 0 ? (
-                <Table variant="simple" size="sm">
-                  <Thead>
-                    <Tr>
-                      <Th>ID</Th>
-                      <Th>Name</Th>
-                      <Th>Type</Th>
-                      <Th>Channels</Th>
-                    </Tr>
-                  </Thead>
+              <TabPanels>
+                {Object.entries(universes).map(([universe, fixtures]) => (
+                  <TabPanel key={universe}>
+                    {fixtures.length > 0 ? (
+                      <Table variant="simple" size="sm">
+                        <Thead>
+                          <Tr>
+                            <Th>ID</Th>
+                            <Th>Name</Th>
+                            <Th>Type</Th>
+                            <Th>Channels</Th>
+                          </Tr>
+                        </Thead>
 
-                  <Tbody>
-                    {fixtures.map((fixture) => {
-                      const { id, name, definition, startChannel } = fixture;
+                        <Tbody>
+                          {fixtures.map((fixture) => {
+                            const { id, name, definition, startChannel } =
+                              fixture;
 
-                      const endChannel = fixtureEndChannel(fixture);
+                            const endChannel = fixtureEndChannel(fixture);
 
-                      return (
-                        <Tr key={id}>
-                          <Td>{id}</Td>
-                          <Td>{name}</Td>
-                          <Td>
-                            <Tag>{definition.name}</Tag>
-                          </Td>
-                          <Td>
-                            {startChannel === endChannel
-                              ? startChannel
-                              : `${startChannel} / ${endChannel}`}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              ) : (
-                <Box textAlign="center" mt={10}>
-                  <Heading color="gray.300" mb={3}>
-                    No fixtures here
-                  </Heading>
-                  <Text mb={6}>Why not patch your first?</Text>
-                  <Button colorScheme="blue" onClick={() => onOpen()}>
-                    Patch Fixture
-                  </Button>
-                </Box>
-              )}
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+                            return (
+                              <Tr key={id}>
+                                <Td>{id}</Td>
+                                <Td>{name}</Td>
+                                <Td>
+                                  <Tag>{definition.name}</Tag>
+                                </Td>
+                                <Td>
+                                  {startChannel === endChannel
+                                    ? startChannel
+                                    : `${startChannel} - ${endChannel}`}
+                                </Td>
+                              </Tr>
+                            );
+                          })}
+                        </Tbody>
+                      </Table>
+                    ) : (
+                      <Box textAlign="center" mt={10}>
+                        <Heading color="gray.300" mb={3}>
+                          No fixtures here
+                        </Heading>
+                        <Text mb={6}>Why not patch your first?</Text>
+                        <Button colorScheme="blue" onClick={() => onOpen()}>
+                          Patch Fixture
+                        </Button>
+                      </Box>
+                    )}
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
+          ) : (
+            <Box textAlign="center" mt={10}>
+              <Heading color="gray.300" mb={3}>
+                No fixtures here
+              </Heading>
+              <Text mb={6}>Why not patch your first?</Text>
+              <Button colorScheme="blue" onClick={() => onOpen()}>
+                Patch Fixture
+              </Button>
+            </Box>
+          ))}
       </Box>
     </MainLayout>
   );
