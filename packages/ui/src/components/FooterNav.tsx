@@ -23,17 +23,22 @@ import { useLocation } from "wouter";
 import ipc from "../lib/ipc";
 
 export default function FooterNav(): ReactElement {
-  const [location, setLocation] = useLocation();
+  const [location, _setLocation] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const onAlertClose = (confirmed: boolean) => {
     setIsOpen(false);
 
     if (confirmed) {
       ipc.send("close-project");
-      setLocation("/");
+      _setLocation("/");
     }
   };
   const cancelRef = useRef(null);
+
+  const setLocation = (l: string) => {
+    _setLocation(l);
+    ipc.send("route-change", l);
+  };
 
   return (
     <>

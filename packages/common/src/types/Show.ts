@@ -9,6 +9,8 @@ export default interface Show {
   universes: { [num: number]: Universe };
 
   grandMaster?: number;
+
+  lastRoute?: string;
 }
 
 export function defaultShow(name?: string): Partial<Show> {

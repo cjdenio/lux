@@ -28,7 +28,7 @@ export default function initWelcomeIpc(
       try {
         const show = await lux.open(filePath);
 
-        mainWindow.webContents.send("open-project");
+        mainWindow.webContents.send("open-project", show.lastRoute);
         mainWindow.webContents.send(
           "window-title-update",
           show.name || basename(filePath)
@@ -56,7 +56,7 @@ export default function initWelcomeIpc(
       await writeFile(filePath, encode(defaultShow()));
       const show = await lux.open(filePath);
 
-      mainWindow.webContents.send("open-project");
+      mainWindow.webContents.send("open-project", show.lastRoute);
       mainWindow.webContents.send(
         "window-title-update",
         show.name || basename(filePath)

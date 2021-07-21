@@ -55,6 +55,13 @@ app.whenReady().then(async () => {
     return process.platform;
   });
 
+  ipcMain.on("route-change", (_e, route: string) => {
+    if (lux.show === undefined) return;
+
+    lux.show.lastRoute = route;
+    lux.save();
+  });
+
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
     // mainWindow.maximize();
@@ -63,7 +70,7 @@ app.whenReady().then(async () => {
       (async () => {
         const show = await lux.open(files[0]);
 
-        mainWindow.webContents.send("open-project");
+        mainWindow.webContents.send("open-project", show.lastRoute);
         mainWindow.webContents.send(
           "window-title-update",
           show.name || basename(files[0])

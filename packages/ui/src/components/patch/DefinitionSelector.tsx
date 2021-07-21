@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
-import { FixtureDefinitionWithId } from "@lux/common";
+import { FixtureDefinitionWithId } from "../../../../common/src/index";
 import useIpc from "../../state/useIpc";
 import { useMemo } from "react";
 
@@ -107,9 +107,18 @@ export default function DefinitionSelector({
                           justifyContent="start"
                           variant={d.id === selected ? "solid" : "ghost"}
                           colorScheme={d.id === selected ? "blue" : undefined}
+                          textOverflow="ellipsis"
+                          overflow="hidden"
+                          whiteSpace="nowrap"
                           onClick={() => onSelect(d.id)}
                         >
-                          {d.name}
+                          <Text
+                            overflow="hidden"
+                            whiteSpace="nowrap"
+                            textOverflow="ellipsis"
+                          >
+                            {d.name}
+                          </Text>
                         </Button>
                       ))}
                     </List>
