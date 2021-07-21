@@ -23,6 +23,16 @@ const theme = extendTheme({
         },
       },
     },
+    Table: {
+      baseStyle: {
+        tr: {
+          _focus: {
+            boxShadow: "outline",
+            outline: "none",
+          },
+        },
+      },
+    },
   },
 });
 

@@ -1,4 +1,4 @@
-import { BrowserWindow, IpcMain } from "electron";
+import { BrowserWindow, IpcMain, Menu } from "electron";
 import { Lux } from "../core";
 import {
   FixtureDefinitionWithId,
@@ -73,5 +73,35 @@ export default function initPatchIpc(
     );
 
     lux.save();
+  });
+
+  ipc.on("fixture-patch-context-menu", (_e, id: number) => {
+    Menu.buildFromTemplate([
+      {
+        label: "Delete fixture",
+        click: () => {
+          if (lux.show === undefined) return;
+
+          for (const universeIndex in lux.show.universes) {
+            const universe = lux.show.universes[universeIndex];
+
+            if (universe.fixtures[id] !== undefined) {
+              delete universe.fixtures[id];
+
+              lux.universeUpdateQueue[universeIndex] = true;
+
+              mainWindow.webContents.send("fixtures-update", lux.fixtures());
+              mainWindow.webContents.send(
+                "fixtures-by-universe-update",
+                lux.fixturesByUniverse()
+              );
+
+              lux.save();
+              break;
+            }
+          }
+        },
+      },
+    ]).popup();
   });
 }

@@ -25,7 +25,8 @@ import MainLayout from "../layouts/MainLayout";
 import { FixtureWithDefinition, fixtureEndChannel } from "@lux/common/src";
 import useIpc from "../state/useIpc";
 import PatchSidebar from "../components/patch/PatchSidebar";
-import { RiAddLine, RiCloseLine } from "react-icons/ri";
+import { RiAddCircleLine, RiAddLine, RiCloseLine } from "react-icons/ri";
+import ipc from "../lib/ipc";
 
 export default function PatchPage(): ReactElement {
   const { isOpen, onToggle, onOpen, onClose } = useDisclosure();
@@ -71,7 +72,7 @@ export default function PatchPage(): ReactElement {
                 {Object.entries(universes).map(([universe, fixtures]) => (
                   <TabPanel key={universe}>
                     {fixtures.length > 0 ? (
-                      <Table variant="simple" size="sm">
+                      <Table size="sm">
                         <Thead>
                           <Tr>
                             <Th>ID</Th>
@@ -89,7 +90,13 @@ export default function PatchPage(): ReactElement {
                             const endChannel = fixtureEndChannel(fixture);
 
                             return (
-                              <Tr key={id}>
+                              <Tr
+                                key={id}
+                                tabIndex={id}
+                                onContextMenu={() =>
+                                  ipc.send("fixture-patch-context-menu", id)
+                                }
+                              >
                                 <Td>{id}</Td>
                                 <Td>{name}</Td>
                                 <Td>
@@ -106,12 +113,16 @@ export default function PatchPage(): ReactElement {
                         </Tbody>
                       </Table>
                     ) : (
-                      <Box textAlign="center" mt={10}>
+                      <Box textAlign="center" mt={20}>
                         <Heading color="gray.300" mb={3}>
                           No fixtures here
                         </Heading>
                         <Text mb={6}>Why not patch your first?</Text>
-                        <Button colorScheme="blue" onClick={() => onOpen()}>
+                        <Button
+                          colorScheme="blue"
+                          onClick={() => onOpen()}
+                          leftIcon={<RiAddCircleLine size={23} />}
+                        >
                           Patch Fixture
                         </Button>
                       </Box>
@@ -121,12 +132,16 @@ export default function PatchPage(): ReactElement {
               </TabPanels>
             </Tabs>
           ) : (
-            <Box textAlign="center" mt={10}>
+            <Box textAlign="center" mt={20}>
               <Heading color="gray.300" mb={3}>
                 No fixtures here
               </Heading>
               <Text mb={6}>Why not patch your first?</Text>
-              <Button colorScheme="blue" onClick={() => onOpen()}>
+              <Button
+                colorScheme="blue"
+                onClick={() => onOpen()}
+                leftIcon={<RiAddCircleLine size={23} />}
+              >
                 Patch Fixture
               </Button>
             </Box>
