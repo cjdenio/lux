@@ -109,9 +109,11 @@ export default class Lux extends EventEmitter {
       // Write the universe to all of the configured outputs
       if (universe.outputs !== undefined) {
         for (const { name, args } of universe.outputs) {
-          this.outputs[name].set(channels, args).catch((err) => {
-            console.error(err);
-          });
+          this.outputs[name]
+            .set(channels, parseInt(universeIndex), args)
+            .catch((err) => {
+              console.error(err);
+            });
         }
       }
 

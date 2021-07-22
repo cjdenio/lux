@@ -4,6 +4,7 @@ import { LuxOutput } from ".";
 export default class ArtnetOutput implements LuxOutput {
   private socket: Socket;
   addr: string;
+  fullName = "Art-Net";
 
   constructor(addr: string) {
     this.addr = addr;
@@ -27,26 +28,30 @@ export default class ArtnetOutput implements LuxOutput {
     });
   }
 
-  set(data: number[]): Promise<void> {
+  set(
+    data: number[],
+    luxUniverse: number,
+    { subnet, universe }: { subnet: number; universe: number }
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       const packet = Buffer.alloc(18 + data.length);
 
       packet.write("Art-Net");
       packet.writeUInt8(0x00, 7);
 
-      packet.writeUInt16LE(0x5000, 8);
+      packet.writeUInt16LE(0x5000, 8); // Opcode - ArtDmx
 
-      packet.writeUInt16BE(14, 10);
+      packet.writeUInt16BE(14, 10); // Protocol version
 
-      packet.writeUInt8(0x01, 12);
+      packet.writeUInt8(0x00, 12); // Sequence
 
-      packet.writeUInt8(0x00, 13);
-      packet.writeUInt8(0x00, 14);
-      packet.writeUInt8(0x00, 15);
+      packet.writeUInt8(luxUniverse, 13); // Physical
+      packet.writeUInt8(universe + (subnet << 4), 14); // Subnet/Universe
+      packet.writeUInt8(0x00, 15); // Net
 
-      packet.writeUInt16BE(data.length, 16);
+      packet.writeUInt16BE(data.length, 16); // Data length
 
-      Buffer.from(data).copy(packet, 18);
+      Buffer.from(data).copy(packet, 18); // Data
 
       this.socket.send(packet, 0x1936, this.addr, (err) => {
         if (err) {

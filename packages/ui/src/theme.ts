@@ -27,7 +27,7 @@ const theme = extendTheme({
       baseStyle: {
         tr: {
           _focus: {
-            boxShadow: "outline",
+            boxShadow: "inset 0 0 0 3px rgba(66, 153, 225, 0.6)",
             outline: "none",
           },
         },

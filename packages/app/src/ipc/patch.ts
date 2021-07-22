@@ -5,8 +5,9 @@ import {
   categories,
   definitions,
   Fixture,
+  Output,
+  definitionChannelCount,
 } from "@lux/common";
-import { definitionChannelCount } from "@lux/common";
 
 export default function initPatchIpc(
   lux: Lux,
@@ -103,5 +104,34 @@ export default function initPatchIpc(
         },
       },
     ]).popup();
+  });
+
+  ipc.on("delete-universe", (_e, universe: number) => {
+    if (lux.show === undefined) return;
+
+    delete lux.show.universes[universe];
+    delete lux.dmxOutput[universe];
+
+    mainWindow.webContents.send("fixtures-update", lux.fixtures());
+    mainWindow.webContents.send(
+      "fixtures-by-universe-update",
+      lux.fixturesByUniverse()
+    );
+
+    lux.save();
+  });
+
+  ipc.handle("outputs", async (): Promise<{ [universe: number]: Output[] }> => {
+    if (lux.show === undefined) return {};
+
+    const universes: { [universe: number]: Output[] } = {};
+
+    for (const universeIndex in lux.show.universes) {
+      const universe = lux.show.universes[universeIndex];
+
+      universes[universeIndex] = universe.outputs || [];
+    }
+
+    return universes;
   });
 }

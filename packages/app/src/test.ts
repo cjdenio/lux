@@ -1,7 +1,8 @@
-import { encode } from "@msgpack/msgpack";
-import { writeFileSync } from "fs";
+import { decode, encode } from "@msgpack/msgpack";
+import { writeFileSync, readFileSync } from "fs";
 import { Show } from "@lux/common";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const show: Partial<Show> = {
   name: "Test Show",
   universes: {
@@ -117,6 +118,17 @@ const show: Partial<Show> = {
   },
 };
 
-writeFileSync("show.lux", encode(show));
+const stuff = readFileSync("show.lux");
+
+const more = decode(stuff) as Show;
+
+more.universes[1].outputs = [
+  { name: "artnet", args: {} },
+  { name: "artnet", args: {} },
+];
+
+writeFileSync("show.lux", encode(more));
+
+console.log(more);
 
 // console.log(msgpack.decode(fs.readFileSync("show.lux")));
