@@ -59,19 +59,18 @@ export default function PatchPage(): ReactElement {
       />
 
       <ButtonGroup position="absolute" bottom={5} right={5}>
-        {universes === undefined ||
-          (Object.keys(universes).length > 0 && (
-            <Tooltip label="Configure Outputs" placement="left">
-              <IconButton
-                size="lg"
-                borderRadius="full"
-                aria-label="Configure Outputs"
-                onClick={() => outputModal.onOpen()}
-              >
-                <RiBroadcastLine size={25} />
-              </IconButton>
-            </Tooltip>
-          ))}
+        {(universes === undefined || Object.keys(universes).length > 0) && (
+          <Tooltip label="Configure Outputs" placement="left">
+            <IconButton
+              size="lg"
+              borderRadius="full"
+              aria-label="Configure Outputs"
+              onClick={() => outputModal.onOpen()}
+            >
+              <RiBroadcastLine size={25} />
+            </IconButton>
+          </Tooltip>
+        )}
 
         <Tooltip
           label={isOpen ? "Cancel Fixture Patch" : "Patch Fixture"}

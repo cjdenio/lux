@@ -10,6 +10,8 @@ import {
   Flex,
   IconButton,
   Tooltip,
+  useDisclosure,
+  useStyleConfig,
 } from "@chakra-ui/react";
 import React, { ReactElement, useRef, useState } from "react";
 import {
@@ -17,10 +19,12 @@ import {
   RiEditFill,
   RiHome5Fill,
   RiRecordCircleFill,
+  RiSettingsLine,
 } from "react-icons/ri";
 import { GoFileBinary } from "react-icons/go";
 import { useLocation } from "wouter";
 import ipc from "../lib/ipc";
+import SettingsModal from "./SettingsModal";
 
 export default function FooterNav(): ReactElement {
   const [location, _setLocation] = useLocation();
@@ -40,8 +44,16 @@ export default function FooterNav(): ReactElement {
     ipc.send("route-change", l);
   };
 
+  const settingsModal = useDisclosure();
+
+  const theme = useStyleConfig("Sidebar");
+
   return (
     <>
+      <SettingsModal
+        isOpen={settingsModal.isOpen}
+        onClose={settingsModal.onClose}
+      />
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -73,10 +85,11 @@ export default function FooterNav(): ReactElement {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
       <Flex
         flexShrink={0}
         padding={3}
-        bg="gray.900"
+        bg={theme.bg as string}
         borderTop="1px solid"
         borderTopColor="gray.700"
         alignItems="center"
@@ -123,17 +136,26 @@ export default function FooterNav(): ReactElement {
           </Tooltip>
         </ButtonGroup>
 
-        <Tooltip label="Home" placement="top">
-          <IconButton
-            disabled={location === "/"}
-            colorScheme={location === "/" ? "blue" : undefined}
-            onClick={() => {
-              setIsOpen(true);
-            }}
-            aria-label="Home"
-            icon={<RiHome5Fill />}
-          />
-        </Tooltip>
+        <ButtonGroup>
+          <Tooltip label="Settings" placement="top">
+            <IconButton
+              onClick={settingsModal.onOpen}
+              aria-label="Settings"
+              icon={<RiSettingsLine />}
+            />
+          </Tooltip>
+          <Tooltip label="Home" placement="top">
+            <IconButton
+              disabled={location === "/"}
+              colorScheme={location === "/" ? "blue" : undefined}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+              aria-label="Home"
+              icon={<RiHome5Fill />}
+            />
+          </Tooltip>
+        </ButtonGroup>
       </Flex>
     </>
   );

@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 
 const theme = extendTheme({
   config: {
@@ -34,10 +35,20 @@ const theme = extendTheme({
       },
     },
     Modal: {
-      baseStyle: {
-        dialog: {
-          background: "gray.800",
-        },
+      baseStyle(props) {
+        return {
+          dialog: {
+            background: mode("white", "gray.800")(props),
+          },
+        };
+      },
+    },
+    // Custom components
+    Sidebar: {
+      baseStyle(props) {
+        return {
+          bg: mode("white", "gray.900")(props),
+        };
       },
     },
   },

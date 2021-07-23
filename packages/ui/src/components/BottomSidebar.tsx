@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/layout";
+import { useStyleConfig } from "@chakra-ui/react";
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -58,12 +59,14 @@ export default function BottomSidebar({
     };
   }, []);
 
+  const theme = useStyleConfig("Sidebar");
+
   return (
     <Box
       flexShrink={0}
       flexGrow={0}
       flexBasis={`${size}px`}
-      bg="gray.900"
+      bg={theme.bg as string}
       p={4}
       position="relative"
       ref={sidebarRef}
