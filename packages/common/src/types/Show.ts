@@ -27,7 +27,8 @@ export interface Universe {
   outputs?: Output[];
 }
 
-export interface Output<T = never> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Output<T = any> {
   name: string;
   id: number;
   args: T;
