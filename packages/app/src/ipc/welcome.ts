@@ -34,7 +34,7 @@ export default function initWelcomeIpc(
           show.name || basename(filePath)
         );
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   });

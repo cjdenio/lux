@@ -52,12 +52,11 @@ export default function PatchPage(): ReactElement {
       rightSidebar={isOpen ? <PatchSidebar onClose={onClose} /> : null}
       rightSidebarId="patch-right-sidebar"
     >
-      {outputModal.isOpen && (
-        <OutputModal
-          isOpen={outputModal.isOpen}
-          onClose={outputModal.onClose}
-        />
-      )}
+      <OutputModal
+        isOpen={outputModal.isOpen}
+        onClose={outputModal.onClose}
+        initialTabIndex={tabIndex}
+      />
 
       <ButtonGroup position="absolute" bottom={5} right={5}>
         {universes === undefined ||

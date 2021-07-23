@@ -17,7 +17,7 @@ export default function AppWindow({
     <Flex direction="column" height="100%">
       {platform === "darwin" && (
         <Flex
-          flexBasis={30}
+          flexBasis={27}
           flexShrink={0}
           bg="gray.900"
           sx={{ WebkitAppRegion: "drag" }}
@@ -25,7 +25,7 @@ export default function AppWindow({
           fontWeight="normal"
           alignItems="center"
           justifyContent="center"
-          fontSize={14}
+          fontSize={13}
         >
           {title ? (
             <>

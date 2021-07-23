@@ -1,1 +1,5 @@
-export default window.require("electron").ipcRenderer;
+import type { IpcRenderer } from "electron";
+
+const ipc: IpcRenderer = window.require("electron").ipcRenderer;
+
+export default ipc;

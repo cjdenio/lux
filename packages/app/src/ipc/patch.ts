@@ -134,4 +134,41 @@ export default function initPatchIpc(
 
     return universes;
   });
+
+  ipc.handle("delete-output", (_e, universe: number, id: number) => {
+    if (lux.show === undefined) return {};
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    lux.show.universes[universe].outputs!.splice(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      lux.show.universes[universe].outputs!.findIndex((v) => v.id === id),
+      1
+    );
+
+    lux.save();
+  });
+
+  ipc.handle(
+    "create-output",
+    (_e, universe: number, name: string, args: unknown) => {
+      if (lux.show === undefined) return {};
+
+      if (lux.show.universes[universe].outputs === undefined) {
+        lux.show.universes[universe].outputs = [
+          { id: lux.show.nextId, name, args },
+        ];
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        lux.show.universes[universe].outputs!.push({
+          id: lux.show.nextId,
+          name,
+          args,
+        });
+      }
+
+      lux.show.nextId++;
+
+      lux.save();
+    }
+  );
 }

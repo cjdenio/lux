@@ -42,9 +42,6 @@ export default function EditorPage({
       setFixtures((fs) =>
         fs.map((f) => {
           if (ids.includes(f.id)) {
-            console.log("yo");
-            console.log(properties);
-
             return { ...f, properties };
           }
 
@@ -255,7 +252,7 @@ export default function EditorPage({
       >
         {fixtures.map((i) => (
           <Fixture
-            name={i.id.toString()}
+            name={i.name}
             key={i.id}
             id={i.id}
             selected={i.selected}

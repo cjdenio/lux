@@ -35,7 +35,6 @@ export default function BottomSidebar({
 
   useEffect(() => {
     const resize = (e: MouseEvent) => {
-      // console.log("mouse: " + e.y);
       if (resizingRef.current) {
         let newSize =
           (sidebarRef.current?.getBoundingClientRect().bottom || 0) - e.y;

@@ -61,9 +61,7 @@ export default function FooterNav(): ReactElement {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button onClick={() => onAlertClose(false)} variant="ghost">
-                Cancel
-              </Button>
+              <Button onClick={() => onAlertClose(false)}>Cancel</Button>
               <Button
                 colorScheme="red"
                 onClick={() => onAlertClose(true)}

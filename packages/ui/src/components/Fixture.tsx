@@ -25,6 +25,7 @@ export default function Fixture({
       display="inline-flex"
       direction="column"
       m={2}
+      w="50px"
       onClick={(e) => {
         if (onClick) {
           onClick(e);
@@ -39,9 +40,16 @@ export default function Fixture({
       cursor="pointer"
     >
       <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="xs" width="100%" overflow="hidden">
-          {name}
-        </Text>
+        <Tooltip label={name} placement="bottom">
+          <Text
+            fontSize="xs"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {name}
+          </Text>
+        </Tooltip>
 
         {edited && (
           <Tooltip label="Edited">

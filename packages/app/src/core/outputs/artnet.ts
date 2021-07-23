@@ -4,7 +4,6 @@ import { LuxOutput } from ".";
 export default class ArtnetOutput implements LuxOutput {
   private socket: Socket;
   addr: string;
-  fullName = "Art-Net";
 
   constructor(addr: string) {
     this.addr = addr;

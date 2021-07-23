@@ -27,7 +27,8 @@ export interface Universe {
   outputs?: Output[];
 }
 
-export interface Output {
+export interface Output<T = never> {
   name: string;
-  args: unknown;
+  id: number;
+  args: T;
 }

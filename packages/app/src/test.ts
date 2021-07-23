@@ -113,7 +113,7 @@ const show: Partial<Show> = {
           properties: {},
         },
       },
-      outputs: [{ name: "artnet", args: {} }],
+      // outputs: [{ name: "artnet", args: {} }],
     },
   },
 };
@@ -123,9 +123,11 @@ const stuff = readFileSync("show.lux");
 const more = decode(stuff) as Show;
 
 more.universes[1].outputs = [
-  { name: "artnet", args: {} },
-  { name: "artnet", args: {} },
+  { name: "artnet", id: more.nextId, args: { subnet: 0, universe: 0 } },
+  { name: "artnet", id: more.nextId + 1, args: { subnet: 0, universe: 1 } },
 ];
+
+more.nextId += 2;
 
 writeFileSync("show.lux", encode(more));
 

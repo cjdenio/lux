@@ -17,7 +17,6 @@ export default function Fader({
   const resizing = useRef(false);
 
   const resize = (e: MouseEvent) => {
-    // console.log("mouse: " + e.y);
     if (resizing.current) {
       const rect = ref.current?.getBoundingClientRect();
 

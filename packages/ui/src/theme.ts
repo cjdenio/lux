@@ -33,6 +33,13 @@ const theme = extendTheme({
         },
       },
     },
+    Modal: {
+      baseStyle: {
+        dialog: {
+          background: "gray.800",
+        },
+      },
+    },
   },
 });
 

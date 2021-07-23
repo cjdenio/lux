@@ -5,7 +5,7 @@ import ipc from "../lib/ipc";
 export default function useIpc<T>(
   handle: string,
   initial: T
-): [T, (value: T) => void] {
+): [T, (value: T) => void, () => void] {
   const [value, setValue] = useState<T>(initial);
 
   useEffect(() => {
@@ -24,6 +24,9 @@ export default function useIpc<T>(
     value,
     (value) => {
       ipc.send(`${handle}-update`, value);
+    },
+    () => {
+      ipc.invoke(handle).then(setValue);
     },
   ];
 }
