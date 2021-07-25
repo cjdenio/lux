@@ -3,7 +3,6 @@ import {
   Alert,
   AlertIcon,
   Button,
-  Switch,
   ButtonGroup,
   FormControl,
   FormLabel,
@@ -11,7 +10,6 @@ import {
   Text,
   Tooltip,
   useStyleConfig,
-  Divider,
 } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
@@ -28,7 +26,6 @@ import {
   RiCheckboxMultipleLine,
   RiCloseLine,
   RiContrastLine,
-  RiEye2Line,
   RiEyeCloseLine,
   RiEyeLine,
   RiSaveLine,

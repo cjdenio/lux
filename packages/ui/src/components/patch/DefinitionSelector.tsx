@@ -8,7 +8,6 @@ import {
   Button,
   Input,
   List,
-  Select,
   Text,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
