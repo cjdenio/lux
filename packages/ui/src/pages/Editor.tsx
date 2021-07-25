@@ -2,9 +2,13 @@ import { Box, Flex } from "@chakra-ui/layout";
 import {
   Alert,
   AlertIcon,
+  ButtonGroup,
   FormControl,
   FormLabel,
+  IconButton,
   Text,
+  Tooltip,
+  useStyleConfig,
 } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
@@ -17,6 +21,12 @@ import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
 import { _ } from "@lux/common/src";
+import {
+  RiCheckboxMultipleLine,
+  RiCloseLine,
+  RiContrastLine,
+  RiSaveLine,
+} from "react-icons/ri";
 
 export default function EditorPage({
   isShow = false,
@@ -37,11 +47,11 @@ export default function EditorPage({
   useEffect(() => {
     const onUpdateFixtures = (
       e: IpcRendererEvent,
-      { ids, properties }: { ids: number[]; properties: PropertyMap }
+      { ids, properties }: { ids?: number[]; properties: PropertyMap }
     ) => {
       setFixtures((fs) =>
         fs.map((f) => {
-          if (ids.includes(f.id)) {
+          if (ids === undefined || ids.includes(f.id)) {
             return { ...f, properties };
           }
 
@@ -62,17 +72,19 @@ export default function EditorPage({
     [fixtures]
   );
 
+  const theme = useStyleConfig("Sidebar");
+
+  const selectAll = () => {
+    setFixtures((f) => f.map((fixture) => ({ ...fixture, selected: true })));
+  };
+
+  const invertSelection = () => {
+    setFixtures((f) =>
+      f.map((fixture) => ({ ...fixture, selected: !fixture.selected }))
+    );
+  };
+
   useEffect(() => {
-    const selectAll = () => {
-      setFixtures((f) => f.map((fixture) => ({ ...fixture, selected: true })));
-    };
-
-    const invertSelection = () => {
-      setFixtures((f) =>
-        f.map((fixture) => ({ ...fixture, selected: !fixture.selected }))
-      );
-    };
-
     const onKeyPress = (e: KeyboardEvent) => {
       if (e.key === "a" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -212,12 +224,38 @@ export default function EditorPage({
       }
       bottomSidebar={
         <Flex width="100%" height="100%">
-          <Box flexGrow={1} overflowX="auto" whiteSpace="nowrap">
-            {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-            <Fader value={0} onChange={() => {}} orientation="vertical" />
+          <Box
+            flexGrow={1}
+            overflowX="auto"
+            overflowY="visible"
+            whiteSpace="nowrap"
+            mr={3}
+          >
+            <Fader
+              value={0}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
+              orientation="vertical"
+              title="Test Cue Yee Haw"
+            />
+            <Fader
+              value={0}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
+              orientation="vertical"
+              title="Another test"
+            />
+            <Fader
+              value={0}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
+              orientation="vertical"
+              title="Cue"
+            />
           </Box>
           <Box flexShrink={0}>
             <Fader
+              title="Master"
               value={(grandMaster / 255) * 100}
               onChange={(v) => {
                 setGrandMaster((v / 100) * 255);
@@ -231,83 +269,126 @@ export default function EditorPage({
         </Flex>
       }
     >
-      <Box
-        height="100%"
-        onClick={(e) => {
-          if (
-            (e.target as Element).id === "editor" &&
-            !(e.shiftKey || e.metaKey || e.ctrlKey)
-          ) {
-            setFixtures((f) =>
-              f.map((fixture) => ({ ...fixture, selected: false }))
-            );
-          }
-        }}
-        onContextMenu={(e) => {
-          if ((e.target as Element).id === "editor") {
-            ipc.send("editor-context-menu");
-          }
-        }}
-        id="editor"
-      >
-        {fixtures.map((i) => (
-          <Fixture
-            name={i.name}
-            key={i.id}
-            id={i.id}
-            selected={i.selected}
-            color={`rgb(${
-              _(i.properties.red, 255) *
-              (i.properties.intensity ? i.properties.intensity / 255 : 0)
-            }, ${
-              _(i.properties.green, 255) *
-              (i.properties.intensity ? i.properties.intensity / 255 : 0)
-            }, ${
-              _(i.properties.blue, 255) *
-              (i.properties.intensity ? i.properties.intensity / 255 : 0)
-            })`}
-            edited={!isShow && !!Object.keys(i.properties).length}
-            rgb={i.definition.channels["red"] !== undefined}
-            onClick={(e) => {
-              setFixtures((f) => {
-                return f.map((fixture) => {
-                  if (e.shiftKey || e.metaKey || e.ctrlKey) {
-                    if (fixture.id === i.id) {
-                      return { ...fixture, selected: !fixture.selected };
-                    }
-                  } else {
-                    if (fixture.id === i.id) {
-                      return { ...fixture, selected: true };
-                    } else {
-                      return { ...fixture, selected: false };
-                    }
-                  }
+      <Flex height="100%" flexDir="column">
+        {!isShow && (
+          <Box
+            flexGrow={0}
+            flexShrink={0}
+            bg={theme.bg as string}
+            borderBottom="1px solid"
+            borderBottomColor="gray.700"
+            padding={3}
+          >
+            <ButtonGroup>
+              <Tooltip label="Clear All Fixtures" placement="top">
+                <IconButton
+                  aria-label="Clear All Fixtures"
+                  icon={<RiCloseLine />}
+                  onClick={() => ipc.send("clear-all")}
+                />
+              </Tooltip>
 
-                  // leave it unchanged
-                  return fixture;
-                });
-              });
-            }}
-            onRightClick={() => {
-              if (!selectedFixtures.some((x) => x.id === i.id)) {
+              <ButtonGroup isAttached>
+                <Tooltip label="Select All" placement="top">
+                  <IconButton
+                    aria-label="Select All"
+                    icon={<RiCheckboxMultipleLine />}
+                    onClick={selectAll}
+                  />
+                </Tooltip>
+                <Tooltip label="Invert Selection" placement="top">
+                  <IconButton
+                    aria-label="Invert Selection"
+                    icon={<RiContrastLine />}
+                    onClick={invertSelection}
+                  />
+                </Tooltip>
+              </ButtonGroup>
+
+              <Tooltip label="Store Cue" placement="top">
+                <IconButton aria-label="Store Cue" icon={<RiSaveLine />} />
+              </Tooltip>
+            </ButtonGroup>
+          </Box>
+        )}
+        <Box
+          flexGrow={1}
+          onClick={(e) => {
+            if (
+              (e.target as Element).id === "editor" &&
+              !(e.shiftKey || e.metaKey || e.ctrlKey)
+            ) {
+              setFixtures((f) =>
+                f.map((fixture) => ({ ...fixture, selected: false }))
+              );
+            }
+          }}
+          onContextMenu={(e) => {
+            if ((e.target as Element).id === "editor") {
+              ipc.send("editor-context-menu");
+            }
+          }}
+          id="editor"
+        >
+          {fixtures.map((i) => (
+            <Fixture
+              name={i.name}
+              key={i.id}
+              id={i.id}
+              selected={i.selected}
+              color={`rgb(${
+                _(i.properties.red, 255) *
+                (i.properties.intensity ? i.properties.intensity / 255 : 0)
+              }, ${
+                _(i.properties.green, 255) *
+                (i.properties.intensity ? i.properties.intensity / 255 : 0)
+              }, ${
+                _(i.properties.blue, 255) *
+                (i.properties.intensity ? i.properties.intensity / 255 : 0)
+              })`}
+              edited={!isShow && !!Object.keys(i.properties).length}
+              rgb={i.definition.channels["red"] !== undefined}
+              onClick={(e) => {
                 setFixtures((f) => {
                   return f.map((fixture) => {
-                    if (fixture.id === i.id) {
-                      return { ...fixture, selected: true };
+                    if (e.shiftKey || e.metaKey || e.ctrlKey) {
+                      if (fixture.id === i.id) {
+                        return { ...fixture, selected: !fixture.selected };
+                      }
+                    } else {
+                      if (fixture.id === i.id) {
+                        return { ...fixture, selected: true };
+                      } else {
+                        return { ...fixture, selected: false };
+                      }
                     }
-                    return { ...fixture, selected: false };
+
+                    // leave it unchanged
+                    return fixture;
                   });
                 });
+              }}
+              onRightClick={() => {
+                if (!selectedFixtures.some((x) => x.id === i.id)) {
+                  setFixtures((f) => {
+                    return f.map((fixture) => {
+                      if (fixture.id === i.id) {
+                        return { ...fixture, selected: true };
+                      }
+                      return { ...fixture, selected: false };
+                    });
+                  });
 
-                ipc.send("fixture-context-menu", [i]);
-                return;
-              }
+                  ipc.send("fixture-context-menu", [i]);
+                  return;
+                }
 
-              ipc.send("fixture-context-menu", selectedFixtures);
-            }}
-          />
-        ))}
-      </Box>
+                ipc.send("fixture-context-menu", selectedFixtures);
+              }}
+            />
+          ))}
+        </Box>
+      </Flex>
     </MainLayout>
   );
 }

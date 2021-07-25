@@ -1,20 +1,38 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useRef } from "react";
+import {
+  Box,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Flex,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 
 export default function Fader({
   value,
   onChange,
   onChangeFinished,
   orientation = "vertical",
+  title,
 }: {
   value: number;
   onChange: (value: number) => unknown;
   onChangeFinished?: () => unknown;
   orientation: "vertical" | "horizontal";
+  title?: string;
 }): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
 
   const resizing = useRef(false);
+
+  const [editableValue, setEditableValue] = useState(
+    Math.round(value).toString()
+  );
+
+  useEffect(() => {
+    setEditableValue(Math.round(value).toString());
+  }, [value]);
 
   const resize = (e: MouseEvent) => {
     if (resizing.current) {
@@ -62,10 +80,25 @@ export default function Fader({
       direction={isHorizontal ? "row" : "column"}
       height={isHorizontal ? "30px" : "100%"}
       width={isHorizontal ? "100%" : "50px"}
-      alignItems="center"
+      alignItems="stretch"
       display="inline-flex"
       {...{ [isHorizontal ? "my" : "mx"]: 2 }}
     >
+      {title && (
+        <Tooltip label={title} placement="top">
+          <Text
+            fontSize="xs"
+            mb={1}
+            flexShrink={0}
+            textAlign="center"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {title}
+          </Text>
+        </Tooltip>
+      )}
       <Box
         onMouseDown={(e) => {
           resizing.current = true;
@@ -89,14 +122,41 @@ export default function Fader({
         position="relative"
         cursor="pointer"
       ></Box>
-      <Text
+      <Editable
         fontSize="sm"
         color="gray.300"
         flexShrink={0}
-        {...(isHorizontal ? { ml: 3, flexBasis: "50px" } : { mt: 1 })}
+        value={editableValue}
+        onChange={(v) => setEditableValue(v)}
+        onSubmit={(v) => {
+          let newValue = parseInt(v);
+
+          if (isNaN(newValue)) {
+            // Revert to previous value
+            setEditableValue(value.toString());
+            return;
+          }
+
+          if (newValue > 100) {
+            newValue = 100;
+            setEditableValue("100");
+          } else if (newValue < 0) {
+            newValue = 0;
+            setEditableValue("0");
+          } else if (newValue.toString() !== v) {
+            setEditableValue(newValue.toString());
+          }
+
+          onChange(newValue);
+          onChangeFinished && onChangeFinished();
+        }}
+        {...(isHorizontal
+          ? { ml: 3, flexBasis: "50px" }
+          : { mt: 1, textAlign: "center" })}
       >
-        {Math.round(value)}%
-      </Text>
+        <EditablePreview />
+        <EditableInput />
+      </Editable>
     </Flex>
   );
 }
