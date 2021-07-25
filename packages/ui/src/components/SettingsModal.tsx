@@ -11,7 +11,8 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import React, { ReactElement } from "react";
+import React, { PropsWithChildren, ReactElement, useState } from "react";
+import { useEffect } from "react";
 import {
   RiEditLine,
   RiInformationLine,
@@ -20,6 +21,32 @@ import {
   RiWifiLine,
 } from "react-icons/ri";
 
+function NavButton({
+  children,
+  active,
+  icon,
+  onClick,
+}: PropsWithChildren<{
+  active?: boolean;
+  icon: ReactElement;
+  onClick: () => void;
+}>): ReactElement {
+  return (
+    <Button
+      isFullWidth
+      size="sm"
+      justifyContent="start"
+      my={0.5}
+      variant={active ? "solid" : "ghost"}
+      colorScheme={active ? "blue" : undefined}
+      leftIcon={icon}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  );
+}
+
 export default function SettingsModal({
   isOpen,
   onClose,
@@ -27,6 +54,12 @@ export default function SettingsModal({
   isOpen: boolean;
   onClose: () => void;
 }): ReactElement {
+  const [route, setRoute] = useState("/");
+
+  useEffect(() => {
+    setRoute("/");
+  }, [isOpen]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -43,64 +76,55 @@ export default function SettingsModal({
           <Flex>
             <Box flexBasis="300px" bg="gray.900" borderRadius="md" p={3}>
               <List>
-                <Button
-                  isFullWidth
-                  size="sm"
-                  justifyContent="start"
-                  my={0.5}
-                  variant="solid"
-                  colorScheme="blue"
-                  leftIcon={<RiSettings2Line />}
+                <NavButton
+                  active={route === "/"}
+                  onClick={() => setRoute("/")}
+                  icon={<RiSettings2Line />}
                 >
                   General
-                </Button>
-                <Button
-                  isFullWidth
-                  size="sm"
-                  justifyContent="start"
-                  my={0.5}
-                  variant="ghost"
-                  leftIcon={<RiEditLine />}
+                </NavButton>
+                <NavButton
+                  active={route === "/editor"}
+                  onClick={() => setRoute("/editor")}
+                  icon={<RiEditLine />}
                 >
                   Editor
-                </Button>
-                <Button
-                  isFullWidth
-                  size="sm"
-                  justifyContent="start"
-                  my={0.5}
-                  variant="ghost"
-                  leftIcon={<RiWifiLine />}
+                </NavButton>
+                <NavButton
+                  active={route === "/network"}
+                  onClick={() => setRoute("/network")}
+                  icon={<RiWifiLine />}
                 >
                   Network
-                </Button>
+                </NavButton>
 
                 <Divider my={2} />
 
-                <Button
-                  isFullWidth
-                  size="sm"
-                  justifyContent="start"
-                  my={0.5}
-                  variant="ghost"
-                  leftIcon={<RiInformationLine />}
+                <NavButton
+                  active={route === "/about"}
+                  onClick={() => setRoute("/about")}
+                  icon={<RiInformationLine />}
                 >
                   About Lux
-                </Button>
-                <Button
-                  isFullWidth
-                  size="sm"
-                  justifyContent="start"
-                  my={0.5}
-                  variant="ghost"
-                  leftIcon={<RiUserLine />}
+                </NavButton>
+                <NavButton
+                  active={route === "/acknowledgements"}
+                  onClick={() => setRoute("/acknowledgements")}
+                  icon={<RiUserLine />}
                 >
                   Acknowledgements
-                </Button>
+                </NavButton>
               </List>
             </Box>
             <Box py={3} px={5} flexGrow={1}>
-              wassup
+              {(() => {
+                switch (route) {
+                  case "/":
+                    return <Box>hi</Box>;
+                  default:
+                    return <Box>default</Box>;
+                }
+              })()}
             </Box>
           </Flex>
         </ModalBody>
