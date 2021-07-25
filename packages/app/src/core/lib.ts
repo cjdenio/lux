@@ -126,7 +126,10 @@ export default class Lux extends EventEmitter {
    * Compute a fixture's DMX output
    */
   private computeFixtureOutput(fixture: Fixture): number[] {
-    const definition = definitions[fixture.definitionId];
+    const definition =
+      definitions[fixture.definitionId.definition].configurations[
+        fixture.definitionId.configuration
+      ];
 
     const output: number[] = [];
 
@@ -198,10 +201,12 @@ export default class Lux extends EventEmitter {
 
         fixtures.push({
           ...fixture,
-          definition: definitions[fixture.definitionId],
+          definition: definitions[fixture.definitionId.definition],
         });
       }
     }
+
+    fixtures.sort((a, b) => a.startChannel - b.startChannel);
 
     return fixtures;
   }
@@ -221,10 +226,20 @@ export default class Lux extends EventEmitter {
 
       universes[universeIndex] = Object.values(universe.fixtures).map((f) => ({
         ...f,
-        definition: definitions[f.definitionId],
+        definition: definitions[f.definitionId.definition],
       }));
+
+      universes[universeIndex].sort((a, b) => a.startChannel - b.startChannel);
     }
 
     return universes;
+  }
+
+  public updateAllUniverses(): void {
+    if (this.show === undefined) return;
+
+    for (const universe in this.show.universes) {
+      this.universeUpdateQueue[universe] = true;
+    }
   }
 }

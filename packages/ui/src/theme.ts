@@ -6,6 +6,13 @@ const theme = extendTheme({
     initialColorMode: "dark",
   },
   components: {
+    Button: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
     Tabs: {
       baseStyle: {
         tab: {

@@ -5,7 +5,10 @@ export default interface Fixture {
   id: number;
   name: string;
   universe: number;
-  definitionId: string;
+  definitionId: {
+    definition: string;
+    configuration: string;
+  };
   startChannel: number;
   properties: PropertyMap;
 }

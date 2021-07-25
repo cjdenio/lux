@@ -105,7 +105,7 @@ export default function PatchPage(): ReactElement {
                       <Table size="sm" variant="unstyled">
                         <Thead>
                           <Tr>
-                            <Th>ID</Th>
+                            {/* <Th>ID</Th> */}
                             <Th>Name</Th>
                             <Th>Type</Th>
                             <Th>Channels</Th>
@@ -127,7 +127,7 @@ export default function PatchPage(): ReactElement {
                                   ipc.send("fixture-patch-context-menu", id)
                                 }
                               >
-                                <Td>{id}</Td>
+                                {/* <Td>{id}</Td> */}
                                 <Td>{name}</Td>
                                 <Td>
                                   <Tag>{definition.name}</Tag>

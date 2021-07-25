@@ -2,6 +2,8 @@ import { Box, Flex } from "@chakra-ui/layout";
 import {
   Alert,
   AlertIcon,
+  Button,
+  Switch,
   ButtonGroup,
   FormControl,
   FormLabel,
@@ -9,6 +11,7 @@ import {
   Text,
   Tooltip,
   useStyleConfig,
+  Divider,
 } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
@@ -25,6 +28,9 @@ import {
   RiCheckboxMultipleLine,
   RiCloseLine,
   RiContrastLine,
+  RiEye2Line,
+  RiEyeCloseLine,
+  RiEyeLine,
   RiSaveLine,
 } from "react-icons/ri";
 
@@ -107,6 +113,12 @@ export default function EditorPage({
     };
   }, []);
 
+  const [preview, setPreview] = useState(false);
+
+  useEffect(() => {
+    setFixtures((fs) => fs.map((f) => ({ ...f, selected: false })));
+  }, [isShow]);
+
   return (
     <MainLayout
       rightSidebarId="editor-right-sidebar"
@@ -142,7 +154,10 @@ export default function EditorPage({
                 )}
 
                 {selectedFixtures.every((f) =>
-                  Object.keys(f.definition.channels).includes("red")
+                  Object.keys(
+                    f.definition.configurations[f.definitionId.configuration]
+                      .channels
+                  ).includes("red")
                 ) && (
                   <FormControl mb={5}>
                     <FormLabel>Color</FormLabel>
@@ -271,7 +286,7 @@ export default function EditorPage({
     >
       <Flex height="100%" flexDir="column">
         {!isShow && (
-          <Box
+          <Flex
             flexGrow={0}
             flexShrink={0}
             bg={theme.bg as string}
@@ -309,7 +324,20 @@ export default function EditorPage({
                 <IconButton aria-label="Store Cue" icon={<RiSaveLine />} />
               </Tooltip>
             </ButtonGroup>
-          </Box>
+
+            <ButtonGroup ml="auto">
+              <Button
+                // colorScheme={preview ? "blue" : "red"}
+                variant="outline"
+                rightIcon={preview ? <RiEyeCloseLine /> : <RiEyeLine />}
+                onClick={() => {
+                  setPreview((p) => !p);
+                }}
+              >
+                {preview ? "Preview" : "Live"}
+              </Button>
+            </ButtonGroup>
+          </Flex>
         )}
         <Box
           flexGrow={1}
@@ -347,26 +375,27 @@ export default function EditorPage({
                 (i.properties.intensity ? i.properties.intensity / 255 : 0)
               })`}
               edited={!isShow && !!Object.keys(i.properties).length}
-              rgb={i.definition.channels["red"] !== undefined}
               onClick={(e) => {
-                setFixtures((f) => {
-                  return f.map((fixture) => {
-                    if (e.shiftKey || e.metaKey || e.ctrlKey) {
-                      if (fixture.id === i.id) {
-                        return { ...fixture, selected: !fixture.selected };
-                      }
-                    } else {
-                      if (fixture.id === i.id) {
-                        return { ...fixture, selected: true };
+                if (!isShow) {
+                  setFixtures((f) => {
+                    return f.map((fixture) => {
+                      if (e.shiftKey || e.metaKey || e.ctrlKey) {
+                        if (fixture.id === i.id) {
+                          return { ...fixture, selected: !fixture.selected };
+                        }
                       } else {
-                        return { ...fixture, selected: false };
+                        if (fixture.id === i.id) {
+                          return { ...fixture, selected: true };
+                        } else {
+                          return { ...fixture, selected: false };
+                        }
                       }
-                    }
 
-                    // leave it unchanged
-                    return fixture;
+                      // leave it unchanged
+                      return fixture;
+                    });
                   });
-                });
+                }
               }}
               onRightClick={() => {
                 if (!selectedFixtures.some((x) => x.id === i.id)) {

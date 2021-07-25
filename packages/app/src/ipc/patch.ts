@@ -42,7 +42,10 @@ export default function initPatchIpc(
     f.properties = {};
 
     const channelCount =
-      definitionChannelCount(definitions[f.definitionId]) + gap;
+      definitionChannelCount(
+        definitions[f.definitionId.definition],
+        f.definitionId.configuration
+      ) + gap;
 
     for (let i = 0; i < num; i++) {
       const id = lux.show.nextId + i;
@@ -79,7 +82,7 @@ export default function initPatchIpc(
   ipc.on("fixture-patch-context-menu", (_e, id: number) => {
     Menu.buildFromTemplate([
       {
-        label: "Delete fixture",
+        label: "Delete Fixture",
         click: () => {
           if (lux.show === undefined) return;
 

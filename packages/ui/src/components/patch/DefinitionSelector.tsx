@@ -8,6 +8,7 @@ import {
   Button,
   Input,
   List,
+  Select,
   Text,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
@@ -19,8 +20,8 @@ export default function DefinitionSelector({
   selected,
   onSelect,
 }: {
-  selected: string;
-  onSelect: (d: string) => unknown;
+  selected?: string;
+  onSelect: (d: FixtureDefinitionWithId) => unknown;
 }): ReactElement {
   const [definitions] = useIpc<Map<string, FixtureDefinitionWithId[]>>(
     "definitions",
@@ -110,7 +111,7 @@ export default function DefinitionSelector({
                           textOverflow="ellipsis"
                           overflow="hidden"
                           whiteSpace="nowrap"
-                          onClick={() => onSelect(d.id)}
+                          onClick={() => onSelect(d)}
                         >
                           <Text
                             overflow="hidden"

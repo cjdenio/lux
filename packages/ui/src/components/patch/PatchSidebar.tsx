@@ -14,29 +14,55 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
 import ipc from "../../lib/ipc";
-import { Fixture } from "@lux/common";
+import { Fixture, FixtureDefinitionWithId } from "@lux/common";
 import DefinitionSelector from "./DefinitionSelector";
+import { useEffect } from "react";
 
 export default function PatchSidebar({
   onClose,
 }: {
   onClose: () => void;
 }): ReactElement {
-  const [definition, setDefinition] = useState("");
+  const [definition, setDefinition] = useState<
+    FixtureDefinitionWithId | undefined
+  >(undefined);
+  const [configuration, setConfiguration] = useState("");
   const [universe, setUniverse] = useState("1");
   const [startChannel, setStartChannel] = useState("1");
   const [name, setName] = useState("");
   const [numFixtures, setNumFixtures] = useState("1");
   const [addressGap, setAddressGap] = useState("0");
 
+  useEffect(() => {
+    if (definition) {
+      setConfiguration(Object.keys(definition.configurations)[0]);
+    }
+  }, [definition]);
+
   return (
     <Box>
-      <DefinitionSelector selected={definition} onSelect={setDefinition} />
+      <DefinitionSelector selected={definition?.id} onSelect={setDefinition} />
 
       <Box flexBasis={0} flexGrow={1} flexShrink={0} mt={5}>
+        <FormControl mb={3}>
+          <FormLabel>Fixture Configuration</FormLabel>
+          <Select
+            disabled={!definition}
+            value={configuration}
+            onChange={(e) => setConfiguration(e.target.value)}
+          >
+            {definition &&
+              Object.keys(definition.configurations).map((c) => (
+                <option value={c} key={c}>
+                  {c}
+                </option>
+              ))}
+          </Select>
+        </FormControl>
         <FormControl mb={3}>
           <FormLabel>Universe</FormLabel>
           <NumberInput
@@ -127,7 +153,8 @@ export default function PatchSidebar({
                 universe &&
                 startChannel &&
                 numFixtures &&
-                addressGap
+                addressGap &&
+                configuration
               )
             }
             onClick={() => {
@@ -136,7 +163,11 @@ export default function PatchSidebar({
                 {
                   name,
                   universe: parseInt(universe),
-                  definitionId: definition,
+                  definitionId: {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    definition: definition!.id,
+                    configuration: configuration,
+                  },
                   startChannel: parseInt(startChannel),
                 } as Partial<Fixture>,
                 parseInt(numFixtures),

@@ -50,7 +50,10 @@ export default function initShowIpc(
   });
 
   ipc.on("grand-master-update", async (e, value) => {
+    if (lux.show === undefined) return;
+
     lux.setGrandMaster(value);
+    lux.updateAllUniverses();
   });
 
   ipc.on("save", async () => {

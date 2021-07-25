@@ -13,13 +13,21 @@ export function _<T>(value: T | undefined, defaultValue: T): T {
 }
 
 export function fixtureEndChannel(f: FixtureWithDefinition): number {
-  return definitionChannelCount(f.definition) + (f.startChannel - 1);
+  return (
+    definitionChannelCount(f.definition, f.definitionId.configuration) +
+    (f.startChannel - 1)
+  );
 }
 
-export function definitionChannelCount(definition: FixtureDefinition): number {
+export function definitionChannelCount(
+  definition: FixtureDefinition,
+  configuration: string
+): number {
   const channels = [
-    ...Object.values(definition.channels),
-    ...Object.keys(definition.static || {}).map(parseInt),
+    ...Object.values(definition.configurations[configuration].channels),
+    ...Object.keys(definition.configurations[configuration].static || {}).map(
+      parseInt
+    ),
   ];
 
   return channels.reduce((acc, curr) => (curr > acc ? curr : acc), 0) + 1;
