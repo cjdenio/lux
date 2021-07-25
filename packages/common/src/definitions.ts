@@ -52,6 +52,18 @@ const definitions: { [key: string]: FixtureDefinition } = {
           amber: 3,
         },
       },
+      "6 Channels": {
+        channels: {
+          intensity: 0,
+          red: 1,
+          green: 2,
+          blue: 3,
+          amber: 4,
+        },
+        static: {
+          5: 0,
+        },
+      },
     },
   },
   "cf-805": {
