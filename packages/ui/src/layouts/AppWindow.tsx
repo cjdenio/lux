@@ -1,4 +1,4 @@
-import { Flex, Text, Box } from "@chakra-ui/react";
+import { Flex, Text, Box, useColorMode } from "@chakra-ui/react";
 import React, { PropsWithChildren, ReactElement } from "react";
 import { useEffect } from "react";
 import useIpc from "../state/useIpc";
@@ -13,15 +13,17 @@ export default function AppWindow({
     document.title = title ? `${title} | Lux` : "Lux";
   }, [title]);
 
+  const { colorMode } = useColorMode();
+
   return (
     <Flex direction="column" height="100%">
       {platform === "darwin" && (
         <Flex
-          flexBasis={27}
+          flexBasis="27px"
           flexShrink={0}
-          bg="gray.900"
+          bg={colorMode === "dark" ? "gray.900" : "gray.200"}
           sx={{ WebkitAppRegion: "drag" }}
-          color="gray.300"
+          color={colorMode === "dark" ? "gray.300" : "gray.700"}
           fontWeight="normal"
           alignItems="center"
           justifyContent="center"

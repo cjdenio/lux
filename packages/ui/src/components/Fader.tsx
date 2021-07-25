@@ -6,6 +6,7 @@ import {
   Flex,
   Text,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 
@@ -23,6 +24,7 @@ export default function Fader({
   title?: string;
 }): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
+  const { colorMode } = useColorMode();
 
   const resizing = useRef(false);
 
@@ -115,16 +117,18 @@ export default function Fader({
         flexGrow={1}
         width="100%"
         height="100%"
-        bgGradient={`linear(${
-          isHorizontal ? "to-r" : "to-t"
-        }, gray.300 ${value}%, gray.700 ${value}%)`}
+        bgGradient={`linear(${isHorizontal ? "to-r" : "to-t"}, ${
+          colorMode === "dark" ? "gray.300" : "blue.500"
+        } ${value}%, ${
+          colorMode === "dark" ? "gray.700" : "gray.200"
+        } ${value}%)`}
         borderRadius="md"
         position="relative"
         cursor="pointer"
       ></Box>
       <Editable
         fontSize="sm"
-        color="gray.300"
+        color={colorMode === "dark" ? "gray.300" : "gray.700"}
         flexShrink={0}
         value={editableValue}
         onChange={(v) => setEditableValue(v)}

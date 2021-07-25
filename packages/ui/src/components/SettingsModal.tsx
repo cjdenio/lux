@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useColorMode,
 } from "@chakra-ui/react";
 import React, { PropsWithChildren, ReactElement, useState } from "react";
 import { useEffect } from "react";
@@ -60,6 +61,8 @@ export default function SettingsModal({
     setRoute("/");
   }, [isOpen]);
 
+  const { colorMode } = useColorMode();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -74,7 +77,12 @@ export default function SettingsModal({
         <ModalCloseButton />
         <ModalBody>
           <Flex>
-            <Box flexBasis="300px" bg="gray.900" borderRadius="md" p={3}>
+            <Box
+              flexBasis="300px"
+              bg={colorMode === "dark" ? "gray.800" : "gray.50"}
+              borderRadius="md"
+              p={3}
+            >
               <List>
                 <NavButton
                   active={route === "/"}

@@ -19,6 +19,7 @@ import {
   Heading,
   Button,
   ButtonGroup,
+  Flex,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
@@ -114,8 +115,13 @@ export default function PatchPage(): ReactElement {
 
                         <Tbody>
                           {fixtures.map((fixture) => {
-                            const { id, name, definition, startChannel } =
-                              fixture;
+                            const {
+                              id,
+                              name,
+                              definition,
+                              startChannel,
+                              definitionId: { configuration },
+                            } = fixture;
 
                             const endChannel = fixtureEndChannel(fixture);
 
@@ -127,15 +133,32 @@ export default function PatchPage(): ReactElement {
                                   ipc.send("fixture-patch-context-menu", id)
                                 }
                               >
-                                {/* <Td>{id}</Td> */}
                                 <Td>{name}</Td>
                                 <Td>
-                                  <Tag>{definition.name}</Tag>
+                                  <Flex>
+                                    {Object.keys(definition.configurations)
+                                      .length > 1 ? (
+                                      <>
+                                        <Tag borderEndRadius={0}>
+                                          {definition.name}
+                                        </Tag>
+                                        <Tag
+                                          borderStartRadius={0}
+                                          colorScheme="blue"
+                                          variant="solid"
+                                        >
+                                          {configuration}
+                                        </Tag>
+                                      </>
+                                    ) : (
+                                      <Tag>{definition.name}</Tag>
+                                    )}
+                                  </Flex>
                                 </Td>
                                 <Td>
                                   {startChannel === endChannel
                                     ? startChannel
-                                    : `${startChannel} - ${endChannel}`}
+                                    : `${startChannel} ... ${endChannel}`}
                                 </Td>
                               </Tr>
                             );

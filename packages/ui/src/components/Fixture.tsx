@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
-import { Tooltip } from "@chakra-ui/react";
+import { Tooltip, useColorMode } from "@chakra-ui/react";
 
 export default function Fixture({
   name,
@@ -20,6 +20,8 @@ export default function Fixture({
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onRightClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }): ReactElement {
+  const { colorMode } = useColorMode();
+
   return (
     <Flex
       display="inline-flex"
@@ -69,7 +71,10 @@ export default function Fixture({
         height={50}
         width={50}
         border="2px solid"
-        borderColor={selected ? "blue.300" : "gray.600"}
+        borderColor={
+          selected ? "blue.300" : colorMode === "dark" ? "gray.600" : "gray.300"
+        }
+        bg={colorMode === "dark" ? "transparent" : "gray.100"}
         borderRadius="md"
         alignItems="center"
         justifyContent="center"

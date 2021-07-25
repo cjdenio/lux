@@ -1,4 +1,11 @@
-import { Flex, Box, ButtonGroup, Tooltip, IconButton } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  ButtonGroup,
+  Tooltip,
+  IconButton,
+  useColorMode,
+} from "@chakra-ui/react";
 import React, { PropsWithChildren, ReactElement } from "react";
 import { RiEditLine, RiDeleteBinLine } from "react-icons/ri";
 import type { Output } from "../../../../../common/src";
@@ -12,14 +19,16 @@ export function OutputViewTemplate({
   onDelete: () => void;
   active: boolean;
 }>): ReactElement {
+  const { colorMode } = useColorMode();
+
   return (
     <Flex
-      bg="gray.900"
+      bg={colorMode === "dark" ? "gray.900" : "gray.50"}
       mt={2}
       p={3}
       borderRadius="md"
       border="1px solid"
-      borderColor="gray.700"
+      borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
       alignItems="center"
     >
       <Box

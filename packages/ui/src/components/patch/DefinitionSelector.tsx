@@ -9,6 +9,7 @@ import {
   Input,
   List,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import React, { ReactElement, useState } from "react";
 import { FixtureDefinitionWithId } from "../../../../common/src/index";
@@ -66,8 +67,15 @@ export default function DefinitionSelector({
     return newMap;
   }, [definitions, searchQuery]);
 
+  const { colorMode } = useColorMode();
+
   return (
-    <Box overflow="visible" background="gray.800" p={3} borderRadius="md">
+    <Box
+      overflow="visible"
+      bg={colorMode === "dark" ? "gray.800" : "gray.50"}
+      p={3}
+      borderRadius="md"
+    >
       <Input
         placeholder="Search..."
         mb={3}

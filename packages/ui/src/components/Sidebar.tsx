@@ -1,4 +1,4 @@
-import { Box, useStyleConfig } from "@chakra-ui/react";
+import { Box, useColorMode, useStyleConfig } from "@chakra-ui/react";
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -67,6 +67,7 @@ export default function Sidebar({
   }, []);
 
   const theme = useStyleConfig("Sidebar");
+  const { colorMode } = useColorMode();
 
   return (
     <Box
@@ -89,7 +90,9 @@ export default function Sidebar({
         position="absolute"
         top="0"
         bottom="0"
-        shadow={`inset ${side === "left" ? "-" : ""}1px 0px #2D3748`}
+        shadow={`inset ${side === "left" ? "-" : ""}1px 0px ${
+          colorMode === "dark" ? "#2D3748" : "#E2E8F0"
+        }`}
         _hover={{
           boxShadow: "none",
           bg: "blue.300",

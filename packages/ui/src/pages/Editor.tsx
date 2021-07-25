@@ -9,6 +9,7 @@ import {
   IconButton,
   Text,
   Tooltip,
+  useColorMode,
   useStyleConfig,
 } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
@@ -115,6 +116,8 @@ export default function EditorPage({
   useEffect(() => {
     setFixtures((fs) => fs.map((f) => ({ ...f, selected: false })));
   }, [isShow]);
+
+  const { colorMode } = useColorMode();
 
   return (
     <MainLayout
@@ -288,7 +291,7 @@ export default function EditorPage({
             flexShrink={0}
             bg={theme.bg as string}
             borderBottom="1px solid"
-            borderBottomColor="gray.700"
+            borderBottomColor={colorMode === "dark" ? "gray.700" : "gray.200"}
             padding={3}
           >
             <ButtonGroup>

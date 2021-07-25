@@ -10,6 +10,7 @@ import {
   Flex,
   IconButton,
   Tooltip,
+  useColorMode,
   useDisclosure,
   useStyleConfig,
 } from "@chakra-ui/react";
@@ -47,6 +48,7 @@ export default function FooterNav(): ReactElement {
   const settingsModal = useDisclosure();
 
   const theme = useStyleConfig("Sidebar");
+  const { colorMode } = useColorMode();
 
   return (
     <>
@@ -91,7 +93,7 @@ export default function FooterNav(): ReactElement {
         padding={3}
         bg={theme.bg as string}
         borderTop="1px solid"
-        borderTopColor="gray.700"
+        borderTopColor={colorMode === "dark" ? "gray.700" : "gray.200"}
         alignItems="center"
         justifyContent="space-between"
       >
