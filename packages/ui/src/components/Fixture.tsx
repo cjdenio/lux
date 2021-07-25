@@ -60,7 +60,7 @@ export default function Fixture({
               bg="red.500"
               flexShrink={0}
               flexGrow={0}
-              mr="1px"
+              mx="1px"
             ></Box>
           </Tooltip>
         )}

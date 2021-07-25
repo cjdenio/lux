@@ -46,7 +46,7 @@ export default function EditorPage({
 
   useEffect(() => {
     const onUpdateFixtures = (
-      e: IpcRendererEvent,
+      _e: IpcRendererEvent,
       { ids, properties }: { ids?: number[]; properties: PropertyMap }
     ) => {
       setFixtures((fs) =>
