@@ -17,7 +17,7 @@ const theme = extendTheme({
       },
     },
     Modal: {
-      baseStyle(props) {
+      baseStyle(props: Record<string, unknown>) {
         return {
           dialog: {
             background: mode("white", "gray.800")(props),
@@ -27,7 +27,7 @@ const theme = extendTheme({
     },
     // Custom components
     Sidebar: {
-      baseStyle(props) {
+      baseStyle(props: Record<string, unknown>) {
         return {
           bg: mode("white", "gray.900")(props),
         };

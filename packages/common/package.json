@@ -16,5 +16,8 @@
     "build": "tsc",
     "lint": "eslint --max-warnings 0 src",
     "format:check": "prettier --check src"
+  },
+  "dependencies": {
+    "typescript": "4.9.5"
   }
 }

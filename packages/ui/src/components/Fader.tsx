@@ -151,8 +151,10 @@ export default function Fader({
             setEditableValue(newValue.toString());
           }
 
-          onChange(newValue);
-          onChangeFinished && onChangeFinished();
+          if (newValue !== value) {
+            onChange(newValue);
+            onChangeFinished && onChangeFinished();
+          }
         }}
         {...(isHorizontal
           ? { ml: 3, flexBasis: "50px" }
