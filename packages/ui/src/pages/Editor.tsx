@@ -1,7 +1,5 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import {
-  Alert,
-  AlertIcon,
   Button,
   ButtonGroup,
   FormControl,
