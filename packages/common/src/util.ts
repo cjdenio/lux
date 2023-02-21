@@ -1,17 +1,6 @@
 import { FixtureWithDefinition } from ".";
 import { FixtureDefinition } from "./definitions";
 
-/**
- * Returns the provided value, or the provided default if the value is undefined
- */
-export function _<T>(value: T | undefined, defaultValue: T): T {
-  if (value !== undefined) {
-    return value;
-  }
-
-  return defaultValue;
-}
-
 export function fixtureEndChannel(f: FixtureWithDefinition): number {
   return (
     definitionChannelCount(f.definition, f.definitionId.configuration) +

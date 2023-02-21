@@ -155,7 +155,7 @@ export default class Lux extends EventEmitter {
       }
 
       if (definition.channels["intensity"] === undefined) {
-        value = value * (_(fixture.properties.intensity, 0) / 255);
+        value = value * ((fixture.properties.intensity ?? 0) / 255);
       }
 
       if (this.show?.grandMaster !== undefined) {

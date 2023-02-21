@@ -1,6 +1,6 @@
 import { BrowserWindow, IpcMain } from "electron";
 import { Lux } from "../core";
-import { FixtureWithDefinition, PropertyMap, Fixture, _ } from "@lux/common";
+import { FixtureWithDefinition, PropertyMap, Fixture } from "@lux/common";
 
 export default function initShowIpc(
   lux: Lux,
@@ -46,7 +46,7 @@ export default function initShowIpc(
   ipc.handle("grand-master", (): number => {
     if (lux.show === undefined) return 0;
 
-    return _(lux.show.grandMaster, 255);
+    return lux.show.grandMaster ?? 255;
   });
 
   ipc.on("grand-master-update", async (e, value) => {

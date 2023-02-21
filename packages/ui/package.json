@@ -20,7 +20,7 @@
     "react-colorful": "^5.2.0",
     "react-dom": "^17.0.0",
     "react-icons": "^4.2.0",
-    "wouter": "^2.7.4"
+    "wouter": "^2.10.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

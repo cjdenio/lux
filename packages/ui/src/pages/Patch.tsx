@@ -21,7 +21,7 @@ import {
   ButtonGroup,
   Flex,
 } from "@chakra-ui/react";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useMemo, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 
 import { FixtureWithDefinition, fixtureEndChannel } from "@lux/common/src";
@@ -35,9 +35,16 @@ import {
 } from "react-icons/ri";
 import ipc from "../lib/ipc";
 import OutputModal from "../components/patch/OutputModal";
+import { useLocationProperty } from "wouter/use-location";
 
 export default function PatchPage(): ReactElement {
-  const { isOpen, onToggle, onOpen, onClose } = useDisclosure();
+  const sidebarOpenInitially = useLocationProperty(() =>
+    new URLSearchParams(window.location.search).get("sidebar")
+  );
+
+  const { isOpen, onToggle, onClose } = useDisclosure({
+    defaultIsOpen: sidebarOpenInitially === "true",
+  });
   const outputModal = useDisclosure();
 
   const [universes] = useIpc<
@@ -47,6 +54,12 @@ export default function PatchPage(): ReactElement {
     | undefined
   >("fixtures-by-universe", undefined);
   const [tabIndex, setTabIndex] = useState(0);
+
+  const selectedUniverse = useMemo(() => {
+    if (universes === undefined) return undefined;
+    const universeNumber = Object.keys(universes)[tabIndex];
+    return universes[universeNumber];
+  }, [tabIndex, universes]);
 
   return (
     <MainLayout
@@ -73,20 +86,22 @@ export default function PatchPage(): ReactElement {
           </Tooltip>
         )}
 
-        <Tooltip
-          label={isOpen ? "Cancel Fixture Patch" : "Patch Fixture"}
-          placement="left"
-        >
-          <IconButton
-            size="lg"
-            borderRadius="full"
-            colorScheme="blue"
-            aria-label="Patch Fixture"
-            onClick={() => onToggle()}
+        {(selectedUniverse?.length ?? 0) > 0 && (
+          <Tooltip
+            label={isOpen ? "Cancel Fixture Patch" : "Patch Fixture"}
+            placement="left"
           >
-            {isOpen ? <RiCloseLine size={25} /> : <RiAddLine size={25} />}
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              size="lg"
+              borderRadius="full"
+              colorScheme="blue"
+              aria-label="Patch Fixture"
+              onClick={() => onToggle()}
+            >
+              {isOpen ? <RiCloseLine size={25} /> : <RiAddLine size={25} />}
+            </IconButton>
+          </Tooltip>
+        )}
       </ButtonGroup>
 
       <Box overflow="auto" height="100%">
@@ -174,7 +189,7 @@ export default function PatchPage(): ReactElement {
                         <ButtonGroup alignItems="center">
                           <Button
                             colorScheme="blue"
-                            onClick={() => onOpen()}
+                            onClick={() => onToggle()}
                             leftIcon={<RiAddCircleLine size={23} />}
                           >
                             Patch Fixture
@@ -203,7 +218,7 @@ export default function PatchPage(): ReactElement {
               <Text mb={6}>Why not patch your first?</Text>
               <Button
                 colorScheme="blue"
-                onClick={() => onOpen()}
+                onClick={() => onToggle()}
                 leftIcon={<RiAddCircleLine size={23} />}
               >
                 Patch Fixture

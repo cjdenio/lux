@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   FormControl,
   FormLabel,
+  Heading,
   IconButton,
   Text,
   Tooltip,
@@ -22,8 +23,8 @@ import { FixtureWithDefinition, PropertyMap } from "@lux/common";
 import { IpcRendererEvent } from "electron";
 import useIpc from "../state/useIpc";
 
-import { _ } from "@lux/common/src";
 import {
+  RiAddCircleLine,
   RiCheckboxMultipleLine,
   RiCloseLine,
   RiContrastLine,
@@ -31,6 +32,7 @@ import {
   RiEyeLine,
   RiSaveLine,
 } from "react-icons/ri";
+import { useLocation } from "wouter";
 
 export default function EditorPage({
   isShow = false,
@@ -118,6 +120,7 @@ export default function EditorPage({
   }, [isShow]);
 
   const { colorMode } = useColorMode();
+  const [, setLocation] = useLocation();
 
   return (
     <MainLayout
@@ -126,14 +129,11 @@ export default function EditorPage({
       bottomSidebarId="editor-bottom-sidebar"
       rightSidebar={
         !isShow ? (
-          <Box>
+          <Box height="100%">
             {selectedFixtures.length === 0 ? (
-              <>
-                <Alert status="info" variant="left-accent" mb={4}>
-                  <AlertIcon />
-                  No fixtures selected.
-                </Alert>
-              </>
+              <Flex height="100%" alignItems="center" justifyContent="center">
+                <Text color="gray.500">No fixtures selected.</Text>
+              </Flex>
             ) : (
               <>
                 {selectedFixtures.length > 1 && (
@@ -163,9 +163,9 @@ export default function EditorPage({
                     <FormLabel>Color</FormLabel>
                     <HslColorPicker
                       value={{
-                        r: _(selectedFixtures[0].properties.red, 255),
-                        g: _(selectedFixtures[0].properties.green, 255),
-                        b: _(selectedFixtures[0].properties.blue, 255),
+                        r: selectedFixtures[0].properties.red ?? 255,
+                        g: selectedFixtures[0].properties.green ?? 255,
+                        b: selectedFixtures[0].properties.blue ?? 255,
                       }}
                       onChange={(c) => {
                         setFixtures((fs) => {
@@ -358,6 +358,26 @@ export default function EditorPage({
           }}
           id="editor"
         >
+          {fixtures.length === 0 && (
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+            >
+              <Heading color="gray.600" mb={3}>
+                No fixtures yet
+              </Heading>
+              <Button
+                colorScheme="blue"
+                leftIcon={<RiAddCircleLine size={23} />}
+                onClick={() => setLocation("/patch?sidebar=true")}
+              >
+                Patch Fixture
+              </Button>
+            </Flex>
+          )}
+
           {fixtures.map((i) => (
             <Fixture
               name={i.name}
@@ -365,13 +385,13 @@ export default function EditorPage({
               id={i.id}
               selected={i.selected}
               color={`rgb(${
-                _(i.properties.red, 255) *
+                (i.properties.red ?? 255) *
                 (i.properties.intensity ? i.properties.intensity / 255 : 0)
               }, ${
-                _(i.properties.green, 255) *
+                (i.properties.green ?? 255) *
                 (i.properties.intensity ? i.properties.intensity / 255 : 0)
               }, ${
-                _(i.properties.blue, 255) *
+                (i.properties.blue ?? 255) *
                 (i.properties.intensity ? i.properties.intensity / 255 : 0)
               })`}
               edited={!isShow && !!Object.keys(i.properties).length}

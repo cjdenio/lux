@@ -51,7 +51,9 @@ export default function PatchSidebar({
         <FormControl mb={3}>
           <FormLabel>Fixture Configuration</FormLabel>
           <Select
-            disabled={!definition}
+            disabled={
+              !definition || Object.keys(definition.configurations).length === 1
+            }
             value={configuration}
             onChange={(e) => setConfiguration(e.target.value)}
           >
