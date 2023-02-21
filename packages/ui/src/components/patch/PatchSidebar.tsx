@@ -51,7 +51,7 @@ export default function PatchSidebar({
         <FormControl mb={3}>
           <FormLabel>Fixture Configuration</FormLabel>
           <Select
-            disabled={
+            isDisabled={
               !definition || Object.keys(definition.configurations).length === 1
             }
             value={configuration}
@@ -148,7 +148,7 @@ export default function PatchSidebar({
           <Button onClick={onClose}>Cancel</Button>
           <Button
             colorScheme="blue"
-            disabled={
+            isDisabled={
               !(
                 definition &&
                 name &&

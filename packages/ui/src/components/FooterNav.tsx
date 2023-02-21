@@ -97,10 +97,10 @@ export default function FooterNav(): ReactElement {
         alignItems="center"
         justifyContent="space-between"
       >
-        <ButtonGroup /* isAttached */>
-          <Tooltip label="Patch" placement="top">
+        <ButtonGroup>
+          <Tooltip label="Patch" placement="top" isDisabled={location === "/"}>
             <IconButton
-              disabled={location === "/"}
+              isDisabled={location === "/"}
               colorScheme={location === "/patch" ? "blue" : undefined}
               onClick={() => setLocation("/patch")}
               aria-label="Patch"
@@ -108,18 +108,22 @@ export default function FooterNav(): ReactElement {
             />
           </Tooltip>
           <ButtonGroup isAttached>
-            <Tooltip label="Editor" placement="top">
+            <Tooltip
+              label="Editor"
+              placement="top"
+              isDisabled={location === "/"}
+            >
               <IconButton
-                disabled={location === "/"}
+                isDisabled={location === "/"}
                 colorScheme={location === "/editor" ? "blue" : undefined}
                 onClick={() => setLocation("/editor")}
                 aria-label="Editor"
                 icon={<RiEditFill />}
               />
             </Tooltip>
-            <Tooltip label="Show" placement="top">
+            <Tooltip label="Show" placement="top" isDisabled={location === "/"}>
               <IconButton
-                disabled={location === "/"}
+                isDisabled={location === "/"}
                 colorScheme={location === "/show" ? "red" : undefined}
                 onClick={() => setLocation("/show")}
                 aria-label="Show"
@@ -127,9 +131,9 @@ export default function FooterNav(): ReactElement {
               />
             </Tooltip>
           </ButtonGroup>
-          <Tooltip label="Output" placement="top">
+          <Tooltip label="Output" placement="top" isDisabled={location === "/"}>
             <IconButton
-              disabled={location === "/"}
+              isDisabled={location === "/"}
               colorScheme={location === "/output" ? "blue" : undefined}
               onClick={() => setLocation("/output")}
               aria-label="Output"
@@ -146,9 +150,9 @@ export default function FooterNav(): ReactElement {
               icon={<RiSettingsLine />}
             />
           </Tooltip>
-          <Tooltip label="Home" placement="top">
+          <Tooltip label="Home" placement="top" isDisabled={location === "/"}>
             <IconButton
-              disabled={location === "/"}
+              isDisabled={location === "/"}
               colorScheme={location === "/" ? "blue" : undefined}
               onClick={() => {
                 setIsOpen(true);

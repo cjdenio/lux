@@ -102,7 +102,7 @@ export function ArtNetModal({
         </Button>
         <Button
           colorScheme="blue"
-          disabled={!(subnet && universe)}
+          isDisabled={!(subnet && universe)}
           onClick={() => {
             submit({
               subnet: parseInt(subnet),
