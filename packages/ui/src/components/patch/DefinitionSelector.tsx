@@ -111,7 +111,7 @@ export default function DefinitionSelector({
                           key={d.id}
                           size="sm"
                           my={0.5}
-                          isFullWidth
+                          width="full"
                           justifyContent="start"
                           variant={d.id === selected ? "solid" : "ghost"}
                           colorScheme={d.id === selected ? "blue" : undefined}

@@ -1,11 +1,5 @@
 import { LuxOutput } from "./outputs";
-import {
-  Show,
-  definitions,
-  _,
-  Fixture,
-  FixtureWithDefinition,
-} from "@lux/common";
+import { Show, definitions, Fixture, FixtureWithDefinition } from "@lux/common";
 
 import { EventEmitter } from "stream";
 import { writeFile, readFile } from "fs/promises";

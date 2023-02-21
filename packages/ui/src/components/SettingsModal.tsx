@@ -34,7 +34,7 @@ function NavButton({
 }>): ReactElement {
   return (
     <Button
-      isFullWidth
+      width="full"
       size="sm"
       justifyContent="start"
       my={0.5}

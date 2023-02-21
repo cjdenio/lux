@@ -9,16 +9,16 @@
     "format:check": "prettier --check src"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.1",
+    "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@lux/common": "0.0.0",
     "electron": "^12.0.9",
-    "framer-motion": "^4",
-    "react": "^17.0.0",
+    "framer-motion": "^9.0.4",
+    "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-colorful": "^5.2.0",
-    "react-dom": "^17.0.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.2.0",
     "wouter": "^2.10.0"
   },

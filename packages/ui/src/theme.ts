@@ -6,31 +6,6 @@ const theme = extendTheme({
     initialColorMode: "dark",
   },
   components: {
-    Button: {
-      baseStyle: {
-        _focus: {
-          boxShadow: "none",
-        },
-      },
-    },
-    Tabs: {
-      baseStyle: {
-        tab: {
-          _focus: {
-            boxShadow: "none",
-          },
-        },
-      },
-    },
-    Accordion: {
-      baseStyle: {
-        button: {
-          _focus: {
-            // boxShadow: "none",
-          },
-        },
-      },
-    },
     Table: {
       baseStyle: {
         tr: {
